@@ -1,0 +1,7 @@
+node_modules/
+*.env
+*.txt
+.vscode/
+.cache/*
+.prettierignore
+*.vscode
