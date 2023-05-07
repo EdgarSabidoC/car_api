@@ -7,6 +7,7 @@ CREATE DATABASE IF NOT EXISTS car_api; USE
 SET FOREIGN_KEY_CHECKS=0;
 
 		-- Se borran las tablas si existen:
+DROP TABLE IF EXISTS car_api.maintenance;
 DROP TABLE IF EXISTS car_api.appointment;
 DROP TABLE IF EXISTS car_api.car;
 DROP TABLE IF EXISTS car_api.log;
@@ -321,3 +322,21 @@ ADD INDEX `telephone` (`telephone`) USING BTREE,
 ADD INDEX `appointment_date` (`appointment_date`) USING BTREE,
 ADD INDEX `dealership` (`dealership`) USING BTREE,
 ADD INDEX `car` (`car`) USING BTREE;
+
+
+CREATE TABLE IF NOT EXISTS car_api.maintenance(
+		maintenance_type INT NOT NULL,
+		car VARCHAR(17) NOT NULL,
+		created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP(),
+		PRIMARY KEY(maintenance_type, car),
+		CONSTRAINT `fk_maintenance_type`
+			FOREIGN KEY (`maintenance_type`)
+			REFERENCES `car_api`.`maintenance_type` (`id`)
+			ON UPDATE CASCADE
+			ON DELETE CASCADE,
+		CONSTRAINT `fk_car_2`
+			FOREIGN KEY (`car`)
+			REFERENCES `car_api`.`car` (`vin`)
+			ON UPDATE CASCADE
+			ON DELETE CASCADE
+) ENGINE = InnoDB;
