@@ -1,12 +1,33 @@
 -- CREAR LAS TABLAS SQL:
 		-- Se crea la Base de Datos:
+DROP DATABASE IF EXISTS car_api;
 CREATE DATABASE IF NOT EXISTS car_api; USE
 		car_api;
 
+SET FOREIGN_KEY_CHECKS=0;
 
-		-- Se crean las tablas de los catálogos:
-DROP TABLE IF EXISTS
-		car_api.schedule;
+		-- Se borran las tablas si existen:
+DROP TABLE IF EXISTS car_api.appointment;
+DROP TABLE IF EXISTS car_api.car;
+DROP TABLE IF EXISTS car_api.log;
+DROP TABLE IF EXISTS car_api.user;
+DROP TABLE IF EXISTS car_api.car_model;
+DROP TABLE IF EXISTS car_api.dealership;
+DROP TABLE IF EXISTS car_api.postal_code;
+DROP TABLE IF EXISTS car_api.state;
+DROP TABLE IF EXISTS car_api.transmission;
+DROP TABLE IF EXISTS car_api.car_condition;
+DROP TABLE IF EXISTS car_api.price;
+DROP TABLE IF EXISTS car_api.color;
+DROP TABLE IF EXISTS car_api.maker;
+DROP TABLE IF EXISTS car_api.car_category;
+DROP TABLE IF EXISTS car_api.schedule;
+DROP TABLE IF EXISTS car_api.maintenance_type;
+DROP TABLE IF EXISTS car_api.role;
+
+SET FOREIGN_KEY_CHECKS=1;
+
+		-- Se crean las tablas:
 CREATE TABLE IF NOT EXISTS car_api.schedule(
 		id INT NOT NULL AUTO_INCREMENT,
 		hour TIME NOT NULL,
@@ -15,8 +36,6 @@ CREATE TABLE IF NOT EXISTS car_api.schedule(
 ALTER TABLE `car_api`.`schedule` ADD INDEX `hour` (`hour`) USING BTREE;
 
 
-DROP TABLE IF EXISTS
-		car_api.car_category;
 CREATE TABLE IF NOT EXISTS car_api.car_category(
 		id INT NOT NULL AUTO_INCREMENT,
 		name VARCHAR(20) NOT NULL,
@@ -25,8 +44,6 @@ CREATE TABLE IF NOT EXISTS car_api.car_category(
 ALTER TABLE `car_api`.`car_category` ADD INDEX `name` (`name`) USING BTREE;
 
 
-DROP TABLE IF EXISTS
-		car_api.maker;
 CREATE TABLE IF NOT EXISTS car_api.maker(
 		id INT NOT NULL AUTO_INCREMENT,
 		name VARCHAR(40) NOT NULL,
@@ -36,8 +53,6 @@ CREATE TABLE IF NOT EXISTS car_api.maker(
 ALTER TABLE `car_api`.`maker` ADD INDEX `name` (`name`) USING BTREE;
 
 
-DROP TABLE IF EXISTS
-		car_api.color;
 CREATE TABLE IF NOT EXISTS car_api.color(
 		id INT NOT NULL AUTO_INCREMENT,
 		name VARCHAR(15) NOT NULL,
@@ -46,8 +61,6 @@ CREATE TABLE IF NOT EXISTS car_api.color(
 ALTER TABLE `car_api`.`color` ADD INDEX `name` (`name`) USING BTREE;
 
 
-DROP TABLE IF EXISTS
-		car_api.price;
 CREATE TABLE IF NOT EXISTS car_api.price(
 		id INT NOT NULL AUTO_INCREMENT,
 		concept VARCHAR(350) NOT NULL,
@@ -58,18 +71,14 @@ ALTER TABLE `car_api`.`price` ADD INDEX `percentage` (`percentage`) USING BTREE,
 ADD INDEX `concept` (`concept`) USING BTREE;
 
 
-DROP TABLE IF EXISTS
-		car_api.condition;
-CREATE TABLE IF NOT EXISTS car_api.condition(
+CREATE TABLE IF NOT EXISTS car_api.car_condition(
 		id INT NOT NULL AUTO_INCREMENT,
 		type VARCHAR(30) NOT NULL,
 		PRIMARY KEY(id)
 ) ENGINE = InnoDB;
-ALTER TABLE `car_api`.`condition` ADD INDEX `type` (`type`) USING BTREE;
+ALTER TABLE `car_api`.`car_condition` ADD INDEX `type` (`type`) USING BTREE;
 
 
-DROP TABLE IF EXISTS
-		car_api.transmission;
 CREATE TABLE IF NOT EXISTS car_api.transmission(
 		id INT NOT NULL AUTO_INCREMENT,
 		type VARCHAR(15) NOT NULL,
@@ -78,28 +87,22 @@ CREATE TABLE IF NOT EXISTS car_api.transmission(
 ALTER TABLE `car_api`.`transmission` ADD INDEX `type` (`type`) USING BTREE;
 
 
-DROP TABLE IF EXISTS
-		car_api.state;
 CREATE TABLE IF NOT EXISTS car_api.state(
 		id INT NOT NULL AUTO_INCREMENT,
 		name VARCHAR(35) NOT NULL,
 		PRIMARY KEY(id)
 ) ENGINE = InnoDB;
-ALTER TABLE `car_api`.`state` ADD INDEX `name` (`name`) USING BTREEm;
+ALTER TABLE `car_api`.`state` ADD INDEX `name` (`name`) USING BTREE;
 
 
-DROP TABLE IF EXISTS
-		car_api.postal_code;
 CREATE TABLE IF NOT EXISTS car_api.postal_code(
 		id INT NOT NULL AUTO_INCREMENT,
 		code VARCHAR(15) NOT NULL,
 		PRIMARY KEY(id)
 ) ENGINE = InnoDB;
-ALTER TABLE `car_api`.`postal_code` ADD INDEX `code` (`code`) USING BTREEm;
+ALTER TABLE `car_api`.`postal_code` ADD INDEX `code` (`code`) USING BTREE;
 
 
-DROP TABLE IF EXISTS
-		car_api.dealership;
 CREATE TABLE IF NOT EXISTS car_api.dealership(
 		id INT NOT NULL AUTO_INCREMENT,
 		name VARCHAR(50) NOT NULL,
@@ -120,42 +123,36 @@ CREATE TABLE IF NOT EXISTS car_api.dealership(
 			FOREIGN KEY (`state`)
 			REFERENCES `car_api`.`state` (`id`)
 			ON UPDATE CASCADE
-			ON DELETE CASCADE;
+			ON DELETE CASCADE
 ) ENGINE = InnoDB;
-ALTER TABLE `car_api`.`dealership` ADD INDEX `name` (`name`) USING BTREEm,
-ADD INDEX `state` (`state`) USING BTREEm,
-ADD INDEX `postal_code` (`postal_code`) USING BTREEm;
+ALTER TABLE `car_api`.`dealership` ADD INDEX `name` (`name`) USING BTREE,
+ADD INDEX `state` (`state`) USING BTREE,
+ADD INDEX `postal_code` (`postal_code`) USING BTREE;
 
 
-DROP TABLE IF EXISTS
-		car_api.maintenance_type;
 CREATE TABLE IF NOT EXISTS car_api.maintenance_type(
 		id INT NOT NULL AUTO_INCREMENT,
 		concept VARCHAR(100) NOT NULL,
 		price INT NOT NULL,
 		PRIMARY KEY(id)
 ) ENGINE = InnoDB;
-ALTER TABLE `car_api`.`maintenance_type` ADD INDEX `concept` (`concept`) USING BTREEm;
+ALTER TABLE `car_api`.`maintenance_type` ADD INDEX `concept` (`concept`) USING BTREE;
 
 
-DROP TABLE IF EXISTS
-		car_api.role;
 CREATE TABLE IF NOT EXISTS car_api.role(
 		id INT NOT NULL AUTO_INCREMENT,
 		name VARCHAR(10) NOT NULL,
-		permissions VARCHAR NULL,
+		permissions VARCHAR(10) NULL,
 		PRIMARY KEY(id)
 ) ENGINE = InnoDB;
-ALTER TABLE `car_api`.`role` ADD INDEX `name` (`name`) USING BTREEm;
+ALTER TABLE `car_api`.`role` ADD INDEX `name` (`name`) USING BTREE;
 
 
-DROP TABLE IF EXISTS
-		car_api.car_model;
 CREATE TABLE IF NOT EXISTS car_api.car_model(
 		id INT NOT NULL AUTO_INCREMENT,
 		name VARCHAR(75) NOT NULL,
 		year INT NULL,
-		factory_price NULL,
+		factory_price INT NULL,
 		transmission INT NOT NULL,
 		color INT NOT NULL,
 		category INT NOT NULL,
@@ -174,34 +171,34 @@ CREATE TABLE IF NOT EXISTS car_api.car_model(
 			ON DELETE CASCADE,
 		CONSTRAINT `fk_category`
 			FOREIGN KEY (`category`)
-			REFERENCES `car_api`.`category` (`id`)
+			REFERENCES `car_api`.`car_category` (`id`)
 			ON UPDATE CASCADE
 			ON DELETE CASCADE,
 		CONSTRAINT `fk_maker`
 			FOREIGN KEY (`maker`)
 			REFERENCES `car_api`.`maker` (`id`)
 			ON UPDATE CASCADE
-			ON DELETE CASCADE;
+			ON DELETE CASCADE
 ) ENGINE = InnoDB;
-ALTER TABLE `car_api`.`car_model` ADD INDEX `name` (`name`) USING BTREEm,
-ADD INDEX `transmission` (`transmission`) USING BTREEm,
-ADD INDEX `color` (`color`) USING BTREEm,
-ADD INDEX `category` (`category`) USING BTREEm,
-ADD INDEX `maker` (`maker`) USING BTREEm,
-ADD INDEX `factory_price` (`factory_price`) USING BTREEm,
-ADD INDEX `year` (`year`) USING BTREEm;
+ALTER TABLE `car_api`.`car_model` ADD INDEX `name` (`name`) USING BTREE,
+ADD INDEX `transmission` (`transmission`) USING BTREE,
+ADD INDEX `color` (`color`) USING BTREE,
+ADD INDEX `category` (`category`) USING BTREE,
+ADD INDEX `maker` (`maker`) USING BTREE,
+ADD INDEX `factory_price` (`factory_price`) USING BTREE,
+ADD INDEX `year` (`year`) USING BTREE;
 
 
-DROP TABLE IF EXISTS
-		car_api.user;
 CREATE TABLE IF NOT EXISTS car_api.user(
 		id INT NOT NULL AUTO_INCREMENT,
 		first_name VARCHAR(75) NOT NULL,
 		last_name_1 VARCHAR(75) NOT NULL,
 		last_name_2  VARCHAR(75) NOT NULL,
+		password VARCHAR(30) NOT NULL,
 		dealership INT NOT NULL,
 		user_role INT NOT NULL,
 		created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP(),
+		updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP(),
 		PRIMARY KEY(id),
 		CONSTRAINT `fk_dealership`
 			FOREIGN KEY (`dealership`)
@@ -212,17 +209,15 @@ CREATE TABLE IF NOT EXISTS car_api.user(
 			FOREIGN KEY (`user_role`)
 			REFERENCES `car_api`.`role` (`id`)
 			ON UPDATE CASCADE
-			ON DELETE CASCADE;
+			ON DELETE CASCADE
 ) ENGINE = InnoDB;
-ALTER TABLE `car_api`.`user` ADD INDEX `first_name` (`first_name`) USING BTREEm,
-ADD INDEX `last_name_1` (`last_name_1`) USING BTREEm,
-ADD INDEX `last_name_2` (`last_name_2`) USING BTREEm,
-ADD INDEX `dealership` (`dealership`) USING BTREEm,
-ADD INDEX `user_role` (`user_role`) USING BTREEm;
+ALTER TABLE `car_api`.`user` ADD INDEX `first_name` (`first_name`) USING BTREE,
+ADD INDEX `last_name_1` (`last_name_1`) USING BTREE,
+ADD INDEX `last_name_2` (`last_name_2`) USING BTREE,
+ADD INDEX `dealership` (`dealership`) USING BTREE,
+ADD INDEX `user_role` (`user_role`) USING BTREE;
 
 
-DROP TABLE IF EXISTS
-		car_api.log;
 CREATE TABLE IF NOT EXISTS car_api.log(
 		id INT NOT NULL AUTO_INCREMENT,
 		user INT NOT NULL,
@@ -235,14 +230,12 @@ CREATE TABLE IF NOT EXISTS car_api.log(
 			FOREIGN KEY (`user`)
 			REFERENCES `car_api`.`user` (`id`)
 			ON UPDATE CASCADE
-			ON DELETE CASCADE,
+			ON DELETE CASCADE
 ) ENGINE = InnoDB;
-ALTER TABLE `car_api`.`log` ADD INDEX `user` (`user`) USING BTREEm,
-ADD INDEX `created_at` (`created_at`) USING BTREEm;
+ALTER TABLE `car_api`.`log` ADD INDEX `user` (`user`) USING BTREE,
+ADD INDEX `created_at` (`created_at`) USING BTREE;
 
 
-DROP TABLE IF EXISTS
-		car_api.car;
 CREATE TABLE IF NOT EXISTS car_api.car(
 		vin VARCHAR(17) NOT NULL,
 		mileage INT NOT NULL,
@@ -251,7 +244,7 @@ CREATE TABLE IF NOT EXISTS car_api.car(
 		sale_price INT NULL,
 		maintenance_cost INT DEFAULT 0,
 		model INT NOT NULL,
-		condition INT NOT NULL,
+		car_condition INT NOT NULL,
 		interior_color INT NOT NULL,
 		exterior_color INT NOT NULL,
 		dealership INT NOT NULL,
@@ -260,17 +253,12 @@ CREATE TABLE IF NOT EXISTS car_api.car(
 		PRIMARY KEY(vin),
 		CONSTRAINT `fk_model`
 			FOREIGN KEY (`model`)
-			REFERENCES `car_api`.`model` (`id`)
+			REFERENCES `car_api`.`car_model` (`id`)
 			ON UPDATE CASCADE
 			ON DELETE CASCADE,
-		CONSTRAINT `fk_condition`
-			FOREIGN KEY (`condition`)
-			REFERENCES `car_api`.`condition` (`id`)
-			ON UPDATE CASCADE
-			ON DELETE CASCADE,
-		CONSTRAINT `fk_interior_color`
-			FOREIGN KEY (`interior_color`)
-			REFERENCES `car_api`.`color` (`id`)
+		CONSTRAINT `fk_car_condition`
+			FOREIGN KEY (`car_condition`)
+			REFERENCES `car_api`.`car_condition` (`id`)
 			ON UPDATE CASCADE
 			ON DELETE CASCADE,
 		CONSTRAINT `fk_exterior_color`
@@ -278,27 +266,30 @@ CREATE TABLE IF NOT EXISTS car_api.car(
 			REFERENCES `car_api`.`color` (`id`)
 			ON UPDATE CASCADE
 			ON DELETE CASCADE,
-		CONSTRAINT `fk_dealership`
+		CONSTRAINT `fk_interior_color`
+			FOREIGN KEY (`interior_color`)
+			REFERENCES `car_api`.`color` (`id`)
+			ON UPDATE CASCADE
+			ON DELETE CASCADE,
+		CONSTRAINT `fk_dealership_2`
 			FOREIGN KEY (`dealership`)
 			REFERENCES `car_api`.`dealership` (`id`)
 			ON UPDATE CASCADE
-			ON DELETE CASCADE;
+			ON DELETE CASCADE
 ) ENGINE = InnoDB;
-ALTER TABLE `car_api`.`car` ADD INDEX `purchase_price` (`purchase_price`) USING BTREEm,
-ADD INDEX `sale_price` (`sale_price`) USING BTREEm,
-ADD INDEX `maintenance_cost` (`maintenance_cost`) USING BTREEm,
-ADD INDEX `model` (`model`) USING BTREEm,
-ADD INDEX `condition` (`condition`) USING BTREEm,
-ADD INDEX `interior_color` (`interior_color`) USING BTREEm,
-ADD INDEX `exterior_color` (`exterior_color`) USING BTREEm,
-ADD INDEX `dealership` (`dealership`) USING BTREEm,
-ADD INDEX `sold` (`sold`) USING BTREEm,
-ADD INDEX `mileage` (`mileage`) USING BTREEm,
-ADD INDEX `created_at` (`created_at`) USING BTREEm;
+ALTER TABLE `car_api`.`car` ADD INDEX `purchase_price` (`purchase_price`) USING BTREE,
+ADD INDEX `sale_price` (`sale_price`) USING BTREE,
+ADD INDEX `maintenance_cost` (`maintenance_cost`) USING BTREE,
+ADD INDEX `model` (`model`) USING BTREE,
+ADD INDEX `car_condition` (`car_condition`) USING BTREE,
+ADD INDEX `interior_color` (`interior_color`) USING BTREE,
+ADD INDEX `exterior_color` (`exterior_color`) USING BTREE,
+ADD INDEX `dealership` (`dealership`) USING BTREE,
+ADD INDEX `sold` (`sold`) USING BTREE,
+ADD INDEX `mileage` (`mileage`) USING BTREE,
+ADD INDEX `created_at` (`created_at`) USING BTREE;
 
 
-DROP TABLE IF EXISTS
-		car_api.appointment;
 CREATE TABLE IF NOT EXISTS car_api.appointment(
 		id INT NOT NULL AUTO_INCREMENT,
 		first_name VARCHAR(80) NOT NULL,
@@ -310,8 +301,8 @@ CREATE TABLE IF NOT EXISTS car_api.appointment(
 		dealership INT NOT NULL,
 		car VARCHAR(17) NOT NULL,
 		created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP(),
-		PRIMARY KEY(vin),
-		CONSTRAINT `fk_dealership`
+		PRIMARY KEY(id),
+		CONSTRAINT `fk_dealership_3`
 			FOREIGN KEY (`dealership`)
 			REFERENCES `car_api`.`dealership` (`id`)
 			ON UPDATE CASCADE
@@ -320,15 +311,13 @@ CREATE TABLE IF NOT EXISTS car_api.appointment(
 			FOREIGN KEY (`car`)
 			REFERENCES `car_api`.`car` (`vin`)
 			ON UPDATE CASCADE
-			ON DELETE CASCADE;
+			ON DELETE CASCADE
 ) ENGINE = InnoDB;
-ALTER TABLE `car_api`.`car` ADD INDEX `first_name` (`first_name`) USING BTREEm,
-ADD INDEX `last_name_1` (`last_name_1`) USING BTREEm,
-ADD INDEX `last_name_2` (`last_name_2`) USING BTREEm,
-ADD INDEX `email` (`email`) USING BTREEm,
-ADD INDEX `telephone` (`telephone`) USING BTREEm,
-ADD INDEX `appointment_date` (`appointment_date`) USING BTREEm,
-ADD INDEX `exterior_color` (`exterior_color`) USING BTREEm,
-ADD INDEX `dealership` (`dealership`) USING BTREEm,
-ADD INDEX `car` (`car`) USING BTREEm;
-
+ALTER TABLE `car_api`.`appointment` ADD INDEX `first_name` (`first_name`) USING BTREE,
+ADD INDEX `last_name_1` (`last_name_1`) USING BTREE,
+ADD INDEX `last_name_2` (`last_name_2`) USING BTREE,
+ADD INDEX `email` (`email`) USING BTREE,
+ADD INDEX `telephone` (`telephone`) USING BTREE,
+ADD INDEX `appointment_date` (`appointment_date`) USING BTREE,
+ADD INDEX `dealership` (`dealership`) USING BTREE,
+ADD INDEX `car` (`car`) USING BTREE;
