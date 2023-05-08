@@ -1,38 +1,35 @@
 require("dotenv").config();
-const express = require("express"); // Starts the app.
+const express = require("express"); // Arranca la app.
 const cors = require("cors");
-const dbConnectMongoDB = require("./config/mongo");
-const morganBody = require("morgan-body"); // Used to formatting the errors.
+const morganBody = require("morgan-body"); // Utilizado para darle formato a los errores.
 const { loggerStream } = require("./utils/handleLogger");
 const { dbConnectMariaDB } = require("./config/mariadb");
 const ENGINE_DB = process.env.ENGINE_DB;
 
 const app = express(); // Instantiate the app.
 
-app.use(cors()); // The app uses cors.
-app.use(express.json()); // The app can use json.
+app.use(cors()); // La app usa cors.
+app.use(express.json()); // La app puede usar json.
 app.use(express.static("storage"));
 
 morganBody(app, {
 	noColors: true,
 	stream: loggerStream,
 	skip: function (req, res) {
-		// Only sends a log if there is an error.
-		return res.statusCode < 400; // Skips errors between 2xx and 3xx.
+		// Solamente se envía un log si hay un error.
+		return res.statusCode < 400; // Evita los errores entre 2xx y 3xx.
 	},
 });
-const port = process.env.PORT || 3000; // App port. Default: 3000.
+const port = process.env.PORT || 3000; // Puerto de la app. Predeterminado: 3000.
 
-// Routes call
+// Llamado a las rutas:
 app.use("/api", require("./routes"));
 
-// Initial function:
+// Función inicial:
 app.listen(port, () => {
 	console.log(`The app is ready and running on http://localhost:${port}`);
 });
 
-ENGINE_DB === "mongodb"
-	? // Calls the function to connect to MongoDB:
-	  dbConnectMongoDB()
-	: // Calls the function to connect to MariaDB:
-	  dbConnectMariaDB();
+if (ENGINE_DB === "mariadb")
+	// Llama la función para conectarse a MariaDB:
+	dbConnectMariaDB();
