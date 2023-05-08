@@ -1,6 +1,7 @@
 const { matchedData } = require("express-validator");
 const { carModel } = require("../models"); // Referencia a lo exportado en models/index.js
 const { handleHttpError } = require("../utils/handleError");
+const { sequelize } = require("../config/mariadb");
 const ENGINE_DB = process.env.ENGINE_DB;
 
 /**
@@ -10,21 +11,27 @@ const ENGINE_DB = process.env.ENGINE_DB;
  * @param res - The response object.
  */
 const getItems = async (req, res) => {
+	let transaction;
 	try {
-		const user = req.user;
-		console.log(user);
-		const data =
-			ENGINE_DB === "mongodb"
-				? await carModel.find({})
-				: await carModel.findAll();
+		transaction = await sequelize.transaction();
+		const car = req.car;
+		console.log(car);
+		const data = await carModel.findAll({ transaction });
 		const searchedBy = {
-			name: user.name,
-			email: user.email,
-			role: user.role,
+			vin: car.vin,
+			purchase_price: car.purchase_price,
+			model: car.model,
 		};
+		await transaction.commit();
 		res.send({ data, searchedBy });
 	} catch (err) {
-		handleHttpError(res, "ERROR_GET_ITEMS");
+		if (transaction) await transaction.rollback();
+		let message = err.message;
+		if (err instanceof Error && err.name === "SequelizeDatabaseError") {
+			message = err.parent.sqlMessage;
+		}
+		res.status(500).send({ error: message });
+		// handleHttpError(res, "ERROR_GET_ITEMS:", err);
 	}
 };
 

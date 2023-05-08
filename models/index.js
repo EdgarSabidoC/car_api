@@ -1,6 +1,6 @@
 const ENGINE_DB = process.env.ENGINE_DB;
 
-const pathModels = ENGINE_DB === "mariadb" ? "./mariadb" : "./mongodb";
+const pathModels = `./${ENGINE_DB}`;
 
 const models = {
 	carModel: require(`${pathModels}/car`),

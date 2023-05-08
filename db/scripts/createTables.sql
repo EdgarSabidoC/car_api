@@ -158,7 +158,8 @@ CREATE TABLE IF NOT EXISTS car_api.car_model(
 		color INT NOT NULL,
 		category INT NOT NULL,
 		maker INT NOT NULL,
-		created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP(),
+		createdAt DATETIME NOT NULL,
+		updatedAt DATETIME NOT NULL,
 		PRIMARY KEY(id),
 		CONSTRAINT `fk_transmission`
 			FOREIGN KEY (`transmission`)
@@ -198,8 +199,8 @@ CREATE TABLE IF NOT EXISTS car_api.user(
 		password VARCHAR(30) NOT NULL,
 		dealership INT NOT NULL,
 		user_role INT NOT NULL,
-		created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP(),
-		updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP(),
+		createdAt DATETIME NOT NULL,
+		updatedAt DATETIME NOT NULL,
 		PRIMARY KEY(id),
 		CONSTRAINT `fk_dealership`
 			FOREIGN KEY (`dealership`)
@@ -225,7 +226,8 @@ CREATE TABLE IF NOT EXISTS car_api.log(
 		ip VARCHAR(50) NOT NULL,
 		event TEXT NOT NULL,
 		observation VARCHAR(50) NOT NULL,
-		created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP(),
+		createdAt DATETIME NOT NULL,
+		updatedAt DATETIME NOT NULL,
 		PRIMARY KEY(id),
 		CONSTRAINT `fk_user`
 			FOREIGN KEY (`user`)
@@ -234,7 +236,7 @@ CREATE TABLE IF NOT EXISTS car_api.log(
 			ON DELETE CASCADE
 ) ENGINE = InnoDB;
 ALTER TABLE `car_api`.`log` ADD INDEX `user` (`user`) USING BTREE,
-ADD INDEX `created_at` (`created_at`) USING BTREE;
+ADD INDEX `createdAt` (`createdAt`) USING BTREE;
 
 
 CREATE TABLE IF NOT EXISTS car_api.car(
@@ -250,7 +252,8 @@ CREATE TABLE IF NOT EXISTS car_api.car(
 		exterior_color INT NOT NULL,
 		dealership INT NOT NULL,
 		sold BOOLEAN DEFAULT 0,
-		created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP(),
+		createdAt DATETIME NOT NULL,
+		updatedAt DATETIME NOT NULL,
 		PRIMARY KEY(vin),
 		CONSTRAINT `fk_model`
 			FOREIGN KEY (`model`)
@@ -288,7 +291,7 @@ ADD INDEX `exterior_color` (`exterior_color`) USING BTREE,
 ADD INDEX `dealership` (`dealership`) USING BTREE,
 ADD INDEX `sold` (`sold`) USING BTREE,
 ADD INDEX `mileage` (`mileage`) USING BTREE,
-ADD INDEX `created_at` (`created_at`) USING BTREE;
+ADD INDEX `createdAt` (`createdAt`) USING BTREE;
 
 
 CREATE TABLE IF NOT EXISTS car_api.appointment(
@@ -301,7 +304,8 @@ CREATE TABLE IF NOT EXISTS car_api.appointment(
 		appointment_date DATE NOT NULL,
 		dealership INT NOT NULL,
 		car VARCHAR(17) NOT NULL,
-		created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP(),
+		createdAt DATETIME NOT NULL,
+		updatedAt DATETIME NOT NULL,
 		PRIMARY KEY(id),
 		CONSTRAINT `fk_dealership_3`
 			FOREIGN KEY (`dealership`)
@@ -327,7 +331,8 @@ ADD INDEX `car` (`car`) USING BTREE;
 CREATE TABLE IF NOT EXISTS car_api.maintenance(
 		maintenance_type INT NOT NULL,
 		car VARCHAR(17) NOT NULL,
-		created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP(),
+		createdAt DATETIME NOT NULL,
+		updatedAt DATETIME NOT NULL,
 		PRIMARY KEY(maintenance_type, car),
 		CONSTRAINT `fk_maintenance_type`
 			FOREIGN KEY (`maintenance_type`)
