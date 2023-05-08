@@ -10,6 +10,7 @@ const sequelize = new Sequelize(database, username, password, {
 	operatorsAliases: 0,
 });
 
+// Se conecta a la base de datos de MariaDB.
 const dbConnectMariaDB = async () => {
 	try {
 		await sequelize.authenticate();
