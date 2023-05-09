@@ -17,7 +17,7 @@ const {
 router.get("/", getItems);
 
 /* Obtiene un elemento */
-router.get("/:id", getItemValidator, getItem);
+router.get("/", getItemValidator, getItem);
 
 /* Crea un registro de un elemento si el usuario es admin */
 router.post("/", createItemValidator, createItem);

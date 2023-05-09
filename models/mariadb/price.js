@@ -18,10 +18,13 @@ const Price = sequelize.define(
 			type: DataTypes.INTEGER,
 			allowNull: false,
 		},
+		deleted: { type: DataTypes.BOOLEAN },
+		deletedAt: { type: DataTypes.DATE },
 	},
 	{
-		timestamps: false,
+		timestamps: true,
 		tableName: "price",
+		paranoid: true,
 	}
 );
 

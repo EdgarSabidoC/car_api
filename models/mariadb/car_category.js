@@ -14,10 +14,13 @@ const CarCategory = sequelize.define(
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
+		deleted: { type: DataTypes.BOOLEAN },
+		deletedAt: { type: DataTypes.DATE },
 	},
 	{
-		timestamps: false,
+		timestamps: true,
 		tableName: "car_category",
+		paranoid: true,
 	}
 );
 

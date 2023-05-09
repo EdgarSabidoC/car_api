@@ -1,5 +1,5 @@
 const { matchedData } = require("express-validator");
-const { carModel } = require("../models"); // Referencia a lo exportado en models/index.js
+const { Car } = require("../models"); // Referencia a lo exportado en models/index.js
 const { handleHttpError } = require("../utils/handleError");
 const { sequelize } = require("../config/mariadb");
 const ENGINE_DB = process.env.ENGINE_DB;
@@ -15,7 +15,7 @@ const getItems = async (req, res) => {
 	try {
 		transaction = await sequelize.transaction();
 		const car = req.car;
-		const data = await carModel.findAll({ transaction });
+		const data = await Car.findAll({ transaction });
 		const searchedBy = {
 			vin: car.vin,
 			purchase_price: car.purchase_price,
@@ -24,17 +24,14 @@ const getItems = async (req, res) => {
 		await transaction.commit();
 		if (data.length === 0) {
 			handleHttpError(res, "ITEMS_NOT_FOUND", 404);
-			console.log(">ENTRÓ<");
 		}
 		res.send({ data, searchedBy });
 	} catch (err) {
-		console.log("Err.name", err.name, "Err.parent:", err.parent);
+		// Se deshace la transacción en caso de un error:
 		if (transaction) await transaction.rollback();
-		let message = err.message;
-		if (err instanceof Error && err.name === "SequelizeDatabaseError") {
-			message = err.parent.sqlMessage;
-		}
-		handleHttpError(res, "ERROR_GET_ITEMS", message);
+
+		// Se envía el error:
+		handleHttpError(res, "ERROR_GET_ITEMS", 500);
 	}
 };
 
@@ -44,16 +41,39 @@ const getItems = async (req, res) => {
  * @param res - The response object.
  */
 const getItem = async (req, res) => {
+	let transaction;
 	try {
-		req = matchedData(req);
-		const { id } = req;
-		const data =
-			ENGINE_DB === "mongodb"
-				? await carModel.findById(id)
-				: await carModel.findOne({ where: { id } });
+		const { field, value } = req.query;
+
+		// Se obtiene una instancia de la transacción:
+		transaction = await sequelize.transaction();
+
+		// Se ejecuta la consulta dentro de la transacción:
+		const data = await Car.findOne({
+			where: { [field]: value },
+			include: [
+				{ model: CarModel },
+				{ model: CarCondition },
+				{ model: Color },
+				{ model: Dealership },
+			],
+			transaction,
+		});
+
+		if (!data) {
+			handleHttpError(res, "ITEM_NOT_FOUND", 404);
+		}
+
+		// Se confirma la transacción si la consulta se ejecuta correctamente:
+		await transaction.commit();
+
 		res.send({ data });
 	} catch (err) {
-		handleHttpError(res, "ERROR_GET_ITEM");
+		// Se deshace la transacción en caso de un error:
+		if (transaction) await transaction.rollback();
+
+		// Se envía el error:
+		handleHttpError(res, "ERROR_GET_ITEM", 500);
 	}
 };
 
@@ -65,12 +85,24 @@ const getItem = async (req, res) => {
  * @param res - The response object.
  */
 const createItem = async (req, res) => {
+	let transaction;
 	try {
 		const body = matchedData(req);
-		const data = await carModel.create(body);
+
+		// Se obtiene una instancia de la transacción:
+		transaction = await sequelize.transaction();
+
+		const data = await Car.create(body, { transaction });
+
+		// Si la creación del elemento es exitosa, se confirma la transacción:
+		await transaction.commit();
+
 		res.send({ data });
 	} catch (err) {
-		handleHttpError(res, "ERROR_CREATE_ITEM");
+		// Si hay un error, se deshace la transacción:
+		if (transaction) await transaction.rollback();
+
+		handleHttpError(res, "ERROR_CREATE_ITEM", 500);
 	}
 };
 
@@ -81,11 +113,22 @@ const createItem = async (req, res) => {
  * @param res - The response object.
  */
 const updateItem = async (req, res) => {
+	let transaction;
 	try {
 		const { id, ...body } = matchedData(req);
-		const data = await carModel.findOneAndUpdate(id, body);
+		// Se obtiene una instancia de la transacción:
+		transaction = await sequelize.transaction();
+
+		const data = await Car.findOneAndUpdate(id, body, { transaction });
+
+		// Si la creación del elemento es exitosa, se confirma la transacción:
+		await transaction.commit();
+
 		res.send({ data });
 	} catch (err) {
+		// Si hay un error, se deshace la transacción:
+		if (transaction) await transaction.rollback();
+
 		handleHttpError(res, "ERROR_UPDATE_ITEM");
 	}
 };
@@ -100,8 +143,8 @@ const deleteItem = async (req, res) => {
 	try {
 		req = matchedData(req);
 		const { id } = req;
-		const data = await carModel.delete({ _id: id }); // Soft delete (el registro no se elimina en la DB).
-		// const data = await carModel.deleteOne({ _id: id }); // Deletes in DB the register.
+		const data = await Car.delete({ _id: id }); // Soft delete (el registro no se elimina en la DB).
+		// const data = await Car.deleteOne({ _id: id }); // Deletes in DB the register.
 		res.send({ data });
 	} catch (err) {
 		handleHttpError(res, "ERROR_DELETE_ITEM");

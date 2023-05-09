@@ -14,10 +14,13 @@ const Schedule = sequelize.define(
 			type: DataTypes.TIME,
 			allowNull: false,
 		},
+		deleted: { type: DataTypes.BOOLEAN },
+		deletedAt: { type: DataTypes.DATE },
 	},
 	{
-		timestamps: false,
+		timestamps: true,
 		tableName: "schedule",
+		paranoid: true,
 	}
 );
 

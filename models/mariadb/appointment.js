@@ -53,10 +53,13 @@ const Appointment = sequelize.define(
 			},
 			allowNull: false,
 		},
+		deleted: { type: DataTypes.BOOLEAN },
+		deletedAt: { type: DataTypes.DATE },
 	},
 	{
 		timestamps: true,
 		tableName: "appointment",
+		paranoid: true,
 	}
 );
 

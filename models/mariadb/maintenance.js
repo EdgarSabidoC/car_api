@@ -27,10 +27,13 @@ const Maintenance = sequelize.define(
 				key: "vin",
 			},
 		},
+		deleted: { type: DataTypes.BOOLEAN },
+		deletedAt: { type: DataTypes.DATE },
 	},
 	{
 		timestamps: true,
 		tableName: "maintenance",
+		paranoid: true,
 	}
 );
 

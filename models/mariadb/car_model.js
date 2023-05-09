@@ -60,10 +60,13 @@ const CarModel = sequelize.define(
 			},
 			allowNull: false,
 		},
+		deleted: { type: DataTypes.BOOLEAN },
+		deletedAt: { type: DataTypes.DATE },
 	},
 	{
 		timestamps: true,
 		tableName: "car_model",
+		paranoid: true,
 	}
 );
 

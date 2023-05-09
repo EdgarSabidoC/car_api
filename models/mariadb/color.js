@@ -14,10 +14,13 @@ const Color = sequelize.define(
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
+		deleted: { type: DataTypes.BOOLEAN },
+		deletedAt: { type: DataTypes.DATE },
 	},
 	{
-		timestamps: false,
+		timestamps: true,
 		tableName: "color",
+		paranoid: true,
 	}
 );
 

@@ -18,10 +18,13 @@ const MaintenanceType = sequelize.define(
 			type: DataTypes.DECIMAL,
 			allowNull: false,
 		},
+		deleted: { type: DataTypes.BOOLEAN },
+		deletedAt: { type: DataTypes.DATE },
 	},
 	{
-		timestamps: false,
+		timestamps: true,
 		tableName: "maintenance_type",
+		paranoid: true,
 	}
 );
 
