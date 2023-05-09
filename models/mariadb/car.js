@@ -1,12 +1,19 @@
 const { sequelize } = require("../../config/mariadb");
 const { DataTypes } = require("sequelize");
 
-// The first part is the structure of the schema:
+// Modelos de sequelize de las tablas de la DB:
+const CarModel = require("./car_model");
+const CarCondition = require("./car_condition");
+const Color = require("./color");
+const Dealership = require("./dealership");
+
+// Estructura del schema:
 const Car = sequelize.define(
 	"car",
 	{
 		vin: {
 			type: DataTypes.STRING,
+			primaryKey: true,
 			allowNull: false,
 		},
 		mileage: {
@@ -18,36 +25,56 @@ const Car = sequelize.define(
 			allowNull: false,
 		},
 		purchase_price: {
-			type: DataTypes.NUMBER,
+			type: DataTypes.DECIMAL,
 			allowNull: false,
 		},
 		sale_price: {
-			type: DataTypes.NUMBER,
+			type: DataTypes.DECIMAL,
 			allowNull: true,
 		},
 		maintenance_cost: {
-			type: DataTypes.NUMBER,
+			type: DataTypes.DECIMAL,
 			defaultValue: 0,
 			allowNull: false,
 		},
 		model: {
-			type: DataTypes.NUMBER,
+			type: DataTypes.INTEGER,
+			references: {
+				model: CarModel,
+				key: "id",
+			},
 			allowNull: false,
 		},
 		car_condition: {
-			type: DataTypes.NUMBER,
+			type: DataTypes.INTEGER,
+			references: {
+				model: CarCondition,
+				key: "id",
+			},
 			allowNull: false,
 		},
 		interior_color: {
-			type: DataTypes.NUMBER,
+			type: DataTypes.INTEGER,
+			references: {
+				model: Color,
+				key: "id",
+			},
 			allowNull: false,
 		},
 		exterior_color: {
-			type: DataTypes.NUMBER,
+			type: DataTypes.INTEGER,
+			references: {
+				model: Color,
+				key: "id",
+			},
 			allowNull: false,
 		},
 		dealership: {
-			type: DataTypes.NUMBER,
+			type: DataTypes.INTEGER,
+			references: {
+				model: Dealership,
+				key: "id",
+			},
 			allowNull: false,
 		},
 		sold: {
@@ -57,7 +84,34 @@ const Car = sequelize.define(
 	},
 	{
 		timestamps: true,
+		tableName: "car",
 	}
 );
+
+// Relación de claves foráneas:
+Car.belongsTo(CarModel, {
+	foreignKey: "fk_model",
+	as: "car_model",
+});
+
+Car.belongsTo(CarCondition, {
+	foreignKey: "fk_car_condition",
+	as: "car_condition_as",
+});
+
+Car.belongsTo(Color, {
+	foreignKey: "fk_interior_color",
+	as: "car_interior_color_as",
+});
+
+Car.belongsTo(Color, {
+	foreignKey: "fk_exterior_color",
+	as: "car_exterior_color_as",
+});
+
+Car.belongsTo(Dealership, {
+	foreignKey: "fk_dealership_2",
+	as: "car_dealership_as",
+});
 
 module.exports = Car;

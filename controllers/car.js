@@ -15,7 +15,6 @@ const getItems = async (req, res) => {
 	try {
 		transaction = await sequelize.transaction();
 		const car = req.car;
-		console.log(car);
 		const data = await carModel.findAll({ transaction });
 		const searchedBy = {
 			vin: car.vin,
@@ -23,15 +22,19 @@ const getItems = async (req, res) => {
 			model: car.model,
 		};
 		await transaction.commit();
+		if (data.length === 0) {
+			handleHttpError(res, "ITEMS_NOT_FOUND", 404);
+			console.log(">ENTRÓ<");
+		}
 		res.send({ data, searchedBy });
 	} catch (err) {
+		console.log("Err.name", err.name, "Err.parent:", err.parent);
 		if (transaction) await transaction.rollback();
 		let message = err.message;
 		if (err instanceof Error && err.name === "SequelizeDatabaseError") {
 			message = err.parent.sqlMessage;
 		}
-		res.status(500).send({ error: message });
-		// handleHttpError(res, "ERROR_GET_ITEMS:", err);
+		handleHttpError(res, "ERROR_GET_ITEMS", message);
 	}
 };
 

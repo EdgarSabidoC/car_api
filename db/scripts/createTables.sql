@@ -134,7 +134,7 @@ ADD INDEX `postal_code` (`postal_code`) USING BTREE;
 CREATE TABLE IF NOT EXISTS car_api.maintenance_type(
 		id INT NOT NULL AUTO_INCREMENT,
 		concept VARCHAR(100) NOT NULL,
-		price INT NOT NULL,
+		price DECIMAL NOT NULL,
 		PRIMARY KEY(id)
 ) ENGINE = InnoDB;
 ALTER TABLE `car_api`.`maintenance_type` ADD INDEX `concept` (`concept`) USING BTREE;
@@ -153,7 +153,7 @@ CREATE TABLE IF NOT EXISTS car_api.car_model(
 		id INT NOT NULL AUTO_INCREMENT,
 		name VARCHAR(75) NOT NULL,
 		year INT NULL,
-		factory_price INT NULL,
+		factory_price DECIMAL NULL,
 		transmission INT NOT NULL,
 		color INT NOT NULL,
 		category INT NOT NULL,
@@ -243,9 +243,9 @@ CREATE TABLE IF NOT EXISTS car_api.car(
 		vin VARCHAR(17) NOT NULL,
 		mileage INT NOT NULL,
 		description TEXT NULL,
-		purchase_price INT NOT NULL,
-		sale_price INT NULL,
-		maintenance_cost INT DEFAULT 0,
+		purchase_price DECIMAL NOT NULL,
+		sale_price DECIMAL NULL,
+		maintenance_cost DECIMAL DEFAULT 0,
 		model INT NOT NULL,
 		car_condition INT NOT NULL,
 		interior_color INT NOT NULL,
