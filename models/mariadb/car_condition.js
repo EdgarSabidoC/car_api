@@ -8,16 +8,20 @@ const CarCondition = sequelize.define(
 		id: {
 			type: DataTypes.INTEGER,
 			primaryKey: true,
+			autoIncrement: true,
 			allowNull: false,
 		},
 		type: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
+		deleted: { type: DataTypes.BOOLEAN },
+		deletedAt: { type: DataTypes.DATE },
 	},
 	{
-		timestamps: false,
+		timestamps: true,
 		tableName: "car_condition",
+		paranoid: true,
 	}
 );
 

@@ -12,6 +12,7 @@ const Dealership = sequelize.define(
 		id: {
 			type: DataTypes.INTEGER,
 			primaryKey: true,
+			autoIncrement: true,
 			allowNull: false,
 		},
 		name: {
@@ -52,10 +53,13 @@ const Dealership = sequelize.define(
 			},
 			allowNull: false,
 		},
+		deleted: { type: DataTypes.BOOLEAN },
+		deletedAt: { type: DataTypes.DATE },
 	},
 	{
 		timestamps: true,
 		tableName: "dealership",
+		paranoid: true,
 	}
 );
 

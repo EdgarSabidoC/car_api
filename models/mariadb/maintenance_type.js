@@ -8,6 +8,7 @@ const MaintenanceType = sequelize.define(
 		id: {
 			type: DataTypes.INTEGER,
 			primaryKey: true,
+			autoIncrement: true,
 			allowNull: false,
 		},
 		concept: {
@@ -18,10 +19,13 @@ const MaintenanceType = sequelize.define(
 			type: DataTypes.DECIMAL,
 			allowNull: false,
 		},
+		deleted: { type: DataTypes.BOOLEAN },
+		deletedAt: { type: DataTypes.DATE },
 	},
 	{
-		timestamps: false,
+		timestamps: true,
 		tableName: "maintenance_type",
+		paranoid: true,
 	}
 );
 

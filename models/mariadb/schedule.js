@@ -8,16 +8,20 @@ const Schedule = sequelize.define(
 		id: {
 			type: DataTypes.INTEGER,
 			primaryKey: true,
+			autoIncrement: true,
 			allowNull: false,
 		},
 		hour: {
 			type: DataTypes.TIME,
 			allowNull: false,
 		},
+		deleted: { type: DataTypes.BOOLEAN },
+		deletedAt: { type: DataTypes.DATE },
 	},
 	{
-		timestamps: false,
+		timestamps: true,
 		tableName: "schedule",
+		paranoid: true,
 	}
 );
 

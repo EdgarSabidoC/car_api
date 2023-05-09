@@ -6,18 +6,22 @@ const Transmission = sequelize.define(
 	"transmission",
 	{
 		id: {
-			type: DataTypes.STRING,
+			type: DataTypes.INTEGER,
 			primaryKey: true,
+			autoIncrement: true,
 			allowNull: false,
 		},
 		type: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
+		deleted: { type: DataTypes.BOOLEAN },
+		deletedAt: { type: DataTypes.DATE },
 	},
 	{
-		timestamps: false,
+		timestamps: true,
 		tableName: "transmission",
+		paranoid: true,
 	}
 );
 

@@ -12,6 +12,7 @@ const Maintenance = sequelize.define(
 		maintenance_type: {
 			type: DataTypes.INTEGER,
 			primaryKey: true,
+			autoIncrement: true,
 			allowNull: false,
 			references: {
 				model: MaintenanceType,
@@ -27,10 +28,13 @@ const Maintenance = sequelize.define(
 				key: "vin",
 			},
 		},
+		deleted: { type: DataTypes.BOOLEAN },
+		deletedAt: { type: DataTypes.DATE },
 	},
 	{
 		timestamps: true,
 		tableName: "maintenance",
+		paranoid: true,
 	}
 );
 
