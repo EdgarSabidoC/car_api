@@ -16,7 +16,7 @@ const getItems = async (req, res) => {
 
 		// Parámetros de paginación:
 		const page = parseInt(req.query.page) || 1;
-		const limit = parseInt(req.query.limit) || 10;
+		const limit = parseInt(req.query.limit) || 100;
 		const offset = (page - 1) * limit;
 
 		// Se ejecuta la consulta dentro de la transacción:
@@ -90,11 +90,12 @@ const getItem = async (req, res) => {
 const createItem = async (req, res) => {
 	let transaction;
 	try {
-		const body = matchedData(req);
+		const { body } = req;
 
 		// Se obtiene una instancia de la transacción:
 		transaction = await sequelize.transaction();
 
+		// Se ejecuta la consulta dentro de la transacción:
 		const data = await Color.create(body, { transaction });
 
 		// Si la creación del elemento es exitosa, se confirma la transacción:
@@ -118,16 +119,39 @@ const createItem = async (req, res) => {
 const updateItem = async (req, res) => {
 	let transaction;
 	try {
-		const { id, ...body } = matchedData(req);
+		const { colorIdOrName } = req.params;
+		const { body } = req;
+
 		// Se obtiene una instancia de la transacción:
 		transaction = await sequelize.transaction();
 
-		const data = await Color.findOneAndUpdate(id, body, { transaction });
+		// Busca el registro a actualizar:
+		const data = await Color.findOne({
+			where: isNaN(colorIdOrName)
+				? { name: colorIdOrName }
+				: { id: colorIdOrName },
+			transaction,
+		});
 
-		// Si la creación del elemento es exitosa, se confirma la transacción:
+		// Si no se encuentra el registro, se devuelve un error:
+		if (!data) {
+			throw new Error("Color not found");
+		}
+
+		// Agrega el campo updatedAt en los datos que se pasan al método update
+		const now = new Date();
+		body.updatedAt = now;
+
+		// Actualiza el registro encontrado con los nuevos datos:
+		await data.update(body, {
+			transaction,
+		});
+
+		// Si la actualización del elemento es exitosa, se confirma la transacción:
 		await transaction.commit();
 
-		res.send({ data });
+		// Devuelve los datos actualizados
+		res.send({ message: "Elemento actualizado correctamente" });
 	} catch (err) {
 		// Si hay un error, se deshace la transacción:
 		if (transaction) await transaction.rollback();

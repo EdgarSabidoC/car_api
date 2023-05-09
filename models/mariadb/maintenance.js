@@ -12,6 +12,7 @@ const Maintenance = sequelize.define(
 		maintenance_type: {
 			type: DataTypes.INTEGER,
 			primaryKey: true,
+			autoIncrement: true,
 			allowNull: false,
 			references: {
 				model: MaintenanceType,

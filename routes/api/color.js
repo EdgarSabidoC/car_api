@@ -19,7 +19,13 @@ router.get("/", getItems);
 /* Obtiene un elemento */
 router.get("/:colorIdOrName", getItemValidator, getItem);
 
+/* Creates an item register only if the user is an admin */
+router.post("/", createItem);
+
+/* Actualiza un elemento del registro */
+router.put("/:colorIdOrName", getItemValidator, updateItem);
+
 /* Elimina un elemento del registro */
-router.delete("/:colorIdOrName", deleteItem);
+router.delete("/:colorIdOrName", getItemValidator, deleteItem);
 
 module.exports = router;
