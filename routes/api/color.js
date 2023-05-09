@@ -11,10 +11,11 @@ const {
 	updateItem,
 	deleteItem,
 } = require("../../controllers/color");
-// const customHeader = require("../middleware/customHeader");
+
+const customHeader = require("../../middleware/customHeader");
 
 /* Obtiene una lista de elementos */
-router.get("/", getItems);
+router.get("/", customHeader, getItems);
 
 /* Obtiene un elemento */
 router.get("/:colorIdOrName", getItemValidator, getItem);

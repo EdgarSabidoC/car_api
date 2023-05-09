@@ -1,9 +1,10 @@
+const API_KEY = process.env.API_KEY;
 const customHeader = (req, res, next) => {
 	try {
 		const apiKey = req.headers.api_key;
 
 		// Validación:
-		if (apiKey === "public-key-123") {
+		if (apiKey === API_KEY) {
 			next();
 		} else {
 			res.status(403);
