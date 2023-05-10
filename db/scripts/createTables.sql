@@ -359,10 +359,10 @@ ADD INDEX `createdAt` (`createdAt`) USING BTREE;
 
 CREATE TABLE IF NOT EXISTS car_api.appointment(
 		id INT NOT NULL AUTO_INCREMENT,
-		first_name VARCHAR(80) NOT NULL,
-		last_name_1 VARCHAR(80) NOT NULL,
-		last_name_2 VARCHAR(80) NOT NULL,
-		email VARCHAR(80) NOT NULL,
+		client_firstname VARCHAR(80) NOT NULL,
+		client_lastname_1 VARCHAR(80) NOT NULL,
+		client_lastname_2 VARCHAR(80) NULL,
+		email VARCHAR(80) NULL,
 		telephone VARCHAR(20) NULL,
 		appointment_date DATE NOT NULL,
 		dealership INT NOT NULL,
@@ -383,9 +383,9 @@ CREATE TABLE IF NOT EXISTS car_api.appointment(
 			ON UPDATE CASCADE
 			ON DELETE CASCADE
 ) ENGINE = InnoDB;
-ALTER TABLE `car_api`.`appointment` ADD INDEX `first_name` (`first_name`) USING BTREE,
-ADD INDEX `last_name_1` (`last_name_1`) USING BTREE,
-ADD INDEX `last_name_2` (`last_name_2`) USING BTREE,
+ALTER TABLE `car_api`.`appointment` ADD INDEX `client_firstname` (`client_firstname`) USING BTREE,
+ADD INDEX `client_lastname_1` (`client_lastname_1`) USING BTREE,
+ADD INDEX `client_lastname_2` (`client_lastname_2`) USING BTREE,
 ADD INDEX `email` (`email`) USING BTREE,
 ADD INDEX `telephone` (`telephone`) USING BTREE,
 ADD INDEX `appointment_date` (`appointment_date`) USING BTREE,
@@ -437,26 +437,32 @@ ADD INDEX `last_name_2` (`last_name_2`) USING BTREE,
 ADD INDEX `createdAt` (`createdAt`) USING BTREE;
 
 CREATE TABLE IF NOT EXISTS car_api.sell(
-		car INT NOT NULL,
+		appointment INT NOT NULL,
+		car VARCHAR(17) NOT NULL,
 		employee INT NOT NULL,
 		sold_price DECIMAL NOT NULL,
 		createdAt DATETIME NOT NULL,
 		updatedAt DATETIME NOT NULL,
 		deleted BOOLEAN DEFAULT 0,
 		deletedAt DATETIME NULL,
-		PRIMARY KEY(car, employee),
+		PRIMARY KEY(appointment, car, employee),
+		CONSTRAINT `fk_appointment`
+			FOREIGN KEY (`appointment`)
+			REFERENCES `car_api`.`appointment` (`id`)
+			ON UPDATE CASCADE
+			ON DELETE CASCADE,
+		CONSTRAINT `fk_car_3`
+			FOREIGN KEY (`car`)
+			REFERENCES `car_api`.`car` (`vin`)
+			ON UPDATE CASCADE
+			ON DELETE CASCADE,
 		CONSTRAINT `fk_employee`
 			FOREIGN KEY (`employee`)
 			REFERENCES `car_api`.`employee` (`id`)
 			ON UPDATE CASCADE
 			ON DELETE CASCADE
-		CONSTRAINT `fk_car_3`
-			FOREIGN KEY (`car`)
-			REFERENCES `car_api`.`car` (`id`)
-			ON UPDATE CASCADE
-			ON DELETE CASCADE
 ) ENGINE = InnoDB;
-ALTER TABLE `car_api`.`employee` ADD INDEX `createdAt` (`createdAt`) USING BTREE;
+ALTER TABLE `car_api`.`sell` ADD INDEX `createdAt` (`createdAt`) USING BTREE;
 
 -- CREATE TABLE IF NOT EXISTS car_api.user (
 --   id INT(11) NOT NULL AUTO_INCREMENT,
