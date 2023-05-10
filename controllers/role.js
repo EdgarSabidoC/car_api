@@ -1,5 +1,5 @@
 const { matchedData } = require("express-validator");
-const { State } = require("../models"); // Referencia a lo exportado en models/index.js
+const { Role } = require("../models"); // Referencia a lo exportado en models/index.js
 const { handleHttpError } = require("../utils/handleError");
 const { sequelize } = require("../config/mariadb");
 
@@ -47,7 +47,7 @@ const getItems = async (req, res) => {
 };
 
 /**
- * La función getItem busca y devuelve un elemento de la base de datos según el valor del parámetro stateIdOrName.
+ * La función getItem busca y devuelve un elemento de la base de datos según el valor del parámetro roleIdOrName.
  * @param {*} req El objeto de solicitud HTTP.
  * @param {*} res El objeto de respuesta HTTP.
  * @returns {Promise} - Promesa que resuelve con un objeto que contiene el elemento.
@@ -56,16 +56,16 @@ const getItems = async (req, res) => {
 const getItem = async (req, res) => {
 	let transaction;
 	try {
-		const { stateIdOrName } = req.params;
+		const { roleIdOrName } = req.params;
 
 		// Se obtiene una instancia de la transacción:
 		transaction = await sequelize.transaction();
 
 		// Se ejecuta la consulta dentro de la transacción:
 		const data = await State.findOne({
-			where: isNaN(stateIdOrName)
-				? { name: stateIdOrName }
-				: { id: stateIdOrName },
+			where: isNaN(roleIdOrName)
+				? { name: roleIdOrName }
+				: { id: roleIdOrName },
 			transaction,
 		});
 
@@ -90,7 +90,7 @@ const getItem = async (req, res) => {
 };
 
 /**
- * Obtiene una lista de elementos de la tabla state utilizando paginación y una transacción de base de datos.
+ * Obtiene una lista de elementos de la tabla role utilizando paginación y una transacción de base de datos.
  * @param {Object} req - Objeto de solicitud HTTP.
  * @param {Object} res - Objeto de respuesta HTTP.
  * @returns {Promise} - Promesa que resuelve con un objeto que contiene la lista de elementos si la creación fue exitosa.
@@ -121,7 +121,7 @@ const createItem = async (req, res) => {
 };
 
 /**
- * Obtiene un elemento de la tabla state según su ID o código de producto, utilizando una transacción de base de datos.
+ * Obtiene un elemento de la tabla role según su ID o código de producto, utilizando una transacción de base de datos.
  * @param {Object} req - Objeto de solicitud HTTP.
  * @param {Object} res - Objeto de respuesta HTTP.
  * @returns {Promise} - Promesa que resuelve con un objeto que contiene el elemento si la actualización fue exitosa.
@@ -130,7 +130,7 @@ const createItem = async (req, res) => {
 const updateItem = async (req, res) => {
 	let transaction;
 	try {
-		const { stateIdOrName } = req.params;
+		const { roleIdOrName } = req.params;
 		const { body } = req;
 
 		// Se obtiene una instancia de la transacción:
@@ -138,9 +138,9 @@ const updateItem = async (req, res) => {
 
 		// Se busca el registro a actualizar:
 		const data = await State.findOne({
-			where: isNaN(stateIdOrName)
-				? { name: stateIdOrName }
-				: { id: stateIdOrName },
+			where: isNaN(roleIdOrName)
+				? { name: roleIdOrName }
+				: { id: roleIdOrName },
 			transaction,
 		});
 
@@ -182,16 +182,16 @@ const updateItem = async (req, res) => {
 const deleteItem = async (req, res) => {
 	let transaction;
 	try {
-		const { stateIdOrName } = req.params;
+		const { roleIdOrName } = req.params;
 
 		// Se obtiene una instancia de la transacción:
 		transaction = await sequelize.transaction();
 
 		// Se ejecuta la consulta dentro de la transacción:
 		const data = await State.findOne({
-			where: isNaN(stateIdOrName)
-				? { name: stateIdOrName }
-				: { id: stateIdOrName },
+			where: isNaN(roleIdOrName)
+				? { name: roleIdOrName }
+				: { id: roleIdOrName },
 			transaction,
 		});
 
@@ -205,18 +205,18 @@ const deleteItem = async (req, res) => {
 		await data.update(
 			{ deleted: true },
 			{
-				where: isNaN(stateIdOrName)
-					? { name: stateIdOrName }
-					: { id: stateIdOrName },
+				where: isNaN(roleIdOrName)
+					? { name: roleIdOrName }
+					: { id: roleIdOrName },
 				transaction,
 			}
 		);
 
 		// Actualiza la fecha de destrucción:
 		await data.destroy({
-			where: isNaN(stateIdOrName)
-				? { name: stateIdOrName }
-				: { id: stateIdOrName },
+			where: isNaN(roleIdOrName)
+				? { name: roleIdOrName }
+				: { id: roleIdOrName },
 			transaction,
 		});
 

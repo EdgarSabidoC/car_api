@@ -2,8 +2,8 @@ const { sequelize } = require("../../config/mariadb");
 const { DataTypes } = require("sequelize");
 
 // Estructura del schema:
-const Price = sequelize.define(
-	"price",
+const State = sequelize.define(
+	"role",
 	{
 		id: {
 			type: DataTypes.INTEGER,
@@ -11,13 +11,13 @@ const Price = sequelize.define(
 			autoIncrement: true,
 			allowNull: false,
 		},
-		concept: {
+		name: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		percentage: {
-			type: DataTypes.INTEGER,
-			allowNull: false,
+		permissions: {
+			type: DataTypes.STRING,
+			allowNull: true,
 		},
 		createdAt: {
 			type: DataTypes.DATE,
@@ -32,9 +32,9 @@ const Price = sequelize.define(
 	},
 	{
 		timestamps: true,
-		tableName: "price",
+		tableName: "role",
 		paranoid: true,
 	}
 );
 
-module.exports = Price;
+module.exports = State;

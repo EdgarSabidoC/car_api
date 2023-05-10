@@ -16,6 +16,7 @@ const models = {
 	MaintenanceType: require(`${pathModels}/maintenance_type`),
 	PostalCode: require(`${pathModels}/postal_code`),
 	Price: require(`${pathModels}/price`),
+	Role: require(`${pathModels}/role`),
 	Schedule: require(`${pathModels}/schedule`),
 	State: require(`${pathModels}/state`),
 	Transmission: require(`${pathModels}/transmission`),

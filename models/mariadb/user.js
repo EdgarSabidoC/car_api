@@ -55,14 +55,10 @@ const User = sequelize.define(
 		createdAt: {
 			type: DataTypes.DATE,
 			allowNull: false,
-			defaultValue: sequelize.literal("CURRENT_TIMESTAMP"),
 		},
 		updatedAt: {
 			type: DataTypes.DATE,
 			allowNull: false,
-			defaultValue: sequelize.literal(
-				"CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"
-			),
 		},
 		deleted: { type: DataTypes.BOOLEAN },
 		deletedAt: { type: DataTypes.DATE, allowNull: true },
