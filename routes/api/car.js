@@ -10,22 +10,24 @@ const {
 	createItem,
 	updateItem,
 	deleteItem,
-} = require("../../controllers/car");
-// const customHeader = require("../middleware/customHeader");
+} = require("../../controllers/car"); // Controladores
 
-/* Obtiene una lista de elementos */
+// Middleware para requerir una API_KEY:
+const customHeader = require("../../middleware/customHeader");
+
+/* Obtiene una lista de elementos del registro */
 router.get("/", getItems);
 
-/* Obtiene un elemento */
+/* Obtiene un elemento del registro */
 router.get("/", getItemValidator, getItem);
 
-/* Crea un registro de un elemento si el usuario es admin */
+/* Crea un elemento en el registro */
 router.post("/", createItemValidator, createItem);
 
-/* Updates an item register */
+/* Actualiza un elemento del registro */
 router.put("/:id", getItemValidator, createItemValidator, updateItem);
 
-/* Deletes an item register */
+/* Elimina un elemento del registro */
 router.delete("/:id", getItemValidator, deleteItem);
 
 module.exports = router;

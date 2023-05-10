@@ -47,7 +47,7 @@ const getItems = async (req, res) => {
 };
 
 /**
- * La función getItem busca y devuelve un elemento de la base de datos según el valor del parámetro pcIdOrCode.
+ * La función getItem busca y devuelve un elemento de la base de datos según el valor del parámetro code.
  * @param {*} req El objeto de solicitud HTTP.
  * @param {*} res El objeto de respuesta HTTP.
  * @returns {Promise} - Promesa que resuelve con un objeto que contiene el elemento.
@@ -56,14 +56,14 @@ const getItems = async (req, res) => {
 const getItem = async (req, res) => {
 	let transaction;
 	try {
-		const { pcIdOrCode } = req.params;
+		const { code } = req.params;
 
 		// Se obtiene una instancia de la transacción:
 		transaction = await sequelize.transaction();
 
 		// Se ejecuta la consulta dentro de la transacción:
 		const data = await PostalCode.findOne({
-			where: isNaN(pcIdOrCode) ? { code: pcIdOrCode } : { id: pcIdOrCode },
+			where: { code: code },
 			transaction,
 		});
 
@@ -128,7 +128,7 @@ const createItem = async (req, res) => {
 const updateItem = async (req, res) => {
 	let transaction;
 	try {
-		const { pcIdOrCode } = req.params;
+		const { code } = req.params;
 		const { body } = req;
 
 		// Se obtiene una instancia de la transacción:
@@ -136,7 +136,7 @@ const updateItem = async (req, res) => {
 
 		// Se busca el registro a actualizar:
 		const data = await PostalCode.findOne({
-			where: isNaN(pcIdOrCode) ? { code: pcIdOrCode } : { id: pcIdOrCode },
+			where: { code: code },
 			transaction,
 		});
 
@@ -178,14 +178,14 @@ const updateItem = async (req, res) => {
 const deleteItem = async (req, res) => {
 	let transaction;
 	try {
-		const { pcIdOrCode } = req.params;
+		const { code } = req.params;
 
 		// Se obtiene una instancia de la transacción:
 		transaction = await sequelize.transaction();
 
 		// Se ejecuta la consulta dentro de la transacción:
 		const data = await PostalCode.findOne({
-			where: isNaN(pcIdOrCode) ? { code: pcIdOrCode } : { id: pcIdOrCode },
+			where: { code: code },
 			transaction,
 		});
 
@@ -197,12 +197,18 @@ const deleteItem = async (req, res) => {
 
 		// Establece el campo "deleted" a true en lugar de eliminar el registro:
 		await data.update(
-			{ deletedAt: new Date() },
+			{ deleted: true },
 			{
-				where: isNaN(pcIdOrCode) ? { code: pcIdOrCode } : { id: pcIdOrCode },
+				where: { code: code },
 				transaction,
 			}
 		);
+
+		// Actualiza la fecha de destrucción:
+		await data.destroy({
+			where: { code: code },
+			transaction,
+		});
 
 		// Si la eliminación del elemento es exitosa, se confirma la transacción:
 		await transaction.commit();

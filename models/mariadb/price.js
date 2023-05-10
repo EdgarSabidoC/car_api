@@ -20,7 +20,7 @@ const Price = sequelize.define(
 			allowNull: false,
 		},
 		deleted: { type: DataTypes.BOOLEAN },
-		deletedAt: { type: DataTypes.DATE },
+		deletedAt: { type: DataTypes.DATE, allowNull: true },
 	},
 	{
 		timestamps: true,

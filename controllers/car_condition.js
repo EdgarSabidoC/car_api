@@ -203,7 +203,7 @@ const deleteItem = async (req, res) => {
 
 		// Establece el campo "deleted" a true en lugar de eliminar el registro:
 		await data.update(
-			{ deletedAt: new Date() },
+			{ deleted: true },
 			{
 				where: isNaN(conditionIdOrType)
 					? { type: conditionIdOrType }
@@ -211,6 +211,14 @@ const deleteItem = async (req, res) => {
 				transaction,
 			}
 		);
+
+		// Actualiza la fecha de destrucción:
+		await data.destroy({
+			where: isNaN(conditionIdOrType)
+				? { type: conditionIdOrType }
+				: { id: conditionIdOrType },
+			transaction,
+		});
 
 		// Si la eliminación del elemento es exitosa, se confirma la transacción:
 		await transaction.commit();

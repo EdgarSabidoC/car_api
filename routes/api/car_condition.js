@@ -10,7 +10,7 @@ const {
 	createItem,
 	updateItem,
 	deleteItem,
-} = require("../../controllers/car_condition");
+} = require("../../controllers/car_condition"); // Controladores
 
 // Middleware para requerir una API_KEY:
 const customHeader = require("../../middleware/customHeader");

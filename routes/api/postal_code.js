@@ -10,7 +10,7 @@ const {
 	createItem,
 	updateItem,
 	deleteItem,
-} = require("../../controllers/postal_code");
+} = require("../../controllers/postal_code"); // Controladores
 
 // Middleware para requerir una API_KEY:
 const customHeader = require("../../middleware/customHeader");
@@ -19,15 +19,15 @@ const customHeader = require("../../middleware/customHeader");
 router.get("/", getItems);
 
 /* Obtiene un elemento */
-router.get("/:pcIdOrCode", getItemValidator, getItem);
+router.get("/:code", getItemValidator, getItem);
 
 /* Crea un elemento en el registro */
 router.post("/", createItem);
 
 /* Actualiza un elemento del registro */
-router.put("/:pcIdOrCode", getItemValidator, updateItem);
+router.put("/:code", getItemValidator, updateItem);
 
 /* Elimina un elemento del registro */
-router.delete("/:pcIdOrCode", getItemValidator, deleteItem);
+router.delete("/:code", getItemValidator, deleteItem);
 
 module.exports = router;

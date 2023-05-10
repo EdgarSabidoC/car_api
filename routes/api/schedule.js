@@ -3,31 +3,31 @@ const router = express.Router();
 const {
 	createItemValidator,
 	getItemValidator,
-} = require("../../validators/color"); // Middlewares
+} = require("../../validators/schedule"); // Middlewares
 const {
 	getItems,
 	getItem,
 	createItem,
 	updateItem,
 	deleteItem,
-} = require("../../controllers/color"); // Controladores
+} = require("../../controllers/schedule"); // Controladores
 
 // Middleware para requerir una API_KEY:
 const customHeader = require("../../middleware/customHeader");
 
-/* Obtiene una lista de elementos del registro */
+/* Obtiene una lista de elementos */
 router.get("/", getItems);
 
-/* Obtiene un elemento del registro */
-router.get("/:colorIdOrName", getItemValidator, getItem);
+/* Obtiene un elemento */
+router.get("/:scheduleIdOrHour", getItemValidator, getItem);
 
 /* Crea un elemento en el registro */
 router.post("/", createItem);
 
 /* Actualiza un elemento del registro */
-router.put("/:colorIdOrName", getItemValidator, updateItem);
+router.put("/:scheduleIdOrHour", getItemValidator, updateItem);
 
 /* Elimina un elemento del registro */
-router.delete("/:colorIdOrName", getItemValidator, deleteItem);
+router.delete("/:scheduleIdOrHour", getItemValidator, deleteItem);
 
 module.exports = router;

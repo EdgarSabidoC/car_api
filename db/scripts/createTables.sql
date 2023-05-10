@@ -29,6 +29,7 @@ DROP TABLE IF EXISTS car_api.role;
 SET FOREIGN_KEY_CHECKS=1;
 
 		-- Se crean las tablas:
+		DROP TABLE IF EXISTS car_api.schedule;
 CREATE TABLE IF NOT EXISTS car_api.schedule(
 		id INT NOT NULL AUTO_INCREMENT,
 		hour TIME NOT NULL,
@@ -36,9 +37,10 @@ CREATE TABLE IF NOT EXISTS car_api.schedule(
 		updatedAt DATETIME NOT NULL,
 		deleted BOOLEAN DEFAULT 0,
 		deletedAt DATETIME NULL,
-		PRIMARY KEY(id)
+		PRIMARY KEY(id),
+		UNIQUE(hour),
+		CHECK (hour <= TIME_FORMAT('23:59', '%H:%i'))
 ) ENGINE = InnoDB;
-ALTER TABLE `car_api`.`schedule` ADD INDEX `hour` (`hour`) USING BTREE;
 
 
 CREATE TABLE IF NOT EXISTS car_api.car_category(

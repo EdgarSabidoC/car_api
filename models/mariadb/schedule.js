@@ -14,9 +14,10 @@ const Schedule = sequelize.define(
 		hour: {
 			type: DataTypes.TIME,
 			allowNull: false,
+			unique: true,
 		},
 		deleted: { type: DataTypes.BOOLEAN },
-		deletedAt: { type: DataTypes.DATE },
+		deletedAt: { type: DataTypes.DATE, allowNull: true },
 	},
 	{
 		timestamps: true,

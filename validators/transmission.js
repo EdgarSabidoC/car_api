@@ -2,14 +2,14 @@ const { check } = require("express-validator");
 const validateResults = require("../utils/handleValidator");
 
 const createItemValidator = [
-	check("code").exists().notEmpty(),
+	check("type").exists().notEmpty(),
 	(req, res, next) => {
 		return validateResults(req, res, next);
 	},
 ];
 
 const getItemValidator = [
-	check("code").exists().notEmpty(),
+	check("transmissionIdOrType").exists().notEmpty(),
 	(req, res, next) => {
 		return validateResults(req, res, next);
 	},
