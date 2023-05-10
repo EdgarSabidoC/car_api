@@ -6,30 +6,31 @@ CREATE DATABASE IF NOT EXISTS car_api; USE
 
 SET FOREIGN_KEY_CHECKS=0;
 
-		-- Se borran las tablas si existen:
-DROP TABLE IF EXISTS car_api.maintenance;
-DROP TABLE IF EXISTS car_api.appointment;
-DROP TABLE IF EXISTS car_api.car;
-DROP TABLE IF EXISTS car_api.log;
-DROP TABLE IF EXISTS car_api.user;
-DROP TABLE IF EXISTS car_api.car_model;
-DROP TABLE IF EXISTS car_api.dealership;
-DROP TABLE IF EXISTS car_api.postal_code;
-DROP TABLE IF EXISTS car_api.state;
-DROP TABLE IF EXISTS car_api.transmission;
-DROP TABLE IF EXISTS car_api.car_condition;
-DROP TABLE IF EXISTS car_api.price;
-DROP TABLE IF EXISTS car_api.color;
-DROP TABLE IF EXISTS car_api.maker;
-DROP TABLE IF EXISTS car_api.car_category;
-DROP TABLE IF EXISTS car_api.schedule;
-DROP TABLE IF EXISTS car_api.maintenance_type;
-DROP TABLE IF EXISTS car_api.role;
+		-- Se borran las tablas si existen: 20
+DROP TABLE IF EXISTS car_api.sell;	-- FALTAN
+DROP TABLE IF EXISTS car_api.employee; -- FALTAN
+DROP TABLE IF EXISTS car_api.maintenance; -- S
+DROP TABLE IF EXISTS car_api.appointment; -- S
+DROP TABLE IF EXISTS car_api.car; -- S
+DROP TABLE IF EXISTS car_api.log; -- FALTAN
+DROP TABLE IF EXISTS car_api.user; -- FALTAN
+DROP TABLE IF EXISTS car_api.car_model; -- S
+DROP TABLE IF EXISTS car_api.dealership; -- S
+DROP TABLE IF EXISTS car_api.postal_code; -- S
+DROP TABLE IF EXISTS car_api.state; -- S
+DROP TABLE IF EXISTS car_api.transmission; -- S
+DROP TABLE IF EXISTS car_api.car_condition; -- S
+DROP TABLE IF EXISTS car_api.price; -- S
+DROP TABLE IF EXISTS car_api.color; -- S
+DROP TABLE IF EXISTS car_api.maker; -- S
+DROP TABLE IF EXISTS car_api.car_category; -- S
+DROP TABLE IF EXISTS car_api.schedule; -- S
+DROP TABLE IF EXISTS car_api.maintenance_type; -- S
+DROP TABLE IF EXISTS car_api.role; -- S
 
 SET FOREIGN_KEY_CHECKS=1;
 
 		-- Se crean las tablas:
-		DROP TABLE IF EXISTS car_api.schedule;
 CREATE TABLE IF NOT EXISTS car_api.schedule(
 		id INT NOT NULL AUTO_INCREMENT,
 		hour TIME NOT NULL,
@@ -281,9 +282,9 @@ ADD INDEX `user_role` (`user_role`) USING BTREE;
 CREATE TABLE IF NOT EXISTS car_api.log(
 		id INT NOT NULL AUTO_INCREMENT,
 		user INT NOT NULL,
-		ip VARCHAR(50) NOT NULL,
-		event TEXT NOT NULL,
-		observation VARCHAR(50) NOT NULL,
+		ip VARCHAR(80) NOT NULL,
+		event TEXT NULL,
+		observation TEXT NULL,
 		createdAt DATETIME NOT NULL,
 		updatedAt DATETIME NOT NULL,
 		deleted BOOLEAN DEFAULT 0,
@@ -412,6 +413,50 @@ CREATE TABLE IF NOT EXISTS car_api.maintenance(
 			ON DELETE CASCADE
 ) ENGINE = InnoDB;
 
+CREATE TABLE IF NOT EXISTS car_api.employee(
+		id INT NOT NULL AUTO_INCREMENT,
+		first_name VARCHAR(75) NOT NULL,
+		last_name_1 VARCHAR(75) NOT NULL,
+		last_name_2  VARCHAR(75) NULL,
+		dealership INT NOT NULL,
+		createdAt DATETIME NOT NULL,
+		updatedAt DATETIME NOT NULL,
+		deleted BOOLEAN DEFAULT 0,
+		deletedAt DATETIME NULL,
+		PRIMARY KEY(id),
+		CONSTRAINT `fk_dealership_4`
+			FOREIGN KEY (`dealership`)
+			REFERENCES `car_api`.`dealership` (`id`)
+			ON UPDATE CASCADE
+			ON DELETE CASCADE
+) ENGINE = InnoDB;
+ALTER TABLE `car_api`.`employee` ADD INDEX `dealership` (`dealership`) USING BTREE,
+ADD INDEX `first_name` (`first_name`) USING BTREE,
+ADD INDEX `last_name_1` (`last_name_1`) USING BTREE,
+ADD INDEX `last_name_2` (`last_name_2`) USING BTREE,
+ADD INDEX `createdAt` (`createdAt`) USING BTREE;
+
+CREATE TABLE IF NOT EXISTS car_api.sell(
+		car INT NOT NULL,
+		employee INT NOT NULL,
+		sold_price DECIMAL NOT NULL,
+		createdAt DATETIME NOT NULL,
+		updatedAt DATETIME NOT NULL,
+		deleted BOOLEAN DEFAULT 0,
+		deletedAt DATETIME NULL,
+		PRIMARY KEY(car, employee),
+		CONSTRAINT `fk_employee`
+			FOREIGN KEY (`employee`)
+			REFERENCES `car_api`.`employee` (`id`)
+			ON UPDATE CASCADE
+			ON DELETE CASCADE
+		CONSTRAINT `fk_car_3`
+			FOREIGN KEY (`car`)
+			REFERENCES `car_api`.`car` (`id`)
+			ON UPDATE CASCADE
+			ON DELETE CASCADE
+) ENGINE = InnoDB;
+ALTER TABLE `car_api`.`employee` ADD INDEX `createdAt` (`createdAt`) USING BTREE;
 
 -- CREATE TABLE IF NOT EXISTS car_api.user (
 --   id INT(11) NOT NULL AUTO_INCREMENT,
