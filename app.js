@@ -1,35 +1,40 @@
 require("dotenv").config();
-const express = require("express"); // Arranca la app.
+const express = require("express");
 const cors = require("cors");
-const morganBody = require("morgan-body"); // Utilizado para darle formato a los errores.
+const morganBody = require("morgan-body");
 const { loggerStream } = require("./utils/handleLogger");
 const { dbConnectMariaDB } = require("./config/mariadb");
-const ENGINE_DB = process.env.ENGINE_DB;
+const session = require("express-session");
+const passport = require("passport");
 
-const app = express(); // Instantiate the app.
+const app = express();
+const port = process.env.PORT || 3000;
 
-app.use(cors()); // La app usa cors.
-app.use(express.json()); // La app puede usar json.
+app.use(cors());
+app.use(express.json());
 app.use(express.static("storage"));
+
+app.use(session({ secret: "cats" }));
+app.use(passport.initialize());
+app.use(passport.session());
 
 morganBody(app, {
 	noColors: true,
 	stream: loggerStream,
 	skip: function (req, res) {
-		// Solamente se envía un log si hay un error.
-		return res.statusCode < 400; // Evita los errores entre 2xx y 3xx.
+		return res.statusCode < 400;
 	},
 });
-const port = process.env.PORT || 3000; // Puerto de la app. Predeterminado: 3000.
 
-// Llamado a las rutas:
 app.use("/api", require("./routes"));
 
-// Función inicial:
+// Ruta donde estará el botón para iniciar sesión de Google:
+app.get("/api", (req, res) => {
+	res.send("<a href='/api/auth/google'>Authenticate with Google</a>");
+});
+
 app.listen(port, () => {
 	console.log(`The app is ready and running on http://localhost:${port}`);
 });
 
-if (ENGINE_DB === "mariadb")
-	// Llama la función para conectarse a MariaDB:
-	dbConnectMariaDB();
+if (process.env.ENGINE_DB === "mariadb") dbConnectMariaDB();

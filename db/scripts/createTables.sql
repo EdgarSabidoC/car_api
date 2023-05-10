@@ -245,8 +245,11 @@ CREATE TABLE IF NOT EXISTS car_api.user(
 		id INT NOT NULL AUTO_INCREMENT,
 		first_name VARCHAR(75) NOT NULL,
 		last_name_1 VARCHAR(75) NOT NULL,
-		last_name_2  VARCHAR(75) NOT NULL,
-		password VARCHAR(30) NOT NULL,
+		last_name_2  VARCHAR(75) NULL,
+		password VARCHAR(30) NULL,
+		googleId VARCHAR(255) NULL,
+		displayName VARCHAR(255) NULL,
+		email VARCHAR(255) NOT NULL,
 		dealership INT NOT NULL,
 		user_role INT NOT NULL,
 		createdAt DATETIME NOT NULL,
@@ -254,6 +257,7 @@ CREATE TABLE IF NOT EXISTS car_api.user(
 		deleted BOOLEAN DEFAULT 0,
 		deletedAt DATETIME NULL,
 		PRIMARY KEY(id),
+		UNIQUE KEY (googleId),
 		CONSTRAINT `fk_dealership`
 			FOREIGN KEY (`dealership`)
 			REFERENCES `car_api`.`dealership` (`id`)
@@ -405,3 +409,15 @@ CREATE TABLE IF NOT EXISTS car_api.maintenance(
 			ON UPDATE CASCADE
 			ON DELETE CASCADE
 ) ENGINE = InnoDB;
+
+
+-- CREATE TABLE IF NOT EXISTS car_api.user (
+--   id INT(11) NOT NULL AUTO_INCREMENT,
+--   googleId VARCHAR(255) NOT NULL,
+--   displayName VARCHAR(255) NOT NULL,
+--   email VARCHAR(255) NOT NULL,
+--   createdAt DATETIME NOT NULL,
+--   updatedAt DATETIME NOT NULL,
+--   PRIMARY KEY (id),
+--   UNIQUE KEY (googleId)
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

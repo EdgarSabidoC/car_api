@@ -19,6 +19,7 @@ const models = {
 	Schedule: require(`${pathModels}/schedule`),
 	State: require(`${pathModels}/state`),
 	Transmission: require(`${pathModels}/transmission`),
+	User: require(`${pathModels}/user`),
 };
 
 // Se exporta el arreglo con los modelos de sequelize:

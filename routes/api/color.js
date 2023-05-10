@@ -12,10 +12,11 @@ const {
 	deleteItem,
 } = require("../../controllers/color");
 
+// Middleware para requerir una API_KEY:
 const customHeader = require("../../middleware/customHeader");
 
 /* Obtiene una lista de elementos */
-router.get("/", customHeader, getItems);
+router.get("/", getItems);
 
 /* Obtiene un elemento */
 router.get("/:colorIdOrName", getItemValidator, getItem);
