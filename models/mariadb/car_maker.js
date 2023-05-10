@@ -16,8 +16,8 @@ const CarMaker = sequelize.define(
 			allowNull: false,
 		},
 		logo: {
-			type: DataTypes.STRING,
-			allowNull: false,
+			type: DataTypes.TEXT,
+			allowNull: true,
 		},
 		createdAt: {
 			type: DataTypes.DATE,
