@@ -13,6 +13,7 @@ const models = {
 	Color: require(`${pathModels}/color`),
 	Dealership: require(`${pathModels}/dealership`),
 	Employee: require(`${pathModels}/employee`),
+	Log: require(`${pathModels}/log`),
 	Maintenance: require(`${pathModels}/maintenance`),
 	MaintenanceType: require(`${pathModels}/maintenance_type`),
 	PostalCode: require(`${pathModels}/postal_code`),
