@@ -7,13 +7,13 @@ CREATE DATABASE IF NOT EXISTS car_api; USE
 SET FOREIGN_KEY_CHECKS=0;
 
 		-- Se borran las tablas si existen: 20
-DROP TABLE IF EXISTS car_api.sell;	-- FALTAN
-DROP TABLE IF EXISTS car_api.employee; -- FALTAN
+DROP TABLE IF EXISTS car_api.sell;	-- FALTAN modelos y demás
+DROP TABLE IF EXISTS car_api.employee; -- FALTAN modelos y demás
 DROP TABLE IF EXISTS car_api.maintenance; -- S
 DROP TABLE IF EXISTS car_api.appointment; -- S
 DROP TABLE IF EXISTS car_api.car; -- S
-DROP TABLE IF EXISTS car_api.log; -- FALTAN
-DROP TABLE IF EXISTS car_api.user; -- FALTAN
+DROP TABLE IF EXISTS car_api.log; -- FALTAN modelos y demás
+DROP TABLE IF EXISTS car_api.user; -- FALTAN modelos y demás
 DROP TABLE IF EXISTS car_api.car_model; -- S
 DROP TABLE IF EXISTS car_api.dealership; -- S
 DROP TABLE IF EXISTS car_api.postal_code; -- S
