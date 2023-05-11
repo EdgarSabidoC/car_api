@@ -2,19 +2,18 @@ const { check } = require("express-validator");
 const validateResults = require("../utils/handleValidator");
 
 const createItemValidator = [
-	check("googleId").exists().notEmpty().isAlphanumeric(),
-	check("first_name").exists().notEmpty().isAlpha(),
-	check("last_name_1").exists().notEmpty().isAlpha(),
-	check("email").exists().notEmpty().isEmail(),
-	check("dealership").exists().notEmpty().isNumeric(),
-	check("user_role").exists().notEmpty().isNumeric(),
+	check("name").exists().notEmpty().isAlphanumeric(),
+	check("transmission").exists().notEmpty().isNumeric(),
+	check("color").exists().notEmpty().isNumeric(),
+	check("category").exists().notEmpty().isNumeric(),
+	check("maker").exists().notEmpty().isNumeric(),
 	(req, res, next) => {
 		return validateResults(req, res, next);
 	},
 ];
 
 const getItemValidator = [
-	check("userIdOrEmail").exists().notEmpty(),
+	check("carModelIdOrName").exists().notEmpty(),
 	(req, res, next) => {
 		return validateResults(req, res, next);
 	},

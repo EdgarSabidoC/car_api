@@ -3,7 +3,7 @@ const router = express.Router();
 const {
 	createItemValidator,
 	getItemValidator,
-} = require("../../validators/maintenance_type"); // Middlewares
+} = require("../../validators/maintenance_type"); // Middlewares para validar.
 const {
 	getItems,
 	getItem,
@@ -12,22 +12,38 @@ const {
 	deleteItem,
 } = require("../../controllers/maintenance_type"); // Controladores
 
-// Middleware para requerir una API_KEY:
-const customHeader = require("../../middleware/customHeader");
+// Middlewares:
+const customHeader = require("../../middleware/customHeader"); // Middleware para requerir una API_KEY.
+const { recordLog } = require("../../middleware/logRecord"); // Middleware para grabar en la bitácora.
 
 /* Obtiene una lista de elementos del registro */
-router.get("/", getItems);
+router.get("/", recordLog, getItems);
 
 /* Obtiene un elemento del registro */
-router.get("/:maintenanceTypeIdOrConcept", getItemValidator, getItem);
+router.get(
+	"/:maintenanceTypeIdOrConcept",
+	recordLog,
+	getItemValidator,
+	getItem
+);
 
 /* Crea un elemento en el registro */
 router.post("/", createItem);
 
 /* Actualiza un elemento del registro */
-router.put("/:maintenanceTypeIdOrConcept", getItemValidator, updateItem);
+router.put(
+	"/:maintenanceTypeIdOrConcept",
+	recordLog,
+	getItemValidator,
+	updateItem
+);
 
 /* Elimina un elemento del registro */
-router.delete("/:maintenanceTypeIdOrConcept", getItemValidator, deleteItem);
+router.delete(
+	"/:maintenanceTypeIdOrConcept",
+	recordLog,
+	getItemValidator,
+	deleteItem
+);
 
 module.exports = router;

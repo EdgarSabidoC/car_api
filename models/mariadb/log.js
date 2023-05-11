@@ -12,14 +12,6 @@ const Log = sequelize.define(
 			autoIncrement: true,
 			allowNull: false,
 		},
-		user: {
-			type: DataTypes.INTEGER,
-			references: {
-				model: User,
-				key: "id",
-			},
-			allowNull: false,
-		},
 		ip: {
 			type: DataTypes.STRING,
 			allowNull: false,
@@ -28,7 +20,19 @@ const Log = sequelize.define(
 			type: DataTypes.TEXT,
 			allowNull: true,
 		},
+		method: {
+			type: DataTypes.TEXT,
+			allowNull: true,
+		},
 		observation: {
+			type: DataTypes.TEXT,
+			allowNull: true,
+		},
+		url: {
+			type: DataTypes.TEXT,
+			allowNull: true,
+		},
+		body: {
 			type: DataTypes.TEXT,
 			allowNull: true,
 		},
@@ -49,10 +53,5 @@ const Log = sequelize.define(
 		paranoid: true,
 	}
 );
-
-Log.belongsTo(User, {
-	foreignKey: "user",
-	as: "log_user_as",
-});
 
 module.exports = Log;

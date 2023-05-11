@@ -3,7 +3,7 @@ const router = express.Router();
 const {
 	createItemValidator,
 	getItemValidator,
-} = require("../../validators/postal_code"); // Middlewares
+} = require("../../validators/postal_code"); // Middlewares para validar.
 const {
 	getItems,
 	getItem,
@@ -12,22 +12,23 @@ const {
 	deleteItem,
 } = require("../../controllers/postal_code"); // Controladores
 
-// Middleware para requerir una API_KEY:
-const customHeader = require("../../middleware/customHeader");
+// Middlewares:
+const customHeader = require("../../middleware/customHeader"); // Middleware para requerir una API_KEY.
+const { recordLog } = require("../../middleware/logRecord"); // Middleware para grabar en la bitácora.
 
 /* Obtiene una lista de elementos */
-router.get("/", getItems);
+router.get("/", recordLog, getItems);
 
 /* Obtiene un elemento */
-router.get("/:code", getItemValidator, getItem);
+router.get("/:code", recordLog, getItemValidator, getItem);
 
 /* Crea un elemento en el registro */
-router.post("/", createItem);
+router.post("/", recordLog, createItem);
 
 /* Actualiza un elemento del registro */
-router.put("/:code", getItemValidator, updateItem);
+router.put("/:code", recordLog, getItemValidator, updateItem);
 
 /* Elimina un elemento del registro */
-router.delete("/:code", getItemValidator, deleteItem);
+router.delete("/:code", recordLog, getItemValidator, deleteItem);
 
 module.exports = router;

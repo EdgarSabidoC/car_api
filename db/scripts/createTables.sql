@@ -246,13 +246,10 @@ ADD INDEX `year` (`year`) USING BTREE;
 
 
 CREATE TABLE IF NOT EXISTS car_api.user(
-		id INT NOT NULL AUTO_INCREMENT,
+		googleId VARCHAR(255) NOT NULL,,
 		first_name VARCHAR(75) NOT NULL,
 		last_name_1 VARCHAR(75) NOT NULL,
 		last_name_2  VARCHAR(75) NULL,
-		password VARCHAR(30) NULL,
-		googleId VARCHAR(255) NULL,
-		displayName VARCHAR(255) NULL,
 		email VARCHAR(255) NOT NULL,
 		dealership INT NOT NULL,
 		user_role INT NOT NULL,
@@ -260,8 +257,8 @@ CREATE TABLE IF NOT EXISTS car_api.user(
 		updatedAt DATETIME NOT NULL,
 		deleted BOOLEAN DEFAULT 0,
 		deletedAt DATETIME NULL,
-		PRIMARY KEY(id),
-		UNIQUE KEY (googleId),
+		PRIMARY KEY(googleId),
+		UNIQUE(email),
 		CONSTRAINT `fk_dealership`
 			FOREIGN KEY (`dealership`)
 			REFERENCES `car_api`.`dealership` (`id`)
@@ -282,22 +279,20 @@ ADD INDEX `user_role` (`user_role`) USING BTREE;
 
 CREATE TABLE IF NOT EXISTS car_api.log(
 		id INT NOT NULL AUTO_INCREMENT,
-		user INT NOT NULL,
 		ip VARCHAR(80) NOT NULL,
 		event TEXT NULL,
+		method TEXT NULL,
 		observation TEXT NULL,
+		url TEXT NULL,
+		body TEXT NULL,
 		createdAt DATETIME NOT NULL,
 		updatedAt DATETIME NOT NULL,
 		deleted BOOLEAN DEFAULT 0,
 		deletedAt DATETIME NULL,
-		PRIMARY KEY(id),
-		CONSTRAINT `fk_user`
-			FOREIGN KEY (`user`)
-			REFERENCES `car_api`.`user` (`id`)
-			ON UPDATE CASCADE
-			ON DELETE CASCADE
+		PRIMARY KEY(id)
 ) ENGINE = InnoDB;
-ALTER TABLE `car_api`.`log` ADD INDEX `user` (`user`) USING BTREE,
+ALTER TABLE `car_api`.`log` ADD INDEX `ip` (`ip`) USING BTREE,
+ADD INDEX `method` (`method`) USING BTREE,
 ADD INDEX `createdAt` (`createdAt`) USING BTREE;
 
 
