@@ -30,7 +30,8 @@ const createItemValidator = [
 ];
 
 const getItemValidator = [
-	check("appointmentIdOrDate").exists().notEmpty(),
+	check("date").exists().notEmpty().isDate(),
+	check("time").exists().notEmpty().isTime(),
 	(req, res, next) => {
 		return validateResults(req, res, next);
 	},

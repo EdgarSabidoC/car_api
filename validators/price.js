@@ -3,7 +3,7 @@ const validateResults = require("../utils/handleValidator");
 
 const createItemValidator = [
 	check("concept").exists().notEmpty().isString().isLength({ max: 350 }),
-	check("percentage").exists.notEmpty().isInt(),
+	check("percentage").exists().notEmpty().isInt(),
 	(req, res, next) => {
 		return validateResults(req, res, next);
 	},
