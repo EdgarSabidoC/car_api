@@ -7,7 +7,7 @@ CREATE DATABASE IF NOT EXISTS car_api; USE
 SET FOREIGN_KEY_CHECKS=0;
 
 		-- Se borran las tablas si existen: 20
-DROPM TABLE IF EXISTS car_api.session; -- Es sólo para almacenar la sesión del backend.
+DROP TABLE IF EXISTS car_api.session; -- Es sólo para almacenar la sesión del backend.
 DROP TABLE IF EXISTS car_api.sell;	-- FALTAN modelos y demás
 DROP TABLE IF EXISTS car_api.employee; -- FALTAN modelos y demás
 DROP TABLE IF EXISTS car_api.maintenance; -- S
@@ -246,13 +246,13 @@ ADD INDEX `year` (`year`) USING BTREE;
 
 
 CREATE TABLE IF NOT EXISTS car_api.user(
-		googleId VARCHAR(255) NOT NULL,,
+		googleId VARCHAR(255) NOT NULL,
 		first_name VARCHAR(75) NOT NULL,
 		last_name_1 VARCHAR(75) NOT NULL,
 		last_name_2  VARCHAR(75) NULL,
 		email VARCHAR(255) NOT NULL,
-		dealership INT NOT NULL,
-		user_role INT NOT NULL,
+		dealership INT NULL,
+		user_role INT NULL,
 		createdAt DATETIME NOT NULL,
 		updatedAt DATETIME NOT NULL,
 		deleted BOOLEAN DEFAULT 0,
@@ -273,7 +273,6 @@ CREATE TABLE IF NOT EXISTS car_api.user(
 ALTER TABLE `car_api`.`user` ADD INDEX `first_name` (`first_name`) USING BTREE,
 ADD INDEX `last_name_1` (`last_name_1`) USING BTREE,
 ADD INDEX `last_name_2` (`last_name_2`) USING BTREE,
-ADD INDEX `dealership` (`dealership`) USING BTREE,
 ADD INDEX `user_role` (`user_role`) USING BTREE;
 
 
@@ -309,6 +308,7 @@ CREATE TABLE IF NOT EXISTS car_api.car(
 		exterior_color INT NOT NULL,
 		dealership INT NOT NULL,
 		sold BOOLEAN DEFAULT 0,
+		photo_url TEXT NULL,
 		createdAt DATETIME NOT NULL,
 		updatedAt DATETIME NOT NULL,
 		deleted BOOLEAN DEFAULT 0,
@@ -344,6 +344,7 @@ ALTER TABLE `car_api`.`car` ADD INDEX `purchase_price` (`purchase_price`) USING 
 ADD INDEX `sale_price` (`sale_price`) USING BTREE,
 ADD INDEX `maintenance_cost` (`maintenance_cost`) USING BTREE,
 ADD INDEX `model` (`model`) USING BTREE,
+ADD INDEX `photo_url` (`photo_url`) USING BTREE,
 ADD INDEX `car_condition` (`car_condition`) USING BTREE,
 ADD INDEX `interior_color` (`interior_color`) USING BTREE,
 ADD INDEX `exterior_color` (`exterior_color`) USING BTREE,
@@ -361,6 +362,7 @@ CREATE TABLE IF NOT EXISTS car_api.appointment(
 		email VARCHAR(80) NULL,
 		telephone VARCHAR(20) NULL,
 		appointment_date DATE NOT NULL,
+		appointment_time TIME NOT NULL,
 		dealership INT NOT NULL,
 		car VARCHAR(17) NOT NULL,
 		createdAt DATETIME NOT NULL,
@@ -433,7 +435,6 @@ ADD INDEX `last_name_2` (`last_name_2`) USING BTREE,
 ADD INDEX `createdAt` (`createdAt`) USING BTREE;
 
 CREATE TABLE IF NOT EXISTS car_api.sell(
-		id INT NOT NULL,
 		appointment INT NOT NULL,
 		employee INT NOT NULL,
 		sold_price DECIMAL NOT NULL,
@@ -441,8 +442,7 @@ CREATE TABLE IF NOT EXISTS car_api.sell(
 		updatedAt DATETIME NOT NULL,
 		deleted BOOLEAN DEFAULT 0,
 		deletedAt DATETIME NULL,
-		PRIMARY KEY(id),
-		UNIQUE(appointment, employee),
+		PRIMARY KEY(appointment, employee),
 		CONSTRAINT `fk_appointment`
 			FOREIGN KEY (`appointment`)
 			REFERENCES `car_api`.`appointment` (`id`)

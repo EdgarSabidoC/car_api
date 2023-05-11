@@ -39,6 +39,10 @@ const Appointment = sequelize.define(
 			type: DataTypes.DATE,
 			allowNull: false,
 		},
+		appointment_time: {
+			type: DataTypes.TIME,
+			allowNull: false,
+		},
 		dealership: {
 			type: DataTypes.INTEGER,
 			references: {

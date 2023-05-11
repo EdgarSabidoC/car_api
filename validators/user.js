@@ -3,11 +3,12 @@ const validateResults = require("../utils/handleValidator");
 
 const createItemValidator = [
 	check("googleId").exists().notEmpty().isAlphanumeric(),
-	check("first_name").exists().notEmpty().isAlpha(),
-	check("last_name_1").exists().notEmpty().isAlpha(),
+	check("first_name").exists().notEmpty().isString().isLength({ max: 75 }),
+	check("last_name_1").exists().notEmpty().isString().isLength({ max: 75 }),
+	check("last_name_2").optional().notEmpty().isString().isLength({ max: 75 }),
 	check("email").exists().notEmpty().isEmail(),
-	check("dealership").exists().notEmpty().isNumeric(),
-	check("user_role").exists().notEmpty().isNumeric(),
+	check("dealership").optional().notEmpty().isInt(),
+	check("user_role").optional().notEmpty().isInt(),
 	(req, res, next) => {
 		return validateResults(req, res, next);
 	},

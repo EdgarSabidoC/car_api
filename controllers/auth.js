@@ -1,6 +1,6 @@
 const passport = require("passport");
+const cookieParser = require("cookie-parser");
 const { Strategy: GoogleStrategy } = require("passport-google-oauth20");
-// const { sequelize } = require("../config/mariadb");
 const { matchedData } = require("express-validator");
 const { encrypt, compare } = require("../utils/handlePassword");
 const { signToken } = require("../utils/handleJwt");
