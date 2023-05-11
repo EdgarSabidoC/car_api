@@ -1,18 +1,17 @@
 const { handleHttpError } = require("../utils/handleError");
 const { verifyToken } = require("../utils/handleJwt");
-const { usersModel } = require("../models/index");
-const getProperties = require("../utils/handleEngineProperties");
-const propertiesKey = getProperties();
+const { User } = require("../models/index"); // Modelo de sequelize de la tabla User.
 const ENGINE_DB = process.env.ENGINE_DB;
 
 const authMiddleware = async (req, res, next) => {
 	try {
-		if (!req.headers.authorization) {
+		// Si no existe la cookie token:
+		if (!req.cookies.token) {
 			handleHttpError(res, "TOKEN_NOT_FOUND", 401);
 			return;
 		}
 
-		const token = req.headers.authorization.split(" ").pop(); //  Obtiene solo el token porque contiene "Bearer" y el token.
+		const token = req.cookies.token; //  Obtiene el token de la cookie.
 		const tokenData = await verifyToken(token);
 
 		if (!tokenData) {
@@ -21,9 +20,9 @@ const authMiddleware = async (req, res, next) => {
 		}
 
 		const query = {
-			[propertiesKey.id]: tokenData[propertiesKey.id],
+			id: tokenData.id,
 		};
-		const user = usersModel.findOne({ where: query });
+		const user = await User.findOne({ where: query });
 		req.user = user;
 		next();
 	} catch (err) {

@@ -12,13 +12,13 @@ const propertiesKey = getProperties();
 const signToken = async (user) => {
 	const sign = jwt.sign(
 		{
-			// Payload.
-			[propertiesKey.id]: user[propertiesKey.id],
+			// Payload:
+			id: user.id,
 			role: user.role,
 		},
 		JWT_SECRET,
 		{
-			// Expire date.
+			// Tiempo de expiración del token:
 			expiresIn: "1h",
 		}
 	);

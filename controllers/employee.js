@@ -1,13 +1,5 @@
 const { matchedData } = require("express-validator");
-const {
-	Appointment,
-	Dealership,
-	PostalCode,
-	Car,
-	CarModel,
-	CarMaker,
-	Color,
-} = require("../models"); // Referencia a lo exportado en models/index.js
+const { Employee, Dealership, PostalCode } = require("../models"); // Referencia a lo exportado en models/index.js
 const { handleHttpError } = require("../utils/handleError");
 const { sequelize } = require("../config/mariadb");
 
@@ -29,54 +21,25 @@ const getItems = async (req, res) => {
 		// const offset = (page - 1) * limit;
 
 		// Se ejecuta la consulta dentro de la transacción:
-		const data = await Appointment.findAll({
-			include: [
-				{
-					model: Dealership,
-					attributes: [
-						"id",
-						"name",
-						"description",
-						"street",
-						"exterior_number",
-						"neighborhood",
-						"state",
-						"country",
-					],
-					include: {
-						model: PostalCode,
-						attributes: ["id", "code"],
-						foreignKey: "postal_code",
-					},
+		const data = await Employee.findAll({
+			include: {
+				model: Dealership,
+				attributes: [
+					"id",
+					"name",
+					"description",
+					"street",
+					"exterior_number",
+					"neighborhood",
+					"state",
+					"country",
+				],
+				include: {
+					model: PostalCode,
+					attributes: ["id", "code"],
+					foreignKey: "postal_code",
 				},
-				{
-					model: Car,
-					attributes: ["vin", "mileage", "description", "sale_price"],
-					include: [
-						{
-							model: CarModel,
-							attributes: ["id", "name", "year"],
-							include: {
-								model: CarMaker,
-								attributes: ["id", "name"],
-								foreignKey: "maker",
-							},
-							foreignKey: "model",
-						},
-						{
-							model: Color,
-							attributes: ["id", "name"],
-							foreignKey: "interior_color",
-						},
-						{
-							model: Color,
-							attributes: ["id", "name"],
-							foreignKey: "exterior_color",
-						},
-					],
-					foreignKey: "car",
-				},
-			],
+			},
 			transaction,
 			order: [["id", "ASC"]],
 		});
@@ -102,7 +65,7 @@ const getItems = async (req, res) => {
 };
 
 /**
- * La función getItem busca y devuelve un elemento de la base de datos según el valor del parámetro appointmentIdOrDate.
+ * La función getItem busca y devuelve un elemento de la base de datos según el valor del parámetro employeeIdOrName.
  * @param {*} req El objeto de solicitud HTTP.
  * @param {*} res El objeto de respuesta HTTP.
  * @returns {Promise} - Promesa que resuelve con un objeto que contiene el elemento.
@@ -111,63 +74,34 @@ const getItems = async (req, res) => {
 const getItem = async (req, res) => {
 	let transaction;
 	try {
-		const { appointmentIdOrDate } = req.params;
+		const { employeeIdOrName } = req.params;
 
 		// Se obtiene una instancia de la transacción:
 		transaction = await sequelize.transaction();
 
 		// Se ejecuta la consulta dentro de la transacción:
-		const data = await Appointment.findOne({
-			where: isNaN(appointmentIdOrDate)
-				? { first_name: appointmentIdOrDate }
-				: { id: appointmentIdOrDate },
-			include: [
-				{
-					model: Dealership,
-					attributes: [
-						"id",
-						"name",
-						"description",
-						"street",
-						"exterior_number",
-						"neighborhood",
-						"state",
-						"country",
-					],
-					include: {
-						model: PostalCode,
-						attributes: ["id", "code"],
-						foreignKey: "postal_code",
-					},
+		const data = await Employee.findOne({
+			where: isNaN(employeeIdOrName)
+				? { first_name: employeeIdOrName }
+				: { id: employeeIdOrName },
+			include: {
+				model: Dealership,
+				attributes: [
+					"id",
+					"name",
+					"description",
+					"street",
+					"exterior_number",
+					"neighborhood",
+					"state",
+					"country",
+				],
+				include: {
+					model: PostalCode,
+					attributes: ["id", "code"],
+					foreignKey: "postal_code",
 				},
-				{
-					model: Car,
-					attributes: ["vin", "mileage", "description", "sale_price"],
-					include: [
-						{
-							model: CarModel,
-							attributes: ["id", "name", "year"],
-							include: {
-								model: CarMaker,
-								attributes: ["id", "name"],
-								foreignKey: "maker",
-							},
-							foreignKey: "model",
-						},
-						{
-							model: Color,
-							attributes: ["id", "name"],
-							foreignKey: "interior_color",
-						},
-						{
-							model: Color,
-							attributes: ["id", "name"],
-							foreignKey: "exterior_color",
-						},
-					],
-					foreignKey: "car",
-				},
-			],
+			},
 			transaction,
 		});
 
@@ -192,7 +126,7 @@ const getItem = async (req, res) => {
 };
 
 /**
- * Obtiene una lista de elementos de la tabla appointment utilizando paginación y una transacción de base de datos.
+ * Obtiene una lista de elementos de la tabla employee utilizando paginación y una transacción de base de datos.
  * @param {Object} req - Objeto de solicitud HTTP.
  * @param {Object} res - Objeto de respuesta HTTP.
  * @returns {Promise} - Promesa que resuelve con un objeto que contiene la lista de elementos si la creación fue exitosa.
@@ -207,7 +141,7 @@ const createItem = async (req, res) => {
 		transaction = await sequelize.transaction();
 
 		// Se ejecuta la consulta dentro de la transacción:
-		const data = await Appointment.create(body, { transaction });
+		const data = await Employee.create(body, { transaction });
 
 		// Si la creación del elemento es exitosa, se confirma la transacción:
 		await transaction.commit();
@@ -223,7 +157,7 @@ const createItem = async (req, res) => {
 };
 
 /**
- * Obtiene un elemento de la tabla appointment según su ID o código de producto, utilizando una transacción de base de datos.
+ * Obtiene un elemento de la tabla employee según su ID o código de producto, utilizando una transacción de base de datos.
  * @param {Object} req - Objeto de solicitud HTTP.
  * @param {Object} res - Objeto de respuesta HTTP.
  * @returns {Promise} - Promesa que resuelve con un objeto que contiene el elemento si la actualización fue exitosa.
@@ -232,17 +166,17 @@ const createItem = async (req, res) => {
 const updateItem = async (req, res) => {
 	let transaction;
 	try {
-		const { appointmentIdOrDate } = req.params;
+		const { employeeIdOrName } = req.params;
 		const { body } = req;
 
 		// Se obtiene una instancia de la transacción:
 		transaction = await sequelize.transaction();
 
 		// Se busca el registro a actualizar:
-		const data = await Appointment.findOne({
-			where: isNaN(appointmentIdOrDate)
-				? { first_name: appointmentIdOrDate }
-				: { id: appointmentIdOrDate },
+		const data = await Employee.findOne({
+			where: isNaN(employeeIdOrName)
+				? { first_name: employeeIdOrName }
+				: { id: employeeIdOrName },
 			transaction,
 		});
 
@@ -284,16 +218,16 @@ const updateItem = async (req, res) => {
 const deleteItem = async (req, res) => {
 	let transaction;
 	try {
-		const { appointmentIdOrDate } = req.params;
+		const { employeeIdOrName } = req.params;
 
 		// Se obtiene una instancia de la transacción:
 		transaction = await sequelize.transaction();
 
 		// Se ejecuta la consulta dentro de la transacción:
-		const data = await Appointment.findOne({
-			where: isNaN(appointmentIdOrDate)
-				? { first_name: appointmentIdOrDate }
-				: { id: appointmentIdOrDate },
+		const data = await Employee.findOne({
+			where: isNaN(employeeIdOrName)
+				? { first_name: employeeIdOrName }
+				: { id: employeeIdOrName },
 			transaction,
 		});
 
@@ -307,18 +241,18 @@ const deleteItem = async (req, res) => {
 		await data.update(
 			{ deleted: true },
 			{
-				where: isNaN(appointmentIdOrDate)
-					? { first_name: appointmentIdOrDate }
-					: { id: appointmentIdOrDate },
+				where: isNaN(employeeIdOrName)
+					? { first_name: employeeIdOrName }
+					: { id: employeeIdOrName },
 				transaction,
 			}
 		);
 
 		// Actualiza la fecha de destrucción:
 		await data.destroy({
-			where: isNaN(appointmentIdOrDate)
-				? { first_name: appointmentIdOrDate }
-				: { id: appointmentIdOrDate },
+			where: isNaN(employeeIdOrName)
+				? { first_name: employeeIdOrName }
+				: { id: employeeIdOrName },
 			transaction,
 		});
 

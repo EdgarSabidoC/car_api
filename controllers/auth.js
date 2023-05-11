@@ -10,7 +10,7 @@ const { Op } = require("sequelize");
 const ENGINE_DB = process.env.ENGINE_DB;
 
 /**
- * The controller registers a user.
+ * El controlador registra a un usuario.
  * @param {*} req
  * @param {*} res
  */
@@ -38,20 +38,14 @@ const registerCtrl = async (req, res) => {
 };
 
 /**
- * The controller logging a user.
+ * El controlador inicia la sesión de un usuario:
  * @param {*} req
  * @param {*} res
  */
 const loginCtrl = async (req, res) => {
 	try {
 		req = matchedData(req);
-		const user =
-			ENGINE_DB === "mongodb" // For mongoose:
-				? await usersModel
-						.findOne({ email: req.email })
-						.select("name role email password")
-				: // For sequelize:
-				  await usersModel.findOne({ where: { email: req.email } });
+		const user = await usersModel.findOne({ where: { email: req.email } });
 
 		if (!user) {
 			handleHttpError(res, "USER_NOT_EXISTS", 404);
@@ -85,19 +79,6 @@ passport.deserializeUser(function (user, done) {
 	done(null, user);
 });
 
-// passport.use(
-// 	new GoogleStrategy(
-// 		{
-// 			clientID: process.env.GOOGLE_CLIENT_ID,
-// 			clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-// 			callbackURL: process.env.GOOGLE_CALLBACK_URL,
-// 		},
-// 		function (request, accessToken, refreshToken, profile, done) {
-// 			return done(null, profile);
-// 		}
-// 	)
-// );
-
 passport.use(
 	new GoogleStrategy(
 		{
@@ -105,35 +86,64 @@ passport.use(
 			clientSecret: process.env.GOOGLE_CLIENT_SECRET,
 			callbackURL: process.env.GOOGLE_CALLBACK_URL,
 		},
-		async (accessToken, refreshToken, profile, done) => {
-			try {
-				// Busca al usuario por su email o su googleId
-				const user = await User.findOne({
-					where: {
-						[Op.or]: [
-							{ email: profile.emails[0].value },
-							{ googleId: profile.id },
-						],
-					},
-				});
-
-				// Si el usuario ya existe, lo devuelve
-				return done(null, user);
-			} catch (error) {
-				console.error(error);
-				return done(error);
-			}
+		async (request, accessToken, refreshToken, profile, done) => {
+			await signToken(profile);
+			request.res.cookie("token", data.token, {
+				httpOnly: true,
+				maxAge: 3600000,
+			}); // La cookie expira en 1h.
+			return done(null, profile); // Éxito
+			// return done(null, null); // Falla.
 		}
 	)
 );
+
+// passport.use(
+// 	new GoogleStrategy(
+// 		{
+// 			clientID: process.env.GOOGLE_CLIENT_ID,
+// 			clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+// 			callbackURL: process.env.GOOGLE_CALLBACK_URL,
+// 		},
+// 		async (accessToken, refreshToken, profile, done) => {
+// 			try {
+// 				// Busca al usuario por su email o su googleId
+// 				const user = await User.findOne({
+// 					where: {
+// 						[Op.or]: [
+// 							{ email: profile.emails[0].value },
+// 							{ googleId: profile.id },
+// 						],
+// 					},
+// 				});
+// //Si el usuario no existe:
+// if (!user) {
+// 	return done("USER_NOT_FOUND");
+// }
+
+// // Si el usuario existe, se genera la cookie:
+// await signToken(user);
+// request.res.cookie("token", data.token, {
+// 	httpOnly: true,
+// 	maxAge: 3600000,
+// });
+// 				// Si el usuario ya existe, lo devuelve
+// 				return done(null, user);
+// 			} catch (error) {
+// 				console.error(error);
+// 				return done(error);
+// 			}
+// 		}
+// 	)
+// );
 
 const authenticate = passport.authenticate("google", {
 	scope: ["email", "profile"],
 });
 
 const callback = passport.authenticate("google", {
-	successRedirect: "/api/auth/protected",
-	failureRedirect: "/api/auth/login",
+	successRedirect: "http://localhost:4200/home",
+	failureRedirect: "http://localhost:4200/login",
 });
 
 module.exports = { authenticate, callback, registerCtrl, loginCtrl };
