@@ -26,6 +26,8 @@ const createItemValidator = [
 	check("interior_color").exists().notEmpty().isInt(),
 	check("exterior_color").exists().notEmpty().isInt(),
 	check("dealership").exists().notEmpty().isInt(),
+	check("sold").optional().notEmpty.isBoolean(),
+	check("photo_url").optional().notEmpty().isString(),
 	(req, res, next) => {
 		return validateResults(req, res, next);
 	},

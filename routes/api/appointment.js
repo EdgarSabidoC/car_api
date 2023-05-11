@@ -23,7 +23,7 @@ router.get("/", recordLog, getItems);
 router.get("/:appointmentIdOrDate", recordLog, getItemValidator, getItem);
 
 /* Crea un elemento en el registro */
-router.post("/", recordLog, createItem);
+router.post("/", recordLog, createItemValidator, createItem);
 
 /* Actualiza un elemento del registro */
 router.put("/:appointmentIdOrDate", recordLog, getItemValidator, updateItem);

@@ -22,7 +22,7 @@ const Car = sequelize.define(
 		},
 		description: {
 			type: DataTypes.TEXT,
-			allowNull: false,
+			allowNull: true,
 		},
 		purchase_price: {
 			type: DataTypes.DECIMAL,
@@ -35,7 +35,6 @@ const Car = sequelize.define(
 		maintenance_cost: {
 			type: DataTypes.DECIMAL,
 			defaultValue: 0,
-			allowNull: false,
 		},
 		model: {
 			type: DataTypes.INTEGER,
@@ -79,7 +78,11 @@ const Car = sequelize.define(
 		},
 		sold: {
 			type: DataTypes.BOOLEAN,
-			defaultValue: 0,
+			defaultValue: false,
+		},
+		photo_url: {
+			type: DataTypes.TEXT,
+			allowNull: true,
 		},
 		createdAt: {
 			type: DataTypes.DATE,

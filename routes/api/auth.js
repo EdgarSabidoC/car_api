@@ -1,4 +1,5 @@
 const express = require("express");
+// const cookieParser = require("cookie-parser");
 const router = express.Router();
 const { isLoggedIn } = require("../../middleware/loggedIn"); // Middlewares para validar.
 const { authenticate, callback } = require("../../controllers/auth"); // Controladores
@@ -11,14 +12,12 @@ router.get("/google", recordLog, authenticate);
 // Ruta del callback:
 router.get("/google/callback", recordLog, callback);
 
-// Ruta protegida:
-router.get("/protected", recordLog);
-
 // Ruta de cierre de sesión:
 router.get("/logout", recordLog, (req, res) => {
 	req.logout();
 	req.session.destroy();
-	res.send("Goodbye!");
+	res.cookie("token", "", { maxAge: 0, httpOnly: true, secure: true });
+	res.redirect("http://localhost:4200/home");
 });
 
 module.exports = router;

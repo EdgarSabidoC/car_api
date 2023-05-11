@@ -2,6 +2,7 @@ const { sequelize } = require("../../config/mariadb");
 const { DataTypes } = require("sequelize");
 
 const Dealership = require("./dealership");
+const Role = require("./role");
 
 const User = sequelize.define(
 	"user",
@@ -28,17 +29,21 @@ const User = sequelize.define(
 			allowNull: false,
 			unique: true,
 		},
-		user_role: {
-			type: DataTypes.INTEGER,
-			allowNull: false,
-		},
 		dealership: {
 			type: DataTypes.INTEGER,
+			allowNull: true,
 			references: {
 				model: Dealership,
 				key: "id",
 			},
-			allowNull: false,
+		},
+		user_role: {
+			type: DataTypes.INTEGER,
+			allowNull: true,
+			references: {
+				model: Role,
+				key: "id",
+			},
 		},
 		createdAt: {
 			type: DataTypes.DATE,
@@ -61,6 +66,11 @@ const User = sequelize.define(
 User.belongsTo(Dealership, {
 	foreignKey: "dealership",
 	as: "user_dealership_as",
+});
+
+User.belongsTo(Role, {
+	foreignKey: "user_role",
+	as: "user_role_as",
 });
 
 module.exports = User;

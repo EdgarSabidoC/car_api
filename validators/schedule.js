@@ -2,7 +2,7 @@ const { check } = require("express-validator");
 const validateResults = require("../utils/handleValidator");
 
 const createItemValidator = [
-	check("hour").exists().notEmpty(),
+	check("hour").exists().notEmpty().isTime(),
 	(req, res, next) => {
 		return validateResults(req, res, next);
 	},

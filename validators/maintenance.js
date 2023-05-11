@@ -2,15 +2,16 @@ const { check } = require("express-validator");
 const validateResults = require("../utils/handleValidator");
 
 const createItemValidator = [
-	check("name").exists().notEmpty().isString().isLength({ max: 40 }),
-	check("logo").optional().notEmpty().isString(),
+	check("maintenance_type").exists().notEmpty().isInt(),
+	check("car").exists().notEmpty().isString().isLength({ min: 17, max: 17 }),
 	(req, res, next) => {
 		return validateResults(req, res, next);
 	},
 ];
 
 const getItemValidator = [
-	check("carMakerIdOrName").exists().notEmpty(),
+	check("maintenanceId").exists().notEmpty().isInt(),
+	check("vin").exists().notEmpty().isString().isLength({ min: 17, max: 17 }),
 	(req, res, next) => {
 		return validateResults(req, res, next);
 	},

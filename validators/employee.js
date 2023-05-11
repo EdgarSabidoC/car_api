@@ -3,8 +3,11 @@ const validateResults = require("../utils/handleValidator");
 const ENGINE_DB = process.env.ENGINE_DB;
 
 const createItemValidator = [
-	check("first_name").exists().notEmpty(),
-	check("last_name_1").exists().notEmpty(),
+	check("first_name").exists().notEmpty().isString().isLength({ max: 75 }),
+	check("last_name_1").exists().notEmpty().isString().isLength({ max: 75 }),
+	check("last_name_2").optional().notEmpty().isString().isLength({ max: 75 }),
+	check("dealership").exists().notEmpty().isInt(),
+	check("email").exists().notEmpty().isEmail(),
 	(req, res, next) => {
 		return validateResults(req, res, next);
 	},
