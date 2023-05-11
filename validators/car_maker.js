@@ -2,7 +2,7 @@ const { check } = require("express-validator");
 const validateResults = require("../utils/handleValidator");
 
 const createItemValidator = [
-	check("name").exists().notEmpty().isAlphanumeric(),
+	check("name").exists().notEmpty().isString().isLength({ max: 40 }),
 	check("logo").optional().notEmpty().isString(),
 	(req, res, next) => {
 		return validateResults(req, res, next);

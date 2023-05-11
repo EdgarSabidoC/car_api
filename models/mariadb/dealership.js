@@ -26,16 +26,13 @@ const Dealership = sequelize.define(
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		exterior: {
+		exterior_number: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
 		neighborhood: {
 			type: DataTypes.STRING,
 			allowNull: false,
-		},
-		country: {
-			type: DataTypes.STRING,
 		},
 		state: {
 			type: DataTypes.INTEGER,
@@ -44,6 +41,10 @@ const Dealership = sequelize.define(
 				key: "id",
 			},
 			allowNull: false,
+		},
+		country: {
+			type: DataTypes.STRING,
+			allowNull: true,
 		},
 		postal_code: {
 			type: DataTypes.INTEGER,

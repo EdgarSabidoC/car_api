@@ -417,6 +417,7 @@ CREATE TABLE IF NOT EXISTS car_api.employee(
 		last_name_1 VARCHAR(75) NOT NULL,
 		last_name_2  VARCHAR(75) NULL,
 		dealership INT NOT NULL,
+		email VARCHAR(80) NOT NULL,
 		createdAt DATETIME NOT NULL,
 		updatedAt DATETIME NOT NULL,
 		deleted BOOLEAN DEFAULT 0,

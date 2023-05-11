@@ -23,7 +23,7 @@ router.get("/", recordLog, getItems);
 router.get("/:stateIdOrName", recordLog, getItemValidator, getItem);
 
 /* Crea un elemento en el registro */
-router.post("/", createItem);
+router.post("/", recordLog, createItemValidator, createItem);
 
 /* Actualiza un elemento del registro */
 router.put("/:stateIdOrName", recordLog, getItemValidator, updateItem);

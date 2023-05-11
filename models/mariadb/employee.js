@@ -34,6 +34,10 @@ const Employee = sequelize.define(
 				key: "id",
 			},
 		},
+		email: {
+			type: DataTypes.STRING,
+			allowNull: false,
+		},
 		createdAt: {
 			type: DataTypes.DATE,
 			allowNull: false,

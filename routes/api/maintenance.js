@@ -20,30 +20,15 @@ const { recordLog } = require("../../middleware/logRecord"); // Middleware para 
 router.get("/", recordLog, getItems);
 
 /* Obtiene un elemento del registro */
-router.get(
-	"/:maintenanceTypeIdOrConcept",
-	recordLog,
-	getItemValidator,
-	getItem
-);
+router.get("/:maintenanceId/:vin", recordLog, getItemValidator, getItem);
 
 /* Crea un elemento en el registro */
-router.post("/", createItem);
+router.post("/", recordLog, createItemValidator, createItem);
 
 /* Actualiza un elemento del registro */
-router.put(
-	"/:maintenanceTypeIdOrConcept",
-	recordLog,
-	getItemValidator,
-	updateItem
-);
+router.put("/:maintenanceId/:vin", recordLog, getItemValidator, updateItem);
 
 /* Elimina un elemento del registro */
-router.delete(
-	"/:maintenanceTypeIdOrConcept",
-	recordLog,
-	getItemValidator,
-	deleteItem
-);
+router.delete("/:maintenanceId/:vin", recordLog, getItemValidator, deleteItem);
 
 module.exports = router;

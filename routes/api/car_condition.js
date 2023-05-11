@@ -23,7 +23,7 @@ router.get("/", recordLog, getItems);
 router.get("/:conditionIdOrType", recordLog, getItemValidator, getItem);
 
 /* Crea un elemento en el registro */
-router.post("/", createItem);
+router.post("/", recordLog, createItemValidator, createItem);
 
 /* Actualiza un elemento del registro */
 router.put("/:conditionIdOrType", recordLog, getItemValidator, updateItem);

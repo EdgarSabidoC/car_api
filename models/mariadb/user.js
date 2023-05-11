@@ -29,6 +29,14 @@ const User = sequelize.define(
 			allowNull: false,
 			unique: true,
 		},
+		dealership: {
+			type: DataTypes.INTEGER,
+			allowNull: true,
+			references: {
+				model: Dealership,
+				key: "id",
+			},
+		},
 		user_role: {
 			type: DataTypes.INTEGER,
 			allowNull: true,
@@ -36,14 +44,6 @@ const User = sequelize.define(
 				model: Role,
 				key: "id",
 			},
-		},
-		dealership: {
-			type: DataTypes.INTEGER,
-			references: {
-				model: Dealership,
-				key: "id",
-			},
-			allowNull: true,
 		},
 		createdAt: {
 			type: DataTypes.DATE,

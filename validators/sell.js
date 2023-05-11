@@ -11,7 +11,8 @@ const createItemValidator = [
 ];
 
 const getItemValidator = [
-	check("sellId").exists().notEmpty(),
+	check("appointment").exists().notEmpty().isInt(),
+	check("employee").exists().notEmpty().isInt(),
 	(req, res, next) => {
 		return validateResults(req, res, next);
 	},
