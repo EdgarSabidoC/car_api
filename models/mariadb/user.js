@@ -71,7 +71,7 @@ const User = sequelize.define(
 );
 
 User.belongsTo(Dealership, {
-	foreignKey: "fk_dealership",
+	foreignKey: "dealership",
 	as: "user_dealership_as",
 });
 

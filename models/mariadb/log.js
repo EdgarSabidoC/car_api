@@ -51,7 +51,7 @@ const Log = sequelize.define(
 );
 
 Log.belongsTo(User, {
-	foreignKey: "fk_user",
+	foreignKey: "user",
 	as: "log_user_as",
 });
 

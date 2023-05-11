@@ -54,7 +54,7 @@ const Employee = sequelize.define(
 
 // Relación de claves foráneas:
 Employee.belongsTo(Dealership, {
-	foreignKey: "fk_dealership_4",
+	foreignKey: "dealership",
 	as: "employee_dealership_as",
 });
 

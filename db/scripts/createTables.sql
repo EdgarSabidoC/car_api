@@ -7,6 +7,7 @@ CREATE DATABASE IF NOT EXISTS car_api; USE
 SET FOREIGN_KEY_CHECKS=0;
 
 		-- Se borran las tablas si existen: 20
+DROPM TABLE IF EXISTS car_api.session; -- Es sólo para almacenar la sesión del backend.
 DROP TABLE IF EXISTS car_api.sell;	-- FALTAN modelos y demás
 DROP TABLE IF EXISTS car_api.employee; -- FALTAN modelos y demás
 DROP TABLE IF EXISTS car_api.maintenance; -- S
@@ -459,6 +460,15 @@ CREATE TABLE IF NOT EXISTS car_api.sell(
 			ON DELETE CASCADE
 ) ENGINE = InnoDB;
 ALTER TABLE `car_api`.`sell` ADD INDEX `createdAt` (`createdAt`) USING BTREE;
+
+CREATE TABLE IF NOT EXISTS car_api.session(
+	sid VARCHAR(40) NOT NULL,
+	expires DATE,
+	data TEXT,
+	createdAt DATETIME NOT NULL,
+	updatedAt DATETIME NOT NULL,
+	PRIMARY KEY(sid)
+) ENGINE = InnoDB;
 
 -- CREATE TABLE IF NOT EXISTS car_api.user (
 --   id INT(11) NOT NULL AUTO_INCREMENT,

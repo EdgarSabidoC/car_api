@@ -81,22 +81,22 @@ const CarModel = sequelize.define(
 
 // Relación de claves foráneas:
 CarModel.belongsTo(Transmission, {
-	foreignKey: "fk_transmission",
+	foreignKey: "transmission",
 	as: "model_transmission",
 });
 
 CarModel.belongsTo(Color, {
-	foreignKey: "fk_color",
+	foreignKey: "color",
 	as: "model_color",
 });
 
 CarModel.belongsTo(CarCategory, {
-	foreignKey: "fk_car_category",
+	foreignKey: "car_category",
 	as: "model_category",
 });
 
 CarModel.belongsTo(CarMaker, {
-	foreignKey: "fk_maker",
+	foreignKey: "maker",
 	as: "model_maker",
 });
 

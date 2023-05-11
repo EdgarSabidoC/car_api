@@ -48,12 +48,12 @@ const Maintenance = sequelize.define(
 
 // Relación de claves foráneas:
 Maintenance.belongsTo(MaintenanceType, {
-	foreignKey: "fk_maintenance_type",
+	foreignKey: "maintenance_type",
 	as: "maintenance_maintenance_type",
 });
 
 Maintenance.belongsTo(Car, {
-	foreignKey: "fk_car_2",
+	foreignKey: "car",
 	as: "maintenance_car",
 });
 
