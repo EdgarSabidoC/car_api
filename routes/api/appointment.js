@@ -5,8 +5,8 @@ const {
 	getItemValidator,
 } = require("../../validators/appointment"); // Middlewares para validar.
 const {
+	getAllItems,
 	getItems,
-	getItem,
 	createItem,
 	updateItem,
 	deleteItem,
@@ -17,18 +17,18 @@ const customHeader = require("../../middleware/customHeader"); // Middleware par
 const { recordLog } = require("../../middleware/logRecord"); // Middleware para grabar en la bitácora.
 
 /* Obtiene una lista de elementos del registro */
-router.get("/", recordLog, getItems);
+router.get("/", recordLog, getAllItems);
 
 /* Obtiene un elemento del registro */
-router.get("/:appointmentIdOrDate", recordLog, getItemValidator, getItem);
+router.get("/:date/:time", recordLog, getItemValidator, getItems);
 
 /* Crea un elemento en el registro */
 router.post("/", recordLog, createItemValidator, createItem);
 
 /* Actualiza un elemento del registro */
-router.put("/:appointmentIdOrDate", recordLog, getItemValidator, updateItem);
+router.put("/:date/:time", recordLog, getItemValidator, updateItem);
 
 /* Elimina un elemento del registro */
-router.delete("/:appointmentIdOrDate", recordLog, getItemValidator, deleteItem);
+router.delete("/:date/:time", recordLog, getItemValidator, deleteItem);
 
 module.exports = router;

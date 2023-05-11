@@ -5,8 +5,8 @@ const {
 	getItemValidator,
 } = require("../../validators/maintenance"); // Middlewares para validar.
 const {
+	getAllItems,
 	getItems,
-	getItem,
 	createItem,
 	updateItem,
 	deleteItem,
@@ -20,7 +20,7 @@ const { recordLog } = require("../../middleware/logRecord"); // Middleware para 
 router.get("/", recordLog, getItems);
 
 /* Obtiene un elemento del registro */
-router.get("/:maintenanceId/:vin", recordLog, getItemValidator, getItem);
+router.get("/:maintenanceId/:vin", recordLog, getItemValidator, getAllItems);
 
 /* Crea un elemento en el registro */
 router.post("/", recordLog, createItemValidator, createItem);

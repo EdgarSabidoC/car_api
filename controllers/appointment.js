@@ -3,6 +3,7 @@ const {
 	Appointment,
 	Dealership,
 	PostalCode,
+	State,
 	Car,
 	CarModel,
 	CarMaker,
@@ -18,7 +19,7 @@ const { sequelize } = require("../config/mariadb");
  * @returns {Promise<void>} - Una promesa que resuelve en un objeto JSON que contiene la lista de elementos.
  * @throws {Error} - Si ocurre un error durante la transaccióno si no se encuentra el elemento.
  */
-const getItems = async (req, res) => {
+const getAllItems = async (req, res) => {
 	let transaction;
 	try {
 		transaction = await sequelize.transaction();
@@ -108,19 +109,18 @@ const getItems = async (req, res) => {
  * @returns {Promise} - Promesa que resuelve con un objeto que contiene el elemento.
  * @throws {Error} - Si ocurre un error durante la transacción o si no se encuentra el elemento.
  */
-const getItem = async (req, res) => {
+const getItems = async (req, res) => {
 	let transaction;
 	try {
-		const { appointmentIdOrDate } = req.params;
+		const date = req.params["date"];
+		const time = req.params["time"];
 
 		// Se obtiene una instancia de la transacción:
 		transaction = await sequelize.transaction();
 
 		// Se ejecuta la consulta dentro de la transacción:
 		const data = await Appointment.findOne({
-			where: isNaN(appointmentIdOrDate)
-				? { first_name: appointmentIdOrDate }
-				: { id: appointmentIdOrDate },
+			where: { appointment_date: date, appointment_time: time },
 			include: [
 				{
 					model: Dealership,
@@ -131,13 +131,17 @@ const getItem = async (req, res) => {
 						"street",
 						"exterior_number",
 						"neighborhood",
-						"state",
 						"country",
 					],
 					include: {
 						model: PostalCode,
 						attributes: ["id", "code"],
 						foreignKey: "postal_code",
+					},
+					include: {
+						model: State,
+						attributes: ["id", "name"],
+						foreignKey: "state",
 					},
 				},
 				{
@@ -232,7 +236,7 @@ const createItem = async (req, res) => {
 const updateItem = async (req, res) => {
 	let transaction;
 	try {
-		const { appointmentIdOrDate } = req.params;
+		const { date, time } = req.params;
 		const { body } = req;
 
 		// Se obtiene una instancia de la transacción:
@@ -284,7 +288,7 @@ const updateItem = async (req, res) => {
 const deleteItem = async (req, res) => {
 	let transaction;
 	try {
-		const { appointmentIdOrDate } = req.params;
+		const { date, time } = req.params;
 
 		// Se obtiene una instancia de la transacción:
 		transaction = await sequelize.transaction();
@@ -335,4 +339,10 @@ const deleteItem = async (req, res) => {
 	}
 };
 
-module.exports = { getItems, getItem, updateItem, createItem, deleteItem };
+module.exports = {
+	getAllItems,
+	getItems,
+	updateItem,
+	createItem,
+	deleteItem,
+};
