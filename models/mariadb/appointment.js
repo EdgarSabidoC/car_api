@@ -15,15 +15,15 @@ const Appointment = sequelize.define(
 			autoIncrement: true,
 			allowNull: false,
 		},
-		client_firstname: {
+		customer_firstname: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		client_lastname_1: {
+		customer_lastname_1: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		client_lastname_2: {
+		customer_lastname_2: {
 			type: DataTypes.STRING,
 			allowNull: true,
 		},

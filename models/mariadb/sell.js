@@ -10,9 +10,13 @@ const Employee = require("./employee");
 const Sell = sequelize.define(
 	"sell",
 	{
-		appointment: {
+		id: {
 			type: DataTypes.INTEGER,
 			primaryKey: true,
+			allowNull: false,
+		},
+		appointment: {
+			type: DataTypes.INTEGER,
 			allowNull: false,
 			references: {
 				model: Appointment,
@@ -21,7 +25,6 @@ const Sell = sequelize.define(
 		},
 		car: {
 			type: DataTypes.STRING,
-			primaryKey: true,
 			allowNull: false,
 			references: {
 				model: Car,
@@ -30,7 +33,6 @@ const Sell = sequelize.define(
 		},
 		employee: {
 			type: DataTypes.INTEGER,
-			primaryKey: true,
 			allowNull: false,
 			references: {
 				model: Employee,
@@ -56,6 +58,12 @@ const Sell = sequelize.define(
 		timestamps: true,
 		tableName: "sell",
 		paranoid: true,
+		indexes: [
+			{
+				unique: true,
+				fields: ["appointment", "car", "employee"],
+			},
+		],
 	}
 );
 

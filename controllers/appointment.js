@@ -143,6 +143,7 @@ const getItem = async (req, res) => {
 				{
 					model: Car,
 					attributes: ["vin", "mileage", "description", "sale_price"],
+					foreignKey: "car",
 					include: [
 						{
 							model: CarModel,
@@ -165,7 +166,6 @@ const getItem = async (req, res) => {
 							foreignKey: "exterior_color",
 						},
 					],
-					foreignKey: "car",
 				},
 			],
 			transaction,
