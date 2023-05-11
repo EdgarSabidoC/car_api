@@ -359,9 +359,9 @@ ADD INDEX `createdAt` (`createdAt`) USING BTREE;
 
 CREATE TABLE IF NOT EXISTS car_api.appointment(
 		id INT NOT NULL AUTO_INCREMENT,
-		client_firstname VARCHAR(80) NOT NULL,
-		client_lastname_1 VARCHAR(80) NOT NULL,
-		client_lastname_2 VARCHAR(80) NULL,
+		customer_firstname VARCHAR(80) NOT NULL,
+		customer_lastname_1 VARCHAR(80) NOT NULL,
+		customer_lastname_2 VARCHAR(80) NULL,
 		email VARCHAR(80) NULL,
 		telephone VARCHAR(20) NULL,
 		appointment_date DATE NOT NULL,
@@ -383,9 +383,9 @@ CREATE TABLE IF NOT EXISTS car_api.appointment(
 			ON UPDATE CASCADE
 			ON DELETE CASCADE
 ) ENGINE = InnoDB;
-ALTER TABLE `car_api`.`appointment` ADD INDEX `client_firstname` (`client_firstname`) USING BTREE,
-ADD INDEX `client_lastname_1` (`client_lastname_1`) USING BTREE,
-ADD INDEX `client_lastname_2` (`client_lastname_2`) USING BTREE,
+ALTER TABLE `car_api`.`appointment` ADD INDEX `customer_firstname` (`customer_firstname`) USING BTREE,
+ADD INDEX `customer_lastname_1` (`customer_lastname_1`) USING BTREE,
+ADD INDEX `customer_lastname_2` (`customer_lastname_2`) USING BTREE,
 ADD INDEX `email` (`email`) USING BTREE,
 ADD INDEX `telephone` (`telephone`) USING BTREE,
 ADD INDEX `appointment_date` (`appointment_date`) USING BTREE,
@@ -437,23 +437,19 @@ ADD INDEX `last_name_2` (`last_name_2`) USING BTREE,
 ADD INDEX `createdAt` (`createdAt`) USING BTREE;
 
 CREATE TABLE IF NOT EXISTS car_api.sell(
+		id INT NOT NULL,
 		appointment INT NOT NULL,
-		car VARCHAR(17) NOT NULL,
 		employee INT NOT NULL,
 		sold_price DECIMAL NOT NULL,
 		createdAt DATETIME NOT NULL,
 		updatedAt DATETIME NOT NULL,
 		deleted BOOLEAN DEFAULT 0,
 		deletedAt DATETIME NULL,
-		PRIMARY KEY(appointment, car, employee),
+		PRIMARY KEY(id),
+		UNIQUE(appointment, employee),
 		CONSTRAINT `fk_appointment`
 			FOREIGN KEY (`appointment`)
 			REFERENCES `car_api`.`appointment` (`id`)
-			ON UPDATE CASCADE
-			ON DELETE CASCADE,
-		CONSTRAINT `fk_car_3`
-			FOREIGN KEY (`car`)
-			REFERENCES `car_api`.`car` (`vin`)
 			ON UPDATE CASCADE
 			ON DELETE CASCADE,
 		CONSTRAINT `fk_employee`
