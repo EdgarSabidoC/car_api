@@ -81,8 +81,16 @@ const Car = sequelize.define(
 			type: DataTypes.BOOLEAN,
 			defaultValue: 0,
 		},
+		createdAt: {
+			type: DataTypes.DATE,
+			allowNull: false,
+		},
+		updatedAt: {
+			type: DataTypes.DATE,
+			allowNull: false,
+		},
 		deleted: { type: DataTypes.BOOLEAN },
-		deletedAt: { type: DataTypes.DATE },
+		deletedAt: { type: DataTypes.DATE, allowNull: true },
 	},
 	{
 		timestamps: true,

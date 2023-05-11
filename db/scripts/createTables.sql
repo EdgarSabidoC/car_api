@@ -6,25 +6,27 @@ CREATE DATABASE IF NOT EXISTS car_api; USE
 
 SET FOREIGN_KEY_CHECKS=0;
 
-		-- Se borran las tablas si existen:
-DROP TABLE IF EXISTS car_api.maintenance;
-DROP TABLE IF EXISTS car_api.appointment;
-DROP TABLE IF EXISTS car_api.car;
-DROP TABLE IF EXISTS car_api.log;
-DROP TABLE IF EXISTS car_api.user;
-DROP TABLE IF EXISTS car_api.car_model;
-DROP TABLE IF EXISTS car_api.dealership;
-DROP TABLE IF EXISTS car_api.postal_code;
-DROP TABLE IF EXISTS car_api.state;
-DROP TABLE IF EXISTS car_api.transmission;
-DROP TABLE IF EXISTS car_api.car_condition;
-DROP TABLE IF EXISTS car_api.price;
-DROP TABLE IF EXISTS car_api.color;
-DROP TABLE IF EXISTS car_api.maker;
-DROP TABLE IF EXISTS car_api.car_category;
-DROP TABLE IF EXISTS car_api.schedule;
-DROP TABLE IF EXISTS car_api.maintenance_type;
-DROP TABLE IF EXISTS car_api.role;
+		-- Se borran las tablas si existen: 20
+DROP TABLE IF EXISTS car_api.sell;	-- FALTAN modelos y demás
+DROP TABLE IF EXISTS car_api.employee; -- FALTAN modelos y demás
+DROP TABLE IF EXISTS car_api.maintenance; -- S
+DROP TABLE IF EXISTS car_api.appointment; -- S
+DROP TABLE IF EXISTS car_api.car; -- S
+DROP TABLE IF EXISTS car_api.log; -- FALTAN modelos y demás
+DROP TABLE IF EXISTS car_api.user; -- FALTAN modelos y demás
+DROP TABLE IF EXISTS car_api.car_model; -- S
+DROP TABLE IF EXISTS car_api.dealership; -- S
+DROP TABLE IF EXISTS car_api.postal_code; -- S
+DROP TABLE IF EXISTS car_api.state; -- S
+DROP TABLE IF EXISTS car_api.transmission; -- S
+DROP TABLE IF EXISTS car_api.car_condition; -- S
+DROP TABLE IF EXISTS car_api.price; -- S
+DROP TABLE IF EXISTS car_api.color; -- S
+DROP TABLE IF EXISTS car_api.maker; -- S
+DROP TABLE IF EXISTS car_api.car_category; -- S
+DROP TABLE IF EXISTS car_api.schedule; -- S
+DROP TABLE IF EXISTS car_api.maintenance_type; -- S
+DROP TABLE IF EXISTS car_api.role; -- S
 
 SET FOREIGN_KEY_CHECKS=1;
 
@@ -36,9 +38,10 @@ CREATE TABLE IF NOT EXISTS car_api.schedule(
 		updatedAt DATETIME NOT NULL,
 		deleted BOOLEAN DEFAULT 0,
 		deletedAt DATETIME NULL,
-		PRIMARY KEY(id)
+		PRIMARY KEY(id),
+		UNIQUE(hour),
+		CHECK (hour <= TIME_FORMAT('23:59', '%H:%i'))
 ) ENGINE = InnoDB;
-ALTER TABLE `car_api`.`schedule` ADD INDEX `hour` (`hour`) USING BTREE;
 
 
 CREATE TABLE IF NOT EXISTS car_api.car_category(
@@ -56,7 +59,7 @@ ALTER TABLE `car_api`.`car_category` ADD INDEX `name` (`name`) USING BTREE;
 CREATE TABLE IF NOT EXISTS car_api.maker(
 		id INT NOT NULL AUTO_INCREMENT,
 		name VARCHAR(40) NOT NULL,
-		logo VARCHAR(250) NOT NULL,
+		logo TEXT NULL,
 		createdAt DATETIME NOT NULL,
 		updatedAt DATETIME NOT NULL,
 		deleted BOOLEAN DEFAULT 0,
@@ -245,8 +248,11 @@ CREATE TABLE IF NOT EXISTS car_api.user(
 		id INT NOT NULL AUTO_INCREMENT,
 		first_name VARCHAR(75) NOT NULL,
 		last_name_1 VARCHAR(75) NOT NULL,
-		last_name_2  VARCHAR(75) NOT NULL,
-		password VARCHAR(30) NOT NULL,
+		last_name_2  VARCHAR(75) NULL,
+		password VARCHAR(30) NULL,
+		googleId VARCHAR(255) NULL,
+		displayName VARCHAR(255) NULL,
+		email VARCHAR(255) NOT NULL,
 		dealership INT NOT NULL,
 		user_role INT NOT NULL,
 		createdAt DATETIME NOT NULL,
@@ -254,6 +260,7 @@ CREATE TABLE IF NOT EXISTS car_api.user(
 		deleted BOOLEAN DEFAULT 0,
 		deletedAt DATETIME NULL,
 		PRIMARY KEY(id),
+		UNIQUE KEY (googleId),
 		CONSTRAINT `fk_dealership`
 			FOREIGN KEY (`dealership`)
 			REFERENCES `car_api`.`dealership` (`id`)
@@ -275,9 +282,9 @@ ADD INDEX `user_role` (`user_role`) USING BTREE;
 CREATE TABLE IF NOT EXISTS car_api.log(
 		id INT NOT NULL AUTO_INCREMENT,
 		user INT NOT NULL,
-		ip VARCHAR(50) NOT NULL,
-		event TEXT NOT NULL,
-		observation VARCHAR(50) NOT NULL,
+		ip VARCHAR(80) NOT NULL,
+		event TEXT NULL,
+		observation TEXT NULL,
 		createdAt DATETIME NOT NULL,
 		updatedAt DATETIME NOT NULL,
 		deleted BOOLEAN DEFAULT 0,
@@ -352,10 +359,10 @@ ADD INDEX `createdAt` (`createdAt`) USING BTREE;
 
 CREATE TABLE IF NOT EXISTS car_api.appointment(
 		id INT NOT NULL AUTO_INCREMENT,
-		first_name VARCHAR(80) NOT NULL,
-		last_name_1 VARCHAR(80) NOT NULL,
-		last_name_2 VARCHAR(80) NOT NULL,
-		email VARCHAR(80) NOT NULL,
+		client_firstname VARCHAR(80) NOT NULL,
+		client_lastname_1 VARCHAR(80) NOT NULL,
+		client_lastname_2 VARCHAR(80) NULL,
+		email VARCHAR(80) NULL,
 		telephone VARCHAR(20) NULL,
 		appointment_date DATE NOT NULL,
 		dealership INT NOT NULL,
@@ -376,9 +383,9 @@ CREATE TABLE IF NOT EXISTS car_api.appointment(
 			ON UPDATE CASCADE
 			ON DELETE CASCADE
 ) ENGINE = InnoDB;
-ALTER TABLE `car_api`.`appointment` ADD INDEX `first_name` (`first_name`) USING BTREE,
-ADD INDEX `last_name_1` (`last_name_1`) USING BTREE,
-ADD INDEX `last_name_2` (`last_name_2`) USING BTREE,
+ALTER TABLE `car_api`.`appointment` ADD INDEX `client_firstname` (`client_firstname`) USING BTREE,
+ADD INDEX `client_lastname_1` (`client_lastname_1`) USING BTREE,
+ADD INDEX `client_lastname_2` (`client_lastname_2`) USING BTREE,
 ADD INDEX `email` (`email`) USING BTREE,
 ADD INDEX `telephone` (`telephone`) USING BTREE,
 ADD INDEX `appointment_date` (`appointment_date`) USING BTREE,
@@ -405,3 +412,65 @@ CREATE TABLE IF NOT EXISTS car_api.maintenance(
 			ON UPDATE CASCADE
 			ON DELETE CASCADE
 ) ENGINE = InnoDB;
+
+CREATE TABLE IF NOT EXISTS car_api.employee(
+		id INT NOT NULL AUTO_INCREMENT,
+		first_name VARCHAR(75) NOT NULL,
+		last_name_1 VARCHAR(75) NOT NULL,
+		last_name_2  VARCHAR(75) NULL,
+		dealership INT NOT NULL,
+		createdAt DATETIME NOT NULL,
+		updatedAt DATETIME NOT NULL,
+		deleted BOOLEAN DEFAULT 0,
+		deletedAt DATETIME NULL,
+		PRIMARY KEY(id),
+		CONSTRAINT `fk_dealership_4`
+			FOREIGN KEY (`dealership`)
+			REFERENCES `car_api`.`dealership` (`id`)
+			ON UPDATE CASCADE
+			ON DELETE CASCADE
+) ENGINE = InnoDB;
+ALTER TABLE `car_api`.`employee` ADD INDEX `dealership` (`dealership`) USING BTREE,
+ADD INDEX `first_name` (`first_name`) USING BTREE,
+ADD INDEX `last_name_1` (`last_name_1`) USING BTREE,
+ADD INDEX `last_name_2` (`last_name_2`) USING BTREE,
+ADD INDEX `createdAt` (`createdAt`) USING BTREE;
+
+CREATE TABLE IF NOT EXISTS car_api.sell(
+		appointment INT NOT NULL,
+		car VARCHAR(17) NOT NULL,
+		employee INT NOT NULL,
+		sold_price DECIMAL NOT NULL,
+		createdAt DATETIME NOT NULL,
+		updatedAt DATETIME NOT NULL,
+		deleted BOOLEAN DEFAULT 0,
+		deletedAt DATETIME NULL,
+		PRIMARY KEY(appointment, car, employee),
+		CONSTRAINT `fk_appointment`
+			FOREIGN KEY (`appointment`)
+			REFERENCES `car_api`.`appointment` (`id`)
+			ON UPDATE CASCADE
+			ON DELETE CASCADE,
+		CONSTRAINT `fk_car_3`
+			FOREIGN KEY (`car`)
+			REFERENCES `car_api`.`car` (`vin`)
+			ON UPDATE CASCADE
+			ON DELETE CASCADE,
+		CONSTRAINT `fk_employee`
+			FOREIGN KEY (`employee`)
+			REFERENCES `car_api`.`employee` (`id`)
+			ON UPDATE CASCADE
+			ON DELETE CASCADE
+) ENGINE = InnoDB;
+ALTER TABLE `car_api`.`sell` ADD INDEX `createdAt` (`createdAt`) USING BTREE;
+
+-- CREATE TABLE IF NOT EXISTS car_api.user (
+--   id INT(11) NOT NULL AUTO_INCREMENT,
+--   googleId VARCHAR(255) NOT NULL,
+--   displayName VARCHAR(255) NOT NULL,
+--   email VARCHAR(255) NOT NULL,
+--   createdAt DATETIME NOT NULL,
+--   updatedAt DATETIME NOT NULL,
+--   PRIMARY KEY (id),
+--   UNIQUE KEY (googleId)
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

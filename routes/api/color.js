@@ -10,17 +10,18 @@ const {
 	createItem,
 	updateItem,
 	deleteItem,
-} = require("../../controllers/color");
+} = require("../../controllers/color"); // Controladores
 
+// Middleware para requerir una API_KEY:
 const customHeader = require("../../middleware/customHeader");
 
-/* Obtiene una lista de elementos */
-router.get("/", customHeader, getItems);
+/* Obtiene una lista de elementos del registro */
+router.get("/", getItems);
 
-/* Obtiene un elemento */
+/* Obtiene un elemento del registro */
 router.get("/:colorIdOrName", getItemValidator, getItem);
 
-/* Creates an item register only if the user is an admin */
+/* Crea un elemento en el registro */
 router.post("/", createItem);
 
 /* Actualiza un elemento del registro */

@@ -12,13 +12,18 @@ const models = {
 	CarModel: require(`${pathModels}/car_model`),
 	Color: require(`${pathModels}/color`),
 	Dealership: require(`${pathModels}/dealership`),
+	Employee: require(`${pathModels}/employee`),
+	Log: require(`${pathModels}/log`),
 	Maintenance: require(`${pathModels}/maintenance`),
 	MaintenanceType: require(`${pathModels}/maintenance_type`),
 	PostalCode: require(`${pathModels}/postal_code`),
 	Price: require(`${pathModels}/price`),
+	Role: require(`${pathModels}/role`),
 	Schedule: require(`${pathModels}/schedule`),
+	Sell: require(`${pathModels}/sell`),
 	State: require(`${pathModels}/state`),
 	Transmission: require(`${pathModels}/transmission`),
+	User: require(`${pathModels}/user`),
 };
 
 // Se exporta el arreglo con los modelos de sequelize:

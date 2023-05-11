@@ -15,24 +15,25 @@ const Appointment = sequelize.define(
 			autoIncrement: true,
 			allowNull: false,
 		},
-		first_name: {
+		client_firstname: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		last_name_1: {
+		client_lastname_1: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		last_name_2: {
+		client_lastname_2: {
 			type: DataTypes.STRING,
-			allowNull: false,
+			allowNull: true,
 		},
 		email: {
 			type: DataTypes.STRING,
-			allowNull: false,
+			allowNull: true,
 		},
 		telephone: {
 			type: DataTypes.STRING,
+			allowNull: true,
 		},
 		appointment_date: {
 			type: DataTypes.DATE,
@@ -54,8 +55,16 @@ const Appointment = sequelize.define(
 			},
 			allowNull: false,
 		},
+		createdAt: {
+			type: DataTypes.DATE,
+			allowNull: false,
+		},
+		updatedAt: {
+			type: DataTypes.DATE,
+			allowNull: false,
+		},
 		deleted: { type: DataTypes.BOOLEAN },
-		deletedAt: { type: DataTypes.DATE },
+		deletedAt: { type: DataTypes.DATE, allowNull: true },
 	},
 	{
 		timestamps: true,
