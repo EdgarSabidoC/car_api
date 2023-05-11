@@ -75,12 +75,12 @@ const Appointment = sequelize.define(
 
 // Relación de claves foráneas:
 Appointment.belongsTo(Dealership, {
-	foreignKey: "fk_dealership_3",
+	foreignKey: "dealership",
 	as: "appointment_dealership",
 });
 
 Appointment.belongsTo(Car, {
-	foreignKey: "fk_car",
+	foreignKey: "car",
 	as: "appointment_car",
 });
 

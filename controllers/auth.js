@@ -79,24 +79,24 @@ passport.deserializeUser(function (user, done) {
 	done(null, user);
 });
 
-passport.use(
-	new GoogleStrategy(
-		{
-			clientID: process.env.GOOGLE_CLIENT_ID,
-			clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-			callbackURL: process.env.GOOGLE_CALLBACK_URL,
-		},
-		async (request, accessToken, refreshToken, profile, done) => {
-			await signToken(profile);
-			request.res.cookie("token", data.token, {
-				httpOnly: true,
-				maxAge: 3600000,
-			}); // La cookie expira en 1h.
-			return done(null, profile); // Éxito
-			// return done(null, null); // Falla.
-		}
-	)
-);
+// passport.use(
+// 	new GoogleStrategy(
+// 		{
+// 			clientID: process.env.GOOGLE_CLIENT_ID,
+// 			clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+// 			callbackURL: process.env.GOOGLE_CALLBACK_URL,
+// 		},
+// 		async (response, request, accessToken, refreshToken, profile, done) => {
+// 			await signToken(User);
+// 			response.cookie("token", data.token, {
+// 				httpOnly: true,
+// 				maxAge: 3600000,
+// 			}); // La cookie expira en 1h.
+// 			return done(null, profile); // Éxito
+// 			// return done(null, null); // Falla.
+// 		}
+// 	)
+// );
 
 // passport.use(
 // 	new GoogleStrategy(
@@ -105,7 +105,7 @@ passport.use(
 // 			clientSecret: process.env.GOOGLE_CLIENT_SECRET,
 // 			callbackURL: process.env.GOOGLE_CALLBACK_URL,
 // 		},
-// 		async (accessToken, refreshToken, profile, done) => {
+// 		async (request, response, accessToken, refreshToken, profile, done) => {
 // 			try {
 // 				// Busca al usuario por su email o su googleId
 // 				const user = await User.findOne({
@@ -116,17 +116,17 @@ passport.use(
 // 						],
 // 					},
 // 				});
-// //Si el usuario no existe:
-// if (!user) {
-// 	return done("USER_NOT_FOUND");
-// }
+// 				//Si el usuario no existe:
+// 				if (!user) {
+// 					return done("USER_NOT_FOUND");
+// 				}
 
-// // Si el usuario existe, se genera la cookie:
-// await signToken(user);
-// request.res.cookie("token", data.token, {
-// 	httpOnly: true,
-// 	maxAge: 3600000,
-// });
+// 				// Si el usuario existe, se genera la cookie:
+// 				await signToken(user);
+// 				response.cookie("token", data.token, {
+// 					httpOnly: true,
+// 					maxAge: 3600000,
+// 				}); // La cookie dura 1h al igual que la sesión.
 // 				// Si el usuario ya existe, lo devuelve
 // 				return done(null, user);
 // 			} catch (error) {
@@ -136,6 +136,45 @@ passport.use(
 // 		}
 // 	)
 // );
+
+passport.use(
+	new GoogleStrategy(
+		{
+			clientID: process.env.GOOGLE_CLIENT_ID,
+			clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+			callbackURL: process.env.GOOGLE_CALLBACK_URL,
+		},
+		async (accessToken, refreshToken, profile, done) => {
+			try {
+				// Busca al usuario por su email o su googleId
+				const user = await User.findOne({
+					where: {
+						[Op.or]: [
+							{ email: profile.emails[0].value },
+							{ googleId: profile.id },
+						],
+					},
+				});
+				//Si el usuario no existe:
+				if (!user) {
+					throw new Error("USER_NOT_FOUND");
+				}
+
+				// Si el usuario existe, se genera la cookie:
+				await signToken(user);
+				response.cookie("token", data.token, {
+					httpOnly: true,
+					maxAge: 3600000,
+				}); // La cookie dura 1h al igual que la sesión.
+
+				// Si el usuario ya existe, lo devuelve
+				return done(null, user);
+			} catch (error) {
+				return done(null, null, error);
+			}
+		}
+	)
+);
 
 const authenticate = passport.authenticate("google", {
 	scope: ["email", "profile"],

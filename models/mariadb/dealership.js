@@ -73,12 +73,12 @@ const Dealership = sequelize.define(
 
 // Relación de claves foráneas:
 Dealership.belongsTo(State, {
-	foreignKey: "fk_state",
+	foreignKey: "state",
 	as: "dealership_state",
 });
 
 Dealership.belongsTo(PostalCode, {
-	foreignKey: "fk_postal_code",
+	foreignKey: "postal_code",
 	as: "dealership_postal_code",
 });
 

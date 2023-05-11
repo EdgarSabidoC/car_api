@@ -4,10 +4,9 @@ const cors = require("cors");
 const morganBody = require("morgan-body");
 const { loggerStream } = require("./utils/handleLogger");
 const { dbConnectMariaDB } = require("./config/mariadb");
-const session = require("express-session");
 const cookieParser = require("cookie-parser");
 const passport = require("passport");
-const SESSION_SECRET = process.env.SESSION_SECRET;
+const session = require("./config/session");
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -17,7 +16,7 @@ app.use(express.json());
 app.use(express.static("storage"));
 app.use(cookieParser());
 
-app.use(session({ secret: SESSION_SECRET }));
+app.use(session);
 app.use(passport.initialize());
 app.use(passport.session());
 
