@@ -6,10 +6,9 @@ const Dealership = require("./dealership");
 const User = sequelize.define(
 	"user",
 	{
-		id: {
-			type: DataTypes.INTEGER,
+		googleId: {
+			type: DataTypes.STRING,
 			primaryKey: true,
-			autoIncrement: true,
 			allowNull: false,
 		},
 		first_name: {
@@ -24,21 +23,10 @@ const User = sequelize.define(
 			type: DataTypes.STRING,
 			allowNull: true,
 		},
-		displayName: {
-			type: DataTypes.STRING,
-			allowNull: true,
-		},
 		email: {
 			type: DataTypes.STRING,
 			allowNull: false,
-		},
-		password: {
-			type: DataTypes.STRING,
-			allowNull: true,
-		},
-		googleId: {
-			type: DataTypes.STRING,
-			allowNull: true,
+			unique: true,
 		},
 		user_role: {
 			type: DataTypes.INTEGER,

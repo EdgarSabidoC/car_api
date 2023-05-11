@@ -146,7 +146,7 @@ passport.use(
 		},
 		async (accessToken, refreshToken, profile, done) => {
 			try {
-				// Busca al usuario por su email o su googleId
+				// Se busca al usuario por su email o su googleId:
 				const user = await User.findOne({
 					where: {
 						[Op.or]: [

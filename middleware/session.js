@@ -1,6 +1,6 @@
 const { handleHttpError } = require("../utils/handleError");
 const { verifyToken } = require("../utils/handleJwt");
-const { User } = require("../models/index"); // Modelo de sequelize de la tabla User.
+const { User } = require("../models"); // Modelo de sequelize de la tabla User.
 const ENGINE_DB = process.env.ENGINE_DB;
 
 const authMiddleware = async (req, res, next) => {

@@ -89,7 +89,7 @@ const getItem = async (req, res) => {
 };
 
 /**
- * Obtiene una lista de elementos de la tabla Color utilizando paginación y una transacción de base de datos.
+ * Obtiene una lista de elementos de la tabla color utilizando paginación y una transacción de base de datos.
  * @param {Object} req - Objeto de solicitud HTTP.
  * @param {Object} res - Objeto de respuesta HTTP.
  * @returns {Promise} - Promesa que resuelve con un objeto que contiene la lista de elementos si la creación fue exitosa.
@@ -120,7 +120,7 @@ const createItem = async (req, res) => {
 };
 
 /**
- * Obtiene un elemento de la tabla Color según su ID o código de producto, utilizando una transacción de base de datos.
+ * Obtiene un elemento de la tabla color según su ID o código de producto, utilizando una transacción de base de datos.
  * @param {Object} req - Objeto de solicitud HTTP.
  * @param {Object} res - Objeto de respuesta HTTP.
  * @returns {Promise} - Promesa que resuelve con un objeto que contiene el elemento si la actualización fue exitosa.
