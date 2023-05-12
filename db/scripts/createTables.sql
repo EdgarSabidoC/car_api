@@ -135,11 +135,17 @@ ALTER TABLE `car_api`.`state` ADD INDEX `name` (`name`) USING BTREE;
 CREATE TABLE IF NOT EXISTS car_api.postal_code(
 		id INT NOT NULL AUTO_INCREMENT,
 		code VARCHAR(15) NOT NULL,
+		state INT NOT NULL,
 		createdAt DATETIME NOT NULL,
 		updatedAt DATETIME NOT NULL,
 		deleted BOOLEAN DEFAULT 0,
 		deletedAt DATETIME NULL,
-		PRIMARY KEY(id)
+		PRIMARY KEY(id),
+		CONSTRAINT `fk_state_1`
+			FOREIGN KEY (`state`)
+			REFERENCES `car_api`.`state` (`id`)
+			ON UPDATE CASCADE
+			ON DELETE CASCADE
 ) ENGINE = InnoDB;
 ALTER TABLE `car_api`.`postal_code` ADD INDEX `code` (`code`) USING BTREE;
 
@@ -152,7 +158,6 @@ CREATE TABLE IF NOT EXISTS car_api.dealership(
 		exterior_number VARCHAR(10) NOT NULL,
 		neighborhood VARCHAR(50) NOT NULL,
 		state INT NOT NULL,
-		country VARCHAR(25),
 		postal_code INT NOT NULL,
 		createdAt DATETIME NOT NULL,
 		updatedAt DATETIME NOT NULL,
@@ -164,7 +169,7 @@ CREATE TABLE IF NOT EXISTS car_api.dealership(
 			REFERENCES `car_api`.`postal_code` (`id`)
 			ON UPDATE CASCADE
 			ON DELETE CASCADE,
-		CONSTRAINT `fk_state`
+		CONSTRAINT `fk_state_2`
 			FOREIGN KEY (`state`)
 			REFERENCES `car_api`.`state` (`id`)
 			ON UPDATE CASCADE

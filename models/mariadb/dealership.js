@@ -2,7 +2,6 @@ const { sequelize } = require("../../config/mariadb");
 const { DataTypes } = require("sequelize");
 
 // Modelos de sequelize:
-const State = require("./state");
 const PostalCode = require("./postal_code");
 
 // Estructura del schema:
@@ -21,6 +20,7 @@ const Dealership = sequelize.define(
 		},
 		description: {
 			type: DataTypes.STRING,
+			allowNull: true,
 		},
 		street: {
 			type: DataTypes.STRING,
@@ -33,18 +33,6 @@ const Dealership = sequelize.define(
 		neighborhood: {
 			type: DataTypes.STRING,
 			allowNull: false,
-		},
-		state: {
-			type: DataTypes.INTEGER,
-			references: {
-				model: State,
-				key: "id",
-			},
-			allowNull: false,
-		},
-		country: {
-			type: DataTypes.STRING,
-			allowNull: true,
 		},
 		postal_code: {
 			type: DataTypes.INTEGER,
@@ -73,11 +61,6 @@ const Dealership = sequelize.define(
 );
 
 // Relación de claves foráneas:
-Dealership.belongsTo(State, {
-	foreignKey: "state",
-	as: "dealership_state",
-});
-
 Dealership.belongsTo(PostalCode, {
 	foreignKey: "postal_code",
 	as: "dealership_postal_code",

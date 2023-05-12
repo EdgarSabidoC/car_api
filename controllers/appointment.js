@@ -51,11 +51,13 @@ const getAllItems = async (req, res) => {
 							model: PostalCode,
 							attributes: ["id", "code"],
 							foreignKey: "postal_code",
-						},
-						{
-							model: State,
-							attributes: ["id", "name"],
-							foreignKey: "state",
+							include: [
+								{
+									model: State,
+									attributes: ["id", "name"],
+									foreignKey: "state",
+								},
+							],
 						},
 					],
 				},
@@ -162,11 +164,13 @@ const getItems = async (req, res) => {
 							model: PostalCode,
 							attributes: ["id", "code"],
 							foreignKey: "postal_code",
-						},
-						{
-							model: State,
-							attributes: ["id", "name"],
-							foreignKey: "state",
+							include: [
+								{
+									model: State,
+									attributes: ["id", "name"],
+									foreignKey: "state",
+								},
+							],
 						},
 					],
 				},
