@@ -1,5 +1,11 @@
 const { matchedData } = require("express-validator");
-const { CarModel } = require("../models"); // Referencia a lo exportado en models/index.js
+const {
+	CarModel,
+	Transmission,
+	Color,
+	CarCategory,
+	CarMaker,
+} = require("../models"); // Referencia a lo exportado en models/index.js
 const { handleHttpError } = require("../utils/handleError");
 const { sequelize } = require("../config/mariadb");
 
@@ -22,6 +28,28 @@ const getItems = async (req, res) => {
 
 		// Se ejecuta la consulta dentro de la transacción:
 		const data = await CarModel.findAll({
+			include: [
+				{
+					model: Transmission,
+					attributes: ["id", "type"],
+					foreignKey: "transmission",
+				},
+				{
+					model: Color,
+					attributes: ["id", "name"],
+					foreignKey: "color",
+				},
+				{
+					model: CarMaker,
+					attributes: ["id", "name"],
+					foreignKey: "maker",
+				},
+				{
+					model: CarCategory,
+					attributes: ["id", "name"],
+					foreignKey: "car_category",
+				},
+			],
 			transaction,
 			order: [["id", "ASC"]],
 		});
@@ -66,6 +94,28 @@ const getItem = async (req, res) => {
 			where: isNaN.test(carModelIdOrName)
 				? { name: carModelIdOrName }
 				: { id: carModelIdOrName },
+			include: [
+				{
+					model: Transmission,
+					attributes: ["id", "type"],
+					foreignKey: "transmission",
+				},
+				{
+					model: Color,
+					attributes: ["id", "name"],
+					foreignKey: "color",
+				},
+				{
+					model: CarMaker,
+					attributes: ["id", "name"],
+					foreignKey: "maker",
+				},
+				{
+					model: CarCategory,
+					attributes: ["id", "name"],
+					foreignKey: "car_category",
+				},
+			],
 			transaction,
 		});
 

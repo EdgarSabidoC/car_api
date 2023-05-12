@@ -1,6 +1,5 @@
 const { check } = require("express-validator");
 const validateResults = require("../utils/handleValidator");
-const ENGINE_DB = process.env.ENGINE_DB;
 
 const createItemValidator = [
 	check("customer_firstname")
@@ -29,7 +28,7 @@ const createItemValidator = [
 	},
 ];
 
-const getItemValidator = [
+const getItemsValidator = [
 	check("date").exists().notEmpty().isDate(),
 	check("time").exists().notEmpty().isTime(),
 	(req, res, next) => {
@@ -37,4 +36,11 @@ const getItemValidator = [
 	},
 ];
 
-module.exports = { createItemValidator, getItemValidator };
+const getItemValidator = [
+	check("appointmentId").exists().notEmpty().isInt(),
+	(req, res, next) => {
+		return validateResults(req, res, next);
+	},
+];
+
+module.exports = { createItemValidator, getItemValidator, getItemsValidator };

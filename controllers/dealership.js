@@ -1,5 +1,5 @@
 const { matchedData } = require("express-validator");
-const { Dealership } = require("../models"); // Referencia a lo exportado en models/index.js
+const { Dealership, PostalCode, State } = require("../models"); // Referencia a lo exportado en models/index.js
 const { handleHttpError } = require("../utils/handleError");
 const { sequelize } = require("../config/mariadb");
 
@@ -22,6 +22,18 @@ const getItems = async (req, res) => {
 
 		// Se ejecuta la consulta dentro de la transacción:
 		const data = await Dealership.findAll({
+			include: [
+				{
+					model: PostalCode,
+					attributes: ["id", "code"],
+					foreignKey: "postal_code",
+				},
+				{
+					model: State,
+					attributes: ["id", "name"],
+					foreignKey: "state",
+				},
+			],
 			transaction,
 			order: [["id", "ASC"]],
 		});
@@ -65,6 +77,18 @@ const getItem = async (req, res) => {
 			where: isNaN(dealershipIdOrName)
 				? { name: dealershipIdOrName }
 				: { id: dealershipIdOrName },
+			include: [
+				{
+					model: PostalCode,
+					attributes: ["id", "code"],
+					foreignKey: "postal_code",
+				},
+				{
+					model: State,
+					attributes: ["id", "name"],
+					foreignKey: "state",
+				},
+			],
 			transaction,
 		});
 

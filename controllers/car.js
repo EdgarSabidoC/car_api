@@ -1,5 +1,16 @@
 const { matchedData } = require("express-validator");
-const { Car } = require("../models"); // Referencia a lo exportado en models/index.js
+const {
+	Car,
+	CarModel,
+	Dealership,
+	CarCategory,
+	PostalCode,
+	CarMaker,
+	Transmission,
+	Color,
+	State,
+	CarCondition,
+} = require("../models"); // Referencia a lo exportado en models/index.js
 const { handleHttpError } = require("../utils/handleError");
 const { sequelize } = require("../config/mariadb");
 const ENGINE_DB = process.env.ENGINE_DB;
@@ -14,13 +25,75 @@ const getItems = async (req, res) => {
 	let transaction;
 	try {
 		transaction = await sequelize.transaction();
-		const car = req.car;
-		const data = await Car.findAll({ transaction });
-		const searchedBy = {
-			vin: car.vin,
-			purchase_price: car.purchase_price,
-			model: car.model,
-		};
+		const data = await Car.findAll({
+			include: [
+				{
+					model: CarModel,
+					attributes: ["id", "name", "year"],
+					include: [
+						{
+							model: CarMaker,
+							attributes: ["id", "name"],
+							foreignKey: "maker",
+						},
+						{
+							model: Transmission,
+							attributes: ["id", "type"],
+							foreignKey: "transmission",
+						},
+						{
+							model: CarCategory,
+							attributes: ["id", "name"],
+							foreignKey: "category",
+						},
+					],
+					foreignKey: "model",
+				},
+				{
+					model: Color,
+					attributes: ["id", "name"],
+					foreignKey: "interior_color",
+				},
+				{
+					model: Color,
+					attributes: ["id", "name"],
+					foreignKey: "exterior_color",
+				},
+				{
+					model: Dealership,
+					foreignKey: "dealership",
+					attributes: [
+						"id",
+						"name",
+						"description",
+						"street",
+						"exterior_number",
+						"neighborhood",
+						"country",
+					],
+					include: [
+						{
+							model: PostalCode,
+							attributes: ["id", "code"],
+							foreignKey: "postal_code",
+						},
+						{
+							model: State,
+							attributes: ["id", "name"],
+							foreignKey: "state",
+						},
+					],
+				},
+				{
+					model: CarCondition,
+					attributes: ["id", "type"],
+					foreignKey: "car_condition",
+				},
+			],
+			transaction,
+			order: [["vin", "ASC"]],
+		});
+
 		await transaction.commit();
 		if (data.length === 0) {
 			handleHttpError(res, "ITEMS_NOT_FOUND", 404);
@@ -43,19 +116,77 @@ const getItems = async (req, res) => {
 const getItem = async (req, res) => {
 	let transaction;
 	try {
-		const { field, value } = req.query;
+		const { vin } = req.query;
 
 		// Se obtiene una instancia de la transacción:
 		transaction = await sequelize.transaction();
 
 		// Se ejecuta la consulta dentro de la transacción:
 		const data = await Car.findOne({
-			where: { [field]: value },
+			where: { vin: vin },
 			include: [
-				{ model: CarModel },
-				{ model: CarCondition },
-				{ model: Color },
-				{ model: Dealership },
+				{
+					model: CarModel,
+					foreignKey: "model",
+					attributes: ["id", "name", "year"],
+					include: [
+						{
+							model: CarMaker,
+							attributes: ["id", "name"],
+							foreignKey: "maker",
+						},
+						{
+							model: Transmission,
+							attributes: ["id", "type"],
+							foreignKey: "transmission",
+						},
+						{
+							model: CarCategory,
+							attributes: ["id", "name"],
+							foreignKey: "category",
+						},
+					],
+				},
+				{
+					model: Color,
+					attributes: ["id", "name"],
+					foreignKey: "interior_color",
+				},
+				{
+					model: Color,
+					attributes: ["id", "name"],
+					foreignKey: "exterior_color",
+				},
+				{
+					model: Dealership,
+					foreignKey: "dealership",
+					attributes: [
+						"id",
+						"name",
+						"description",
+						"street",
+						"exterior_number",
+						"neighborhood",
+						"country",
+					],
+					include: [
+						{
+							model: PostalCode,
+							attributes: ["id", "code"],
+							foreignKey: "postal_code",
+						},
+						{
+							model: State,
+							attributes: ["id", "name"],
+							foreignKey: "state",
+						},
+					],
+				},
+				{
+					model: CarCondition,
+					attributes: ["id", "type"],
+					foreignKey: "car_condition",
+				},
 			],
 			transaction,
 		});

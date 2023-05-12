@@ -1,5 +1,5 @@
 const { matchedData } = require("express-validator");
-const { User } = require("../models"); // Referencia a lo exportado en models/index.js
+const { User, Role, Dealership, PostalCode, State } = require("../models"); // Referencia a lo exportado en models/index.js
 const { handleHttpError } = require("../utils/handleError");
 const { sequelize } = require("../config/mariadb");
 const isEmail = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
@@ -23,6 +23,38 @@ const getItems = async (req, res) => {
 
 		// Se ejecuta la consulta dentro de la transacción:
 		const data = await User.findAll({
+			indclude: [
+				{
+					model: Dealership,
+					foreignKey: "dealership",
+					attributes: [
+						"id",
+						"name",
+						"description",
+						"street",
+						"exterior_number",
+						"neighborhood",
+						"country",
+					],
+					include: [
+						{
+							model: PostalCode,
+							attributes: ["id", "code"],
+							foreignKey: "postal_code",
+						},
+						{
+							model: State,
+							attributes: ["id", "name"],
+							foreignKey: "state",
+						},
+					],
+				},
+				{
+					model: Role,
+					attributes: ["id", "name", "permissions"],
+					foreignKey: "user_role",
+				},
+			],
 			transaction,
 			order: [["googleId", "ASC"]],
 		});
@@ -67,6 +99,38 @@ const getItem = async (req, res) => {
 			where: isEmail.test(userIdOrEmail)
 				? { email: userIdOrEmail }
 				: { googleId: userIdOrEmail },
+			indclude: [
+				{
+					model: Dealership,
+					foreignKey: "dealership",
+					attributes: [
+						"id",
+						"name",
+						"description",
+						"street",
+						"exterior_number",
+						"neighborhood",
+						"country",
+					],
+					include: [
+						{
+							model: PostalCode,
+							attributes: ["id", "code"],
+							foreignKey: "postal_code",
+						},
+						{
+							model: State,
+							attributes: ["id", "name"],
+							foreignKey: "state",
+						},
+					],
+				},
+				{
+					model: Role,
+					attributes: ["id", "name", "permissions"],
+					foreignKey: "user_role",
+				},
+			],
 			transaction,
 		});
 
