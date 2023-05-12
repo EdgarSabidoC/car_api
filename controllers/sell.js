@@ -9,6 +9,9 @@ const {
 	PostalCode,
 	CarMaker,
 	Color,
+	State,
+	Transmission,
+	CarCategory,
 } = require("../models"); // Referencia a lo exportado en models/index.js
 const { handleHttpError } = require("../utils/handleError");
 const { sequelize } = require("../config/mariadb");
@@ -44,11 +47,12 @@ const getItems = async (req, res) => {
 						"email",
 						"telephone",
 						"appointment_date",
-						"country",
+						"appointment_time",
 					],
 					include: [
 						{
 							model: Dealership,
+							foreignKey: "dealership",
 							attributes: [
 								"id",
 								"name",
@@ -56,28 +60,46 @@ const getItems = async (req, res) => {
 								"street",
 								"exterior_number",
 								"neighborhood",
-								"state",
 								"country",
 							],
-							include: {
-								model: PostalCode,
-								attributes: ["id", "code"],
-								foreignKey: "postal_code",
-							},
-							foreignKey: "dealership",
+							include: [
+								{
+									model: PostalCode,
+									attributes: ["id", "code"],
+									foreignKey: "postal_code",
+								},
+								{
+									model: State,
+									attributes: ["id", "name"],
+									foreignKey: "state",
+								},
+							],
 						},
 						{
 							model: Car,
 							attributes: ["vin", "mileage", "description", "sale_price"],
+							foreignKey: "car",
 							include: [
 								{
 									model: CarModel,
 									attributes: ["id", "name", "year"],
-									include: {
-										model: CarMaker,
-										attributes: ["id", "name"],
-										foreignKey: "maker",
-									},
+									include: [
+										{
+											model: CarMaker,
+											attributes: ["id", "name"],
+											foreignKey: "maker",
+										},
+										{
+											model: Transmission,
+											attributes: ["id", "type"],
+											foreignKey: "transmission",
+										},
+										{
+											model: CarCategory,
+											attributes: ["id", "name"],
+											foreignKey: "category",
+										},
+									],
 									foreignKey: "model",
 								},
 								{
@@ -91,13 +113,18 @@ const getItems = async (req, res) => {
 									foreignKey: "exterior_color",
 								},
 							],
-							foreignKey: "car",
 						},
 					],
 				},
 				{
 					model: Employee,
-					attributes: ["id", "first_name", "last_name_1", "last_name_2"],
+					attributes: [
+						"id",
+						"first_name",
+						"last_name_1",
+						"last_name_2",
+						"email",
+					],
 					foreignKey: "employee",
 				},
 			],
@@ -155,11 +182,12 @@ const getItem = async (req, res) => {
 						"email",
 						"telephone",
 						"appointment_date",
-						"country",
+						"appointment_time",
 					],
 					include: [
 						{
 							model: Dealership,
+							foreignKey: "dealership",
 							attributes: [
 								"id",
 								"name",
@@ -167,29 +195,47 @@ const getItem = async (req, res) => {
 								"street",
 								"exterior_number",
 								"neighborhood",
-								"state",
 								"country",
 							],
-							include: {
-								model: PostalCode,
-								attributes: ["id", "code"],
-								foreignKey: "postal_code",
-							},
-							foreignKey: "dealership",
+							include: [
+								{
+									model: PostalCode,
+									attributes: ["id", "code"],
+									foreignKey: "postal_code",
+								},
+								{
+									model: State,
+									attributes: ["id", "name"],
+									foreignKey: "state",
+								},
+							],
 						},
 						{
 							model: Car,
 							attributes: ["vin", "mileage", "description", "sale_price"],
+							foreignKey: "car",
 							include: [
 								{
 									model: CarModel,
-									attributes: ["id", "name", "year"],
-									include: {
-										model: CarMaker,
-										attributes: ["id", "name"],
-										foreignKey: "maker",
-									},
 									foreignKey: "model",
+									attributes: ["id", "name", "year"],
+									include: [
+										{
+											model: CarMaker,
+											attributes: ["id", "name"],
+											foreignKey: "maker",
+										},
+										{
+											model: Transmission,
+											attributes: ["id", "type"],
+											foreignKey: "transmission",
+										},
+										{
+											model: CarCategory,
+											attributes: ["id", "name"],
+											foreignKey: "category",
+										},
+									],
 								},
 								{
 									model: Color,
@@ -202,13 +248,18 @@ const getItem = async (req, res) => {
 									foreignKey: "exterior_color",
 								},
 							],
-							foreignKey: "car",
 						},
 					],
 				},
 				{
 					model: Employee,
-					attributes: ["id", "first_name", "last_name_1", "last_name_2"],
+					attributes: [
+						"id",
+						"first_name",
+						"last_name_1",
+						"last_name_2",
+						"email",
+					],
 					foreignKey: "employee",
 				},
 			],

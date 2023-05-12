@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const {
 	createItemValidator,
+	getItemsValidator,
 	getItemValidator,
 } = require("../../validators/appointment"); // Middlewares para validar.
 const {
@@ -20,15 +21,15 @@ const { recordLog } = require("../../middleware/logRecord"); // Middleware para 
 router.get("/", recordLog, getAllItems);
 
 /* Obtiene un elemento del registro */
-router.get("/:date/:time", recordLog, getItemValidator, getItems);
+router.get("/:date/:time", recordLog, getItemsValidator, getItems);
 
 /* Crea un elemento en el registro */
 router.post("/", recordLog, createItemValidator, createItem);
 
 /* Actualiza un elemento del registro */
-router.put("/:date/:time", recordLog, getItemValidator, updateItem);
+router.put("/:appointmentId", recordLog, getItemValidator, updateItem);
 
 /* Elimina un elemento del registro */
-router.delete("/:date/:time", recordLog, getItemValidator, deleteItem);
+router.delete("/:appointmentId", recordLog, getItemValidator, deleteItem);
 
 module.exports = router;

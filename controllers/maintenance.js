@@ -8,6 +8,10 @@ const {
 	CarModel,
 	CarMaker,
 	Color,
+	Transmission,
+	CarCategory,
+	Maintenance,
+	MaintenanceType,
 } = require("../models"); // Referencia a lo exportado en models/index.js
 const { handleHttpError } = require("../utils/handleError");
 const { sequelize } = require("../config/mariadb");
@@ -33,36 +37,36 @@ const getAllItems = async (req, res) => {
 		const data = await Appointment.findAll({
 			include: [
 				{
-					model: Dealership,
-					attributes: [
-						"id",
-						"name",
-						"description",
-						"street",
-						"exterior_number",
-						"neighborhood",
-						"state",
-						"country",
-					],
-					include: {
-						model: PostalCode,
-						attributes: ["id", "code"],
-						foreignKey: "postal_code",
-					},
+					model: MaintenanceType,
+					attributes: ["id", "concept", "price"],
+					foreignKey: "maintenance_type",
 				},
 				{
 					model: Car,
 					attributes: ["vin", "mileage", "description", "sale_price"],
+					foreignKey: "car",
 					include: [
 						{
 							model: CarModel,
-							attributes: ["id", "name", "year"],
-							include: {
-								model: CarMaker,
-								attributes: ["id", "name"],
-								foreignKey: "maker",
-							},
 							foreignKey: "model",
+							attributes: ["id", "name", "year"],
+							include: [
+								{
+									model: CarMaker,
+									attributes: ["id", "name"],
+									foreignKey: "maker",
+								},
+								{
+									model: Transmission,
+									attributes: ["id", "type"],
+									foreignKey: "transmission",
+								},
+								{
+									model: CarCategory,
+									attributes: ["id", "name"],
+									foreignKey: "category",
+								},
+							],
 						},
 						{
 							model: Color,
@@ -75,7 +79,6 @@ const getAllItems = async (req, res) => {
 							foreignKey: "exterior_color",
 						},
 					],
-					foreignKey: "car",
 				},
 			],
 			transaction,
@@ -119,30 +122,13 @@ const getItems = async (req, res) => {
 		transaction = await sequelize.transaction();
 
 		// Se ejecuta la consulta dentro de la transacción:
-		const data = await Appointment.findOne({
+		const data = await Appointment.findAndCountAll({
 			where: { appointment_date: date, appointment_time: time },
 			include: [
 				{
-					model: Dealership,
-					attributes: [
-						"id",
-						"name",
-						"description",
-						"street",
-						"exterior_number",
-						"neighborhood",
-						"country",
-					],
-					include: {
-						model: PostalCode,
-						attributes: ["id", "code"],
-						foreignKey: "postal_code",
-					},
-					include: {
-						model: State,
-						attributes: ["id", "name"],
-						foreignKey: "state",
-					},
+					model: MaintenanceType,
+					attributes: ["id", "concept", "price"],
+					foreignKey: "maintenance_type",
 				},
 				{
 					model: Car,
@@ -151,13 +137,25 @@ const getItems = async (req, res) => {
 					include: [
 						{
 							model: CarModel,
-							attributes: ["id", "name", "year"],
-							include: {
-								model: CarMaker,
-								attributes: ["id", "name"],
-								foreignKey: "maker",
-							},
 							foreignKey: "model",
+							attributes: ["id", "name", "year"],
+							include: [
+								{
+									model: CarMaker,
+									attributes: ["id", "name"],
+									foreignKey: "maker",
+								},
+								{
+									model: Transmission,
+									attributes: ["id", "type"],
+									foreignKey: "transmission",
+								},
+								{
+									model: CarCategory,
+									attributes: ["id", "name"],
+									foreignKey: "category",
+								},
+							],
 						},
 						{
 							model: Color,

@@ -1,5 +1,5 @@
 const { matchedData } = require("express-validator");
-const { Employee, Dealership, PostalCode } = require("../models"); // Referencia a lo exportado en models/index.js
+const { Employee, Dealership, PostalCode, State } = require("../models"); // Referencia a lo exportado en models/index.js
 const { handleHttpError } = require("../utils/handleError");
 const { sequelize } = require("../config/mariadb");
 
@@ -24,6 +24,7 @@ const getItems = async (req, res) => {
 		const data = await Employee.findAll({
 			include: {
 				model: Dealership,
+				foreignKey: "dealership",
 				attributes: [
 					"id",
 					"name",
@@ -31,14 +32,20 @@ const getItems = async (req, res) => {
 					"street",
 					"exterior_number",
 					"neighborhood",
-					"state",
 					"country",
 				],
-				include: {
-					model: PostalCode,
-					attributes: ["id", "code"],
-					foreignKey: "postal_code",
-				},
+				include: [
+					{
+						model: PostalCode,
+						attributes: ["id", "code"],
+						foreignKey: "postal_code",
+					},
+					{
+						model: State,
+						attributes: ["id", "name"],
+						foreignKey: "state",
+					},
+				],
 			},
 			transaction,
 			order: [["id", "ASC"]],
@@ -86,6 +93,7 @@ const getItem = async (req, res) => {
 				: { id: employeeIdOrName },
 			include: {
 				model: Dealership,
+				foreignKey: "dealership",
 				attributes: [
 					"id",
 					"name",
@@ -93,14 +101,20 @@ const getItem = async (req, res) => {
 					"street",
 					"exterior_number",
 					"neighborhood",
-					"state",
 					"country",
 				],
-				include: {
-					model: PostalCode,
-					attributes: ["id", "code"],
-					foreignKey: "postal_code",
-				},
+				include: [
+					{
+						model: PostalCode,
+						attributes: ["id", "code"],
+						foreignKey: "postal_code",
+					},
+					{
+						model: State,
+						attributes: ["id", "name"],
+						foreignKey: "state",
+					},
+				],
 			},
 			transaction,
 		});

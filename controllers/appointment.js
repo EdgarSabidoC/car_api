@@ -4,10 +4,12 @@ const {
 	Dealership,
 	PostalCode,
 	State,
+	Transmission,
 	Car,
 	CarModel,
 	CarMaker,
 	Color,
+	CarCategory,
 } = require("../models"); // Referencia a lo exportado en models/index.js
 const { handleHttpError } = require("../utils/handleError");
 const { sequelize } = require("../config/mariadb");
@@ -34,6 +36,7 @@ const getAllItems = async (req, res) => {
 			include: [
 				{
 					model: Dealership,
+					foreignKey: "dealership",
 					attributes: [
 						"id",
 						"name",
@@ -41,28 +44,47 @@ const getAllItems = async (req, res) => {
 						"street",
 						"exterior_number",
 						"neighborhood",
-						"state",
 						"country",
 					],
-					include: {
-						model: PostalCode,
-						attributes: ["id", "code"],
-						foreignKey: "postal_code",
-					},
+					include: [
+						{
+							model: PostalCode,
+							attributes: ["id", "code"],
+							foreignKey: "postal_code",
+						},
+						{
+							model: State,
+							attributes: ["id", "name"],
+							foreignKey: "state",
+						},
+					],
 				},
 				{
 					model: Car,
 					attributes: ["vin", "mileage", "description", "sale_price"],
+					foreignKey: "car",
 					include: [
 						{
 							model: CarModel,
-							attributes: ["id", "name", "year"],
-							include: {
-								model: CarMaker,
-								attributes: ["id", "name"],
-								foreignKey: "maker",
-							},
 							foreignKey: "model",
+							attributes: ["id", "name", "year"],
+							include: [
+								{
+									model: CarMaker,
+									attributes: ["id", "name"],
+									foreignKey: "maker",
+								},
+								{
+									model: Transmission,
+									attributes: ["id", "type"],
+									foreignKey: "transmission",
+								},
+								{
+									model: CarCategory,
+									attributes: ["id", "name"],
+									foreignKey: "category",
+								},
+							],
 						},
 						{
 							model: Color,
@@ -75,11 +97,13 @@ const getAllItems = async (req, res) => {
 							foreignKey: "exterior_color",
 						},
 					],
-					foreignKey: "car",
 				},
 			],
 			transaction,
-			order: [["id", "ASC"]],
+			order: [
+				["appointment_date", "ASC"],
+				["appointment_time", "ASC"],
+			],
 		});
 
 		// Si no se encuentra ningún registro, se devuelve un error:
@@ -98,12 +122,12 @@ const getAllItems = async (req, res) => {
 		if (transaction) await transaction.rollback();
 
 		// Se envía el error:
-		handleHttpError(res, "ERROR_GET_ITEMS", 500);
+		handleHttpError(res, "ERROR_GET_ALL_ITEMS", 500);
 	}
 };
 
 /**
- * La función getItem busca y devuelve un elemento de la base de datos según el valor del parámetro appointmentIdOrDate.
+ * Esta función busca y devuelve elementos de la base de datos según el valor de los parámetros date y time.
  * @param {*} req El objeto de solicitud HTTP.
  * @param {*} res El objeto de respuesta HTTP.
  * @returns {Promise} - Promesa que resuelve con un objeto que contiene el elemento.
@@ -112,18 +136,18 @@ const getAllItems = async (req, res) => {
 const getItems = async (req, res) => {
 	let transaction;
 	try {
-		const date = req.params["date"];
-		const time = req.params["time"];
+		const { date, time } = req.params;
 
 		// Se obtiene una instancia de la transacción:
 		transaction = await sequelize.transaction();
 
 		// Se ejecuta la consulta dentro de la transacción:
-		const data = await Appointment.findOne({
+		const data = await Appointment.findAndCountAll({
 			where: { appointment_date: date, appointment_time: time },
 			include: [
 				{
 					model: Dealership,
+					foreignKey: "dealership",
 					attributes: [
 						"id",
 						"name",
@@ -133,16 +157,18 @@ const getItems = async (req, res) => {
 						"neighborhood",
 						"country",
 					],
-					include: {
-						model: PostalCode,
-						attributes: ["id", "code"],
-						foreignKey: "postal_code",
-					},
-					include: {
-						model: State,
-						attributes: ["id", "name"],
-						foreignKey: "state",
-					},
+					include: [
+						{
+							model: PostalCode,
+							attributes: ["id", "code"],
+							foreignKey: "postal_code",
+						},
+						{
+							model: State,
+							attributes: ["id", "name"],
+							foreignKey: "state",
+						},
+					],
 				},
 				{
 					model: Car,
@@ -151,13 +177,25 @@ const getItems = async (req, res) => {
 					include: [
 						{
 							model: CarModel,
-							attributes: ["id", "name", "year"],
-							include: {
-								model: CarMaker,
-								attributes: ["id", "name"],
-								foreignKey: "maker",
-							},
 							foreignKey: "model",
+							attributes: ["id", "name", "year"],
+							include: [
+								{
+									model: CarMaker,
+									attributes: ["id", "name"],
+									foreignKey: "maker",
+								},
+								{
+									model: Transmission,
+									attributes: ["id", "type"],
+									foreignKey: "transmission",
+								},
+								{
+									model: CarCategory,
+									attributes: ["id", "name"],
+									foreignKey: "category",
+								},
+							],
 						},
 						{
 							model: Color,
@@ -173,11 +211,15 @@ const getItems = async (req, res) => {
 				},
 			],
 			transaction,
+			order: [
+				["appointment_date", "ASC"],
+				["appointment_time", "ASC"],
+			],
 		});
 
-		// Si no se encuentra el registro, se devuelve un error:
+		// Si no se encuentran los registros, se devuelve un error:
 		if (!data) {
-			handleHttpError(res, "ITEM_NOT_FOUND", 404);
+			handleHttpError(res, "ERROR_ITEMS_NOT_FOUND", 404);
 			return;
 		}
 
@@ -191,7 +233,7 @@ const getItems = async (req, res) => {
 		if (transaction) await transaction.rollback();
 
 		// Se envía el error:
-		handleHttpError(res, "ERROR_GET_ITEM", 500);
+		handleHttpError(res, "ERROR_GET_ITEMS", 500);
 	}
 };
 
@@ -236,7 +278,7 @@ const createItem = async (req, res) => {
 const updateItem = async (req, res) => {
 	let transaction;
 	try {
-		const { date, time } = req.params;
+		const { appointmentId } = req.params;
 		const { body } = req;
 
 		// Se obtiene una instancia de la transacción:
@@ -244,9 +286,7 @@ const updateItem = async (req, res) => {
 
 		// Se busca el registro a actualizar:
 		const data = await Appointment.findOne({
-			where: isNaN(appointmentIdOrDate)
-				? { first_name: appointmentIdOrDate }
-				: { id: appointmentIdOrDate },
+			where: { id: appointmentId },
 			transaction,
 		});
 
@@ -288,16 +328,14 @@ const updateItem = async (req, res) => {
 const deleteItem = async (req, res) => {
 	let transaction;
 	try {
-		const { date, time } = req.params;
+		const { appointmentId } = req.params;
 
 		// Se obtiene una instancia de la transacción:
 		transaction = await sequelize.transaction();
 
 		// Se ejecuta la consulta dentro de la transacción:
 		const data = await Appointment.findOne({
-			where: isNaN(appointmentIdOrDate)
-				? { first_name: appointmentIdOrDate }
-				: { id: appointmentIdOrDate },
+			where: { id: appointmentId },
 			transaction,
 		});
 
@@ -311,18 +349,14 @@ const deleteItem = async (req, res) => {
 		await data.update(
 			{ deleted: true },
 			{
-				where: isNaN(appointmentIdOrDate)
-					? { first_name: appointmentIdOrDate }
-					: { id: appointmentIdOrDate },
+				where: { id: appointmentId },
 				transaction,
 			}
 		);
 
 		// Actualiza la fecha de destrucción:
 		await data.destroy({
-			where: isNaN(appointmentIdOrDate)
-				? { first_name: appointmentIdOrDate }
-				: { id: appointmentIdOrDate },
+			where: { id: appointmentId },
 			transaction,
 		});
 
