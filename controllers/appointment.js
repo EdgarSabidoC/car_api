@@ -37,6 +37,7 @@ const getAllItems = async (req, res) => {
 				{
 					model: Dealership,
 					foreignKey: "dealership",
+					as: "appointment_dealership",
 					attributes: [
 						"id",
 						"name",
@@ -44,17 +45,18 @@ const getAllItems = async (req, res) => {
 						"street",
 						"exterior_number",
 						"neighborhood",
-						"country",
 					],
 					include: [
 						{
 							model: PostalCode,
 							attributes: ["id", "code"],
 							foreignKey: "postal_code",
+							as: "dealership_postal_code",
 							include: [
 								{
 									model: State,
 									attributes: ["id", "name"],
+									as: "postal_code_state",
 									foreignKey: "state",
 								},
 							],
@@ -69,20 +71,24 @@ const getAllItems = async (req, res) => {
 						{
 							model: CarModel,
 							foreignKey: "model",
+							as: "appointment_car",
 							attributes: ["id", "name", "year"],
 							include: [
 								{
 									model: CarMaker,
+									as: "model_maker",
 									attributes: ["id", "name"],
 									foreignKey: "maker",
 								},
 								{
 									model: Transmission,
+									as: "model_transmission",
 									attributes: ["id", "type"],
 									foreignKey: "transmission",
 								},
 								{
 									model: CarCategory,
+									as: "model_category",
 									attributes: ["id", "name"],
 									foreignKey: "category",
 								},
@@ -90,11 +96,13 @@ const getAllItems = async (req, res) => {
 						},
 						{
 							model: Color,
+							as: "car_interior_color",
 							attributes: ["id", "name"],
 							foreignKey: "interior_color",
 						},
 						{
 							model: Color,
+							as: "car_exterior_color",
 							attributes: ["id", "name"],
 							foreignKey: "exterior_color",
 						},
@@ -150,6 +158,7 @@ const getItems = async (req, res) => {
 				{
 					model: Dealership,
 					foreignKey: "dealership",
+					as: "appointment_dealership",
 					attributes: [
 						"id",
 						"name",
@@ -157,17 +166,18 @@ const getItems = async (req, res) => {
 						"street",
 						"exterior_number",
 						"neighborhood",
-						"country",
 					],
 					include: [
 						{
 							model: PostalCode,
 							attributes: ["id", "code"],
 							foreignKey: "postal_code",
+							as: "dealership_postal_code",
 							include: [
 								{
 									model: State,
 									attributes: ["id", "name"],
+									as: "postal_code_state",
 									foreignKey: "state",
 								},
 							],
@@ -182,20 +192,24 @@ const getItems = async (req, res) => {
 						{
 							model: CarModel,
 							foreignKey: "model",
+							as: "appointment_car",
 							attributes: ["id", "name", "year"],
 							include: [
 								{
 									model: CarMaker,
+									as: "model_maker",
 									attributes: ["id", "name"],
 									foreignKey: "maker",
 								},
 								{
 									model: Transmission,
+									as: "model_transmission",
 									attributes: ["id", "type"],
 									foreignKey: "transmission",
 								},
 								{
 									model: CarCategory,
+									as: "model_category",
 									attributes: ["id", "name"],
 									foreignKey: "category",
 								},
@@ -203,11 +217,13 @@ const getItems = async (req, res) => {
 						},
 						{
 							model: Color,
+							as: "car_interior_color",
 							attributes: ["id", "name"],
 							foreignKey: "interior_color",
 						},
 						{
 							model: Color,
+							as: "car_exterior_color",
 							attributes: ["id", "name"],
 							foreignKey: "exterior_color",
 						},

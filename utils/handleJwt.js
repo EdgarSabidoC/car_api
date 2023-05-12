@@ -5,16 +5,17 @@ const propertiesKey = getProperties();
 /**
  * Genera un token JWT a partir de los datos de usuario proporcionados.
  * @param {Object} user - Objeto con los datos del usuario.
- * @param {string} user.id - Identificador único del usuario.
- * @param {string} user.role - Rol del usuario.
+ * @param {string} user.googleId - Identificador único del usuario.
+ * @param {string} user.user_role - Rol del usuario.
  * @returns {Promise<string>} Token JWT generado.
  */
 const signToken = async (user) => {
+	console.log("SIGN: ", user.googleId);
 	const sign = jwt.sign(
 		{
 			// Payload:
-			id: user.id,
-			role: user.role,
+			id: user.googleId,
+			role: user.user_role,
 		},
 		JWT_SECRET,
 		{

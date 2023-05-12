@@ -3,7 +3,7 @@ const validateResults = require("../utils/handleValidator");
 const ENGINE_DB = process.env.ENGINE_DB;
 
 const createItemValidator = [
-	check("name").exists().notEmpty().isString().isLength({ max: 15 }),
+	check("name").exists().notEmpty().isString().isLength({ max: 80 }),
 	(req, res, next) => {
 		return validateResults(req, res, next);
 	},

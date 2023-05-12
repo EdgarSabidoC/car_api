@@ -1,6 +1,6 @@
 const { matchedData } = require("express-validator");
 const {
-	Appointment,
+	Maintenance,
 	Dealership,
 	PostalCode,
 	State,
@@ -10,8 +10,8 @@ const {
 	Color,
 	Transmission,
 	CarCategory,
-	Maintenance,
 	MaintenanceType,
+	CarCondition,
 } = require("../models"); // Referencia a lo exportado en models/index.js
 const { handleHttpError } = require("../utils/handleError");
 const { sequelize } = require("../config/mariadb");
@@ -34,49 +34,98 @@ const getAllItems = async (req, res) => {
 		// const offset = (page - 1) * limit;
 
 		// Se ejecuta la consulta dentro de la transacción:
-		const data = await Appointment.findAll({
+		const data = await Maintenance.findAll({
 			include: [
 				{
 					model: MaintenanceType,
+					as: "maintenance_maintenance_type",
 					attributes: ["id", "concept", "price"],
 					foreignKey: "maintenance_type",
 				},
 				{
 					model: Car,
+					as: "maintenance_car",
 					attributes: ["vin", "mileage", "description", "sale_price"],
 					foreignKey: "car",
 					include: [
 						{
 							model: CarModel,
+							as: "car_model",
 							foreignKey: "model",
 							attributes: ["id", "name", "year"],
 							include: [
 								{
-									model: CarMaker,
-									attributes: ["id", "name"],
-									foreignKey: "maker",
-								},
-								{
 									model: Transmission,
+									as: "model_transmission",
 									attributes: ["id", "type"],
 									foreignKey: "transmission",
 								},
 								{
-									model: CarCategory,
+									model: Color,
+									as: "model_color",
 									attributes: ["id", "name"],
-									foreignKey: "category",
+									foreignKey: "color",
+								},
+								{
+									model: CarMaker,
+									as: "model_maker",
+									attributes: ["id", "name"],
+									foreignKey: "maker",
+								},
+								{
+									model: CarCategory,
+									as: "model_category",
+									attributes: ["id", "name"],
+									foreignKey: "car_category",
 								},
 							],
 						},
 						{
 							model: Color,
+							as: "car_interior_color",
 							attributes: ["id", "name"],
 							foreignKey: "interior_color",
 						},
 						{
 							model: Color,
+							as: "car_exterior_color",
 							attributes: ["id", "name"],
 							foreignKey: "exterior_color",
+						},
+						{
+							model: Dealership,
+							as: "car_dealership",
+							foreignKey: "dealership",
+							attributes: [
+								"id",
+								"name",
+								"description",
+								"street",
+								"exterior_number",
+								"neighborhood",
+							],
+							include: [
+								{
+									model: PostalCode,
+									as: "dealership_postal_code",
+									attributes: ["id", "code"],
+									foreignKey: "postal_code",
+									include: [
+										{
+											model: State,
+											as: "postal_code_state",
+											attributes: ["id", "name"],
+											foreignKey: "state",
+										},
+									],
+								},
+							],
+						},
+						{
+							model: CarCondition,
+							as: "car_condition",
+							attributes: ["id", "type"],
+							foreignKey: "car_condition",
 						},
 					],
 				},
@@ -122,50 +171,99 @@ const getItems = async (req, res) => {
 		transaction = await sequelize.transaction();
 
 		// Se ejecuta la consulta dentro de la transacción:
-		const data = await Appointment.findAndCountAll({
+		const data = await Maintenance.findAndCountAll({
 			where: { appointment_date: date, appointment_time: time },
 			include: [
 				{
 					model: MaintenanceType,
+					as: "maintenance_maintenance_type",
 					attributes: ["id", "concept", "price"],
 					foreignKey: "maintenance_type",
 				},
 				{
 					model: Car,
+					as: "maintenance_car",
 					attributes: ["vin", "mileage", "description", "sale_price"],
 					foreignKey: "car",
 					include: [
 						{
 							model: CarModel,
+							as: "car_model",
 							foreignKey: "model",
 							attributes: ["id", "name", "year"],
 							include: [
 								{
-									model: CarMaker,
-									attributes: ["id", "name"],
-									foreignKey: "maker",
-								},
-								{
 									model: Transmission,
+									as: "model_transmission",
 									attributes: ["id", "type"],
 									foreignKey: "transmission",
 								},
 								{
-									model: CarCategory,
+									model: Color,
+									as: "model_color",
 									attributes: ["id", "name"],
-									foreignKey: "category",
+									foreignKey: "color",
+								},
+								{
+									model: CarMaker,
+									as: "model_maker",
+									attributes: ["id", "name"],
+									foreignKey: "maker",
+								},
+								{
+									model: CarCategory,
+									as: "model_category",
+									attributes: ["id", "name"],
+									foreignKey: "car_category",
 								},
 							],
 						},
 						{
 							model: Color,
+							as: "car_interior_color",
 							attributes: ["id", "name"],
 							foreignKey: "interior_color",
 						},
 						{
 							model: Color,
+							as: "car_exterior_color",
 							attributes: ["id", "name"],
 							foreignKey: "exterior_color",
+						},
+						{
+							model: Dealership,
+							as: "car_dealership",
+							foreignKey: "dealership",
+							attributes: [
+								"id",
+								"name",
+								"description",
+								"street",
+								"exterior_number",
+								"neighborhood",
+							],
+							include: [
+								{
+									model: PostalCode,
+									as: "dealership_postal_code",
+									attributes: ["id", "code"],
+									foreignKey: "postal_code",
+									include: [
+										{
+											model: State,
+											as: "postal_code_state",
+											attributes: ["id", "name"],
+											foreignKey: "state",
+										},
+									],
+								},
+							],
+						},
+						{
+							model: CarCondition,
+							as: "car_condition",
+							attributes: ["id", "type"],
+							foreignKey: "car_condition",
 						},
 					],
 				},
@@ -209,7 +307,7 @@ const createItem = async (req, res) => {
 		transaction = await sequelize.transaction();
 
 		// Se ejecuta la consulta dentro de la transacción:
-		const data = await Appointment.create(body, { transaction });
+		const data = await Maintenance.create(body, { transaction });
 
 		// Si la creación del elemento es exitosa, se confirma la transacción:
 		await transaction.commit();
@@ -241,7 +339,7 @@ const updateItem = async (req, res) => {
 		transaction = await sequelize.transaction();
 
 		// Se busca el registro a actualizar:
-		const data = await Appointment.findOne({
+		const data = await Maintenance.findOne({
 			where: isNaN(appointmentIdOrDate)
 				? { first_name: appointmentIdOrDate }
 				: { id: appointmentIdOrDate },
@@ -292,7 +390,7 @@ const deleteItem = async (req, res) => {
 		transaction = await sequelize.transaction();
 
 		// Se ejecuta la consulta dentro de la transacción:
-		const data = await Appointment.findOne({
+		const data = await Maintenance.findOne({
 			where: isNaN(appointmentIdOrDate)
 				? { first_name: appointmentIdOrDate }
 				: { id: appointmentIdOrDate },

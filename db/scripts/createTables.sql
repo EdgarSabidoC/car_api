@@ -72,7 +72,7 @@ ALTER TABLE `car_api`.`maker` ADD INDEX `name` (`name`) USING BTREE;
 
 CREATE TABLE IF NOT EXISTS car_api.color(
 		id INT NOT NULL AUTO_INCREMENT,
-		name VARCHAR(15) NOT NULL,
+		name VARCHAR(80) NOT NULL,
 		createdAt DATETIME NOT NULL,
 		updatedAt DATETIME NOT NULL,
 		deleted BOOLEAN DEFAULT 0,
@@ -154,7 +154,7 @@ CREATE TABLE IF NOT EXISTS car_api.dealership(
 		id INT NOT NULL AUTO_INCREMENT,
 		name VARCHAR(50) NOT NULL,
 		description VARCHAR(300),
-		street VARCHAR(10) NOT NULL,
+		street VARCHAR(50) NOT NULL,
 		exterior_number VARCHAR(10) NOT NULL,
 		neighborhood VARCHAR(50) NOT NULL,
 		postal_code INT NOT NULL,
@@ -301,7 +301,7 @@ CREATE TABLE IF NOT EXISTS car_api.car(
 		sale_price DECIMAL NULL,
 		maintenance_cost DECIMAL DEFAULT 0,
 		model INT NOT NULL,
-		car_condition INT NOT NULL,
+		ccondition INT NOT NULL,
 		interior_color INT NOT NULL,
 		exterior_color INT NOT NULL,
 		dealership INT NOT NULL,
@@ -317,8 +317,8 @@ CREATE TABLE IF NOT EXISTS car_api.car(
 			REFERENCES `car_api`.`car_model` (`id`)
 			ON UPDATE CASCADE
 			ON DELETE CASCADE,
-		CONSTRAINT `fk_car_condition`
-			FOREIGN KEY (`car_condition`)
+		CONSTRAINT `fk_ccondition`
+			FOREIGN KEY (`ccondition`)
 			REFERENCES `car_api`.`car_condition` (`id`)
 			ON UPDATE CASCADE
 			ON DELETE CASCADE,
@@ -343,7 +343,7 @@ ADD INDEX `sale_price` (`sale_price`) USING BTREE,
 ADD INDEX `maintenance_cost` (`maintenance_cost`) USING BTREE,
 ADD INDEX `model` (`model`) USING BTREE,
 ADD INDEX `photo_url` (`photo_url`) USING BTREE,
-ADD INDEX `car_condition` (`car_condition`) USING BTREE,
+ADD INDEX `ccondition` (`ccondition`) USING BTREE,
 ADD INDEX `interior_color` (`interior_color`) USING BTREE,
 ADD INDEX `exterior_color` (`exterior_color`) USING BTREE,
 ADD INDEX `dealership` (`dealership`) USING BTREE,

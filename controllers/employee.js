@@ -24,6 +24,7 @@ const getItems = async (req, res) => {
 		const data = await Employee.findAll({
 			include: {
 				model: Dealership,
+				as: "employee_dealership",
 				foreignKey: "dealership",
 				attributes: [
 					"id",
@@ -32,16 +33,17 @@ const getItems = async (req, res) => {
 					"street",
 					"exterior_number",
 					"neighborhood",
-					"country",
 				],
 				include: [
 					{
 						model: PostalCode,
+						as: "dealership_postal_code",
 						attributes: ["id", "code"],
 						foreignKey: "postal_code",
 						include: [
 							{
 								model: State,
+								as: "postal_code_state",
 								attributes: ["id", "name"],
 								foreignKey: "state",
 							},
@@ -95,6 +97,7 @@ const getItem = async (req, res) => {
 				: { id: employeeIdOrName },
 			include: {
 				model: Dealership,
+				as: "employee_dealership",
 				foreignKey: "dealership",
 				attributes: [
 					"id",
@@ -103,16 +106,17 @@ const getItem = async (req, res) => {
 					"street",
 					"exterior_number",
 					"neighborhood",
-					"country",
 				],
 				include: [
 					{
 						model: PostalCode,
+						as: "dealership_postal_code",
 						attributes: ["id", "code"],
 						foreignKey: "postal_code",
 						include: [
 							{
 								model: State,
+								as: "postal_code_state",
 								attributes: ["id", "name"],
 								foreignKey: "state",
 							},

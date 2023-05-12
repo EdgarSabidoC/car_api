@@ -65,12 +65,12 @@ const User = sequelize.define(
 
 User.belongsTo(Dealership, {
 	foreignKey: "dealership",
-	as: "user_dealership_as",
+	as: "user_dealership",
 });
 
 User.belongsTo(Role, {
 	foreignKey: "user_role",
-	as: "user_role_as",
+	as: "user_user_role",
 });
 
 module.exports = User;

@@ -44,7 +44,7 @@ const Car = sequelize.define(
 			},
 			allowNull: false,
 		},
-		car_condition: {
+		ccondition: {
 			type: DataTypes.INTEGER,
 			references: {
 				model: CarCondition,
@@ -109,23 +109,23 @@ Car.belongsTo(CarModel, {
 });
 
 Car.belongsTo(CarCondition, {
-	foreignKey: "car_condition",
-	as: "car_condition_as",
+	foreignKey: "ccondition",
+	as: "car_condition",
 });
 
 Car.belongsTo(Color, {
 	foreignKey: "interior_color",
-	as: "car_interior_color_as",
+	as: "car_interior_color",
 });
 
 Car.belongsTo(Color, {
 	foreignKey: "exterior_color",
-	as: "car_exterior_color_as",
+	as: "car_exterior_color",
 });
 
 Car.belongsTo(Dealership, {
 	foreignKey: "dealership",
-	as: "car_dealership_as",
+	as: "car_dealership",
 });
 
 module.exports = Car;

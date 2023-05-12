@@ -29,38 +29,51 @@ const getItems = async (req, res) => {
 			include: [
 				{
 					model: CarModel,
+					as: "car_model",
+					foreignKey: "model",
 					attributes: ["id", "name", "year"],
 					include: [
 						{
-							model: CarMaker,
-							attributes: ["id", "name"],
-							foreignKey: "maker",
-						},
-						{
 							model: Transmission,
+							as: "model_transmission",
 							attributes: ["id", "type"],
 							foreignKey: "transmission",
 						},
 						{
-							model: CarCategory,
+							model: Color,
+							as: "model_color",
 							attributes: ["id", "name"],
-							foreignKey: "category",
+							foreignKey: "color",
+						},
+						{
+							model: CarMaker,
+							as: "model_maker",
+							attributes: ["id", "name"],
+							foreignKey: "maker",
+						},
+						{
+							model: CarCategory,
+							as: "model_category",
+							attributes: ["id", "name"],
+							foreignKey: "car_category",
 						},
 					],
-					foreignKey: "model",
 				},
 				{
 					model: Color,
+					as: "car_interior_color",
 					attributes: ["id", "name"],
 					foreignKey: "interior_color",
 				},
 				{
 					model: Color,
+					as: "car_exterior_color",
 					attributes: ["id", "name"],
 					foreignKey: "exterior_color",
 				},
 				{
 					model: Dealership,
+					as: "car_dealership",
 					foreignKey: "dealership",
 					attributes: [
 						"id",
@@ -69,16 +82,17 @@ const getItems = async (req, res) => {
 						"street",
 						"exterior_number",
 						"neighborhood",
-						"country",
 					],
 					include: [
 						{
 							model: PostalCode,
+							as: "dealership_postal_code",
 							attributes: ["id", "code"],
 							foreignKey: "postal_code",
 							include: [
 								{
 									model: State,
+									as: "postal_code_state",
 									attributes: ["id", "name"],
 									foreignKey: "state",
 								},
@@ -88,8 +102,9 @@ const getItems = async (req, res) => {
 				},
 				{
 					model: CarCondition,
+					as: "car_condition",
 					attributes: ["id", "type"],
-					foreignKey: "car_condition",
+					foreignKey: "ccondition",
 				},
 			],
 			transaction,
@@ -99,6 +114,7 @@ const getItems = async (req, res) => {
 		await transaction.commit();
 		if (data.length === 0) {
 			handleHttpError(res, "ITEMS_NOT_FOUND", 404);
+			return;
 		}
 		res.send({ data, searchedBy });
 	} catch (err) {
@@ -129,38 +145,51 @@ const getItem = async (req, res) => {
 			include: [
 				{
 					model: CarModel,
+					as: "car_model",
 					foreignKey: "model",
 					attributes: ["id", "name", "year"],
 					include: [
 						{
-							model: CarMaker,
-							attributes: ["id", "name"],
-							foreignKey: "maker",
-						},
-						{
 							model: Transmission,
+							as: "model_transmission",
 							attributes: ["id", "type"],
 							foreignKey: "transmission",
 						},
 						{
-							model: CarCategory,
+							model: Color,
+							as: "model_color",
 							attributes: ["id", "name"],
-							foreignKey: "category",
+							foreignKey: "color",
+						},
+						{
+							model: CarMaker,
+							as: "model_maker",
+							attributes: ["id", "name"],
+							foreignKey: "maker",
+						},
+						{
+							model: CarCategory,
+							as: "model_category",
+							attributes: ["id", "name"],
+							foreignKey: "car_category",
 						},
 					],
 				},
 				{
 					model: Color,
+					as: "car_interior_color",
 					attributes: ["id", "name"],
 					foreignKey: "interior_color",
 				},
 				{
 					model: Color,
+					as: "car_exterior_color",
 					attributes: ["id", "name"],
 					foreignKey: "exterior_color",
 				},
 				{
 					model: Dealership,
+					as: "car_dealership",
 					foreignKey: "dealership",
 					attributes: [
 						"id",
@@ -169,16 +198,17 @@ const getItem = async (req, res) => {
 						"street",
 						"exterior_number",
 						"neighborhood",
-						"country",
 					],
 					include: [
 						{
 							model: PostalCode,
+							as: "dealership_postal_code",
 							attributes: ["id", "code"],
 							foreignKey: "postal_code",
 							include: [
 								{
 									model: State,
+									as: "postal_code_state",
 									attributes: ["id", "name"],
 									foreignKey: "state",
 								},
@@ -188,8 +218,9 @@ const getItem = async (req, res) => {
 				},
 				{
 					model: CarCondition,
+					as: "car_condition",
 					attributes: ["id", "type"],
-					foreignKey: "car_condition",
+					foreignKey: "ccondition",
 				},
 			],
 			transaction,
