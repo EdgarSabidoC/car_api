@@ -2,7 +2,7 @@ const { check } = require("express-validator");
 const validateResults = require("../utils/handleValidator");
 
 const createItemValidator = [
-	check("googleId").exists().notEmpty().isString().isLength({ max: 255 }),
+	check("googleId").optional().notEmpty().isString().isLength({ max: 255 }),
 	check("first_name").exists().notEmpty().isString().isLength({ max: 75 }),
 	check("last_name_1").exists().notEmpty().isString().isLength({ max: 75 }),
 	check("last_name_2").optional().notEmpty().isString().isLength({ max: 75 }),

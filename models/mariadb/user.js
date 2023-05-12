@@ -9,8 +9,8 @@ const User = sequelize.define(
 	{
 		googleId: {
 			type: DataTypes.STRING,
-			primaryKey: true,
-			allowNull: false,
+			unique: true,
+			allowNull: true,
 		},
 		first_name: {
 			type: DataTypes.STRING,
@@ -27,7 +27,7 @@ const User = sequelize.define(
 		email: {
 			type: DataTypes.STRING,
 			allowNull: false,
-			unique: true,
+			primaryKey: true,
 		},
 		dealership: {
 			type: DataTypes.INTEGER,

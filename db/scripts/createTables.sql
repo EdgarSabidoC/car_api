@@ -157,7 +157,6 @@ CREATE TABLE IF NOT EXISTS car_api.dealership(
 		street VARCHAR(10) NOT NULL,
 		exterior_number VARCHAR(10) NOT NULL,
 		neighborhood VARCHAR(50) NOT NULL,
-		state INT NOT NULL,
 		postal_code INT NOT NULL,
 		createdAt DATETIME NOT NULL,
 		updatedAt DATETIME NOT NULL,
@@ -168,15 +167,9 @@ CREATE TABLE IF NOT EXISTS car_api.dealership(
 			FOREIGN KEY (`postal_code`)
 			REFERENCES `car_api`.`postal_code` (`id`)
 			ON UPDATE CASCADE
-			ON DELETE CASCADE,
-		CONSTRAINT `fk_state_2`
-			FOREIGN KEY (`state`)
-			REFERENCES `car_api`.`state` (`id`)
-			ON UPDATE CASCADE
 			ON DELETE CASCADE
 ) ENGINE = InnoDB;
 ALTER TABLE `car_api`.`dealership` ADD INDEX `name` (`name`) USING BTREE,
-ADD INDEX `state` (`state`) USING BTREE,
 ADD INDEX `postal_code` (`postal_code`) USING BTREE;
 
 
@@ -251,7 +244,7 @@ ADD INDEX `year` (`year`) USING BTREE;
 
 
 CREATE TABLE IF NOT EXISTS car_api.user(
-		googleId VARCHAR(255) NOT NULL,
+		googleId VARCHAR(255) NULL,
 		first_name VARCHAR(75) NOT NULL,
 		last_name_1 VARCHAR(75) NOT NULL,
 		last_name_2  VARCHAR(75) NULL,
@@ -262,8 +255,8 @@ CREATE TABLE IF NOT EXISTS car_api.user(
 		updatedAt DATETIME NOT NULL,
 		deleted BOOLEAN DEFAULT 0,
 		deletedAt DATETIME NULL,
-		PRIMARY KEY(googleId),
-		UNIQUE(email),
+		PRIMARY KEY(email),
+		UNIQUE(googleId),
 		CONSTRAINT `fk_dealership`
 			FOREIGN KEY (`dealership`)
 			REFERENCES `car_api`.`dealership` (`id`)
@@ -470,14 +463,3 @@ CREATE TABLE IF NOT EXISTS car_api.session(
 	updatedAt DATETIME NOT NULL,
 	PRIMARY KEY(sid)
 ) ENGINE = InnoDB;
-
--- CREATE TABLE IF NOT EXISTS car_api.user (
---   id INT(11) NOT NULL AUTO_INCREMENT,
---   googleId VARCHAR(255) NOT NULL,
---   displayName VARCHAR(255) NOT NULL,
---   email VARCHAR(255) NOT NULL,
---   createdAt DATETIME NOT NULL,
---   updatedAt DATETIME NOT NULL,
---   PRIMARY KEY (id),
---   UNIQUE KEY (googleId)
--- ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

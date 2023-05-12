@@ -1,88 +1,100 @@
--- Tabla Color:
-INSERT INTO `car_api`.`color` (`name`) VALUES
-('Alpine White'),
-('Beige'),
-('Black'),
-('Black Sapphire Metallic'),
-('Brown'),
-('Burgundy'),
-('Carbon Black Metallic'),
-('Champagne'),
-('Charcoal'),
-('Cognac'),
-('Copper'),
-('Coral Red Black'),
-('Cream'),
-('Dark Blue'),
-('Dark Graphite Metallic'),
-('Dark Green'),
-('Dark Grey'),
-('Dark Red'),
-('Glacier Silver Metallic'),
-('Gold'),
-('Gray'),
-('Ivory'),
-('Ivory White Black'),
-('Jet Black'),
-('Light Blue'),
-('Light Brown'),
-('Light Green'),
-('Light Grey'),
-('Light Gan'),
-('Lime'),
-('Magma Red'),
-('Medium Blue'),
-('Medium Brown'),
-('Medium Green'),
-('Medium Grey'),
-('Melbourne Red Metallic'),
-('Mineral Gray Metallic'),
-('Mineral White Metallic'),
-('Moonstone Metallic'),
-('Night Blue'),
-('Olive'),
-('Oyster Black'),
-('Pink'),
-('platinum Gray Metallic'),
-('Purple'),
-('Pyrite Brown Metallic'),
-('Saddle Brown'),
-('Silver'),
-('Sophisto Gray Metallic'),
-('Sparkling Brown Metallic'),
-('Sunset Orange Metallic'),
-('Tan'),
-('Tanzanite Blue Metallic'),
-('Terra'),
-('Turquoise'),
-('Valencia Orange Metallic'),
-('White');
+-- Tabla car_condition:
+INSERT INTO `car_api`.`car_condition` (`type`, `createdAt`, `updatedAt`) VALUES
+("Mint", NOW(), NOW()),
+("Excellent", NOW(), NOW()),
+("Good", NOW(), NOW()),
+("Fair", NOW(), NOW()),
+("Needs repair or maintenance", NOW(), NOW());
 
 
--- Tabla Schedule:
-INSERT INTO `car_api`.`schedule` (`hour`) VALUES
-('8:00'),
-('8:30'),
-('9:00'),
-('9:30'),
-('10:00'),
-('10:30'),
-('11:00'),
-('11:30'),
-('12:00'),
-('12:30'),
-('13:00'),
-('13:30'),
-('14:00'),
-('14:30'),
-('15:00'),
-('15:30'),
-('16:00'),
-('16:30'),
-('17:00');
+-- Tabla color:
+INSERT INTO `car_api`.`color` (`name`, `createdAt`, `updatedAt`) VALUES
+('Alpine White', NOW(), NOW()),
+('Beige', NOW(), NOW()),
+('Black', NOW(), NOW()),
+('Black Sapphire Metallic', NOW(), NOW()),
+('Brown', NOW(), NOW()),
+('Burgundy', NOW(), NOW()),
+('Carbon Black Metallic', NOW(), NOW()),
+('Champagne', NOW(), NOW()),
+('Charcoal', NOW(), NOW()),
+('Cognac', NOW(), NOW()),
+('Copper', NOW(), NOW()),
+('Coral Red Black', NOW(), NOW()),
+('Cream', NOW(), NOW()),
+('Dark Blue', NOW(), NOW()),
+('Dark Graphite Metallic', NOW(), NOW()),
+('Dark Green', NOW(), NOW()),
+('Dark Grey', NOW(), NOW()),
+('Dark Red', NOW(), NOW()),
+('Glacier Silver Metallic', NOW(), NOW()),
+('Gold', NOW(), NOW()),
+('Gray', NOW(), NOW()),
+('Ivory', NOW(), NOW()),
+('Ivory White Black', NOW(), NOW()),
+('Jet Black', NOW(), NOW()),
+('Light Blue', NOW(), NOW()),
+('Light Brown', NOW(), NOW()),
+('Light Green', NOW(), NOW()),
+('Light Grey', NOW(), NOW()),
+('Light Gan', NOW(), NOW()),
+('Lime', NOW(), NOW()),
+('Magma Red', NOW(), NOW()),
+('Medium Blue', NOW(), NOW()),
+('Medium Brown', NOW(), NOW()),
+('Medium Green', NOW(), NOW()),
+('Medium Grey', NOW(), NOW()),
+('Melbourne Red Metallic', NOW(), NOW()),
+('Mineral Gray Metallic', NOW(), NOW()),
+('Mineral White Metallic', NOW(), NOW()),
+('Moonstone Metallic', NOW(), NOW()),
+('Night Blue', NOW(), NOW()),
+('Nightmist Blue', NOW(), NOW()),
+('Olive', NOW(), NOW()),
+('Oyster Black', NOW(), NOW()),
+('Pink', NOW(), NOW()),
+('Platinum Gray Metallic', NOW(), NOW()),
+('Purple', NOW(), NOW()),
+('Pyrite Brown Metallic', NOW(), NOW()),
+('Red', NOW(), NOW()),
+('Saddle Brown', NOW(), NOW()),
+('Silver', NOW(), NOW()),
+('Sophisto Gray Metallic', NOW(), NOW()),
+('Sparkling Brown Metallic', NOW(), NOW()),
+('Sunset Orange Metallic', NOW(), NOW()),
+('Tan', NOW(), NOW()),
+('Tanzanite Blue Metallic', NOW(), NOW()),
+('Terra', NOW(), NOW()),
+('Thunderbird Blue', NOW(), NOW()),
+('Turquoise', NOW(), NOW()),
+('Valencia Orange Metallic', NOW(), NOW()),
+('White', NOW(), NOW());
 
 
--- Tabla Maker:
+-- Tabla schedule:
+INSERT INTO `car_api`.`schedule` (`hour`, `createdAt`, `updatedAt`) VALUES
+('8:00', NOW(), NOW()),
+('8:30', NOW(), NOW()),
+('9:00', NOW(), NOW()),
+('9:30', NOW(), NOW()),
+('10:00', NOW(), NOW()),
+('10:30', NOW(), NOW()),
+('11:00', NOW(), NOW()),
+('11:30', NOW(), NOW()),
+('12:00', NOW(), NOW()),
+('12:30', NOW(), NOW()),
+('13:00', NOW(), NOW()),
+('13:30', NOW(), NOW()),
+('14:00', NOW(), NOW()),
+('14:30', NOW(), NOW()),
+('15:00', NOW(), NOW()),
+('15:30', NOW(), NOW()),
+('16:00', NOW(), NOW()),
+('16:30', NOW(), NOW()),
+('17:00', NOW(), NOW());
+
+
+-- Tabla maker:
 INSERT INTO `car_api`.`maker` (`name`, `logo`, `createdAt`, `updatedAt`) VALUES
 ('Acura', 'https://www.carlogos.org/logo/Acura-logo-2001-2048x2048.png', NOW(), NOW()),
 ('Alfa-Romeo', 'https://www.carlogos.org/logo/Alfa-Romeo-logo-1920x1080.png', NOW(), NOW()),
@@ -190,6 +202,7 @@ INSERT INTO `car_api`.`car_category` (`name`, `createdAt`, `updatedAt`) VALUES
 ("Minivan",NOW(),NOW()),
 ("Pickup",NOW(),NOW()),
 ("Sedan",NOW(),NOW()),
+("Sport",NOW(),NOW()),
 ("SUV",NOW(),NOW()),
 ("Van",NOW(),NOW()),
 ("Wagon",NOW(),NOW());
@@ -201,4 +214,34 @@ INSERT INTO `car_api`.`dealership` (`name`, `description`, `street`, `exterior_n
 ( 'Donut-Motors Vintage Auto Gallery', "", "Calle Juárez", "456", "Zona Centro", 2, NOW(), NOW()),
 ( 'Donut-Motors Automobile Dealership', "", "Calle Hidalgo", "789", "San José Viejo", 3, NOW(), NOW()),
 ( 'Donut-Motors Retro Ride Showroom', "", "Calle Reforma", "101", "San Francisco", 4, NOW(), NOW()),
-( 'Donut-Motors Timeless Car Boutique', "", "Calle Insurgentes", "112", "Roma Norte", 5, NOW(), NOW());
+( 'Donut-Motors Timeless Car Boutique', "", "Calle Insurgentes", "112", "Roma Norte", 5, NOW(), NOW()),
+( 'Donut-Motors Headquarters', "Headquarters of Donut-Motors company", "Calle Insurgentes", "112", "Roma Norte", 5, NOW(), NOW());
+
+-- Tabla role:
+INSERT INTO `car_api`.`role` (`name`, `permissions`, `createdAt`, `updatedAt`) VALUES
+('admin', 'r-w-d', NOW(), NOW()),
+('capturist', 'r-w-d', NOW(), NOW());
+
+
+-- Tabla user:
+INSERT INTO `car_api`.`user` (`googleId`, `first_name`, `last_name_1`, `last_name_2`, `email`, `dealership`, `user_role`, `createdAt`, `updatedAt`) VALUES
+('100262865461402723367', 'Edgar', 'Sabido', 'Cortés', 'edgar.sabido17@gmail.com', 6, 1, NOW(), NOW()),
+('', 'Carlos', 'Ruiz', 'Domínguez', 'cardtpp@gmail.com', 6, 2, NOW(), NOW());
+
+
+-- Tabla car_model:
+INSERT INTO `car_api`.`car_model` (`name`, `year`, `factory_price`, `transmission`, `color`, `category`, `maker`, `createdAt`, `updatedAt`) VALUES
+( 'Corvette Sting Ray', 1966, 75551.63, 1, 47, 2, 10, NOW(), NOW()),
+( 'Mustang', 1967, 47459.71, 1, 40, 1, 15, NOW(), NOW()),
+( 'Thunderbird', 1955, 51786.43, 2, 56, 1, 15, NOW(), NOW());
+
+
+-- Tabla car:
+INSERT INTO `car_api`.`car` (`vin`, `mileage`, `description`, `purchase_price`, `sale_price`, `maintenance_cost`, `model`, `car_condition`, `interior_color`, `exterior_color`, `dealership`, `sold`, `photo_url`, `createdAt`, `updatedAt`) VALUES
+('1G1YY3D70G5100001', 558233, 'This Thunderbird is said to have received a body-off restoration some six years ago. The car is reportedly finished to original specifications, and all components are either numbers-matching original, correct coded replacements, or quality reproduction.', 350000.00, 499999.99, 0, 1, 1, 1, 2, 5, false, 'car_photos\2023041801.webp', NOW(), NOW()),
+('1ZVHT80N775372738', 143272, 'Restored to resemble a Shelby G.T.500, this 1967 Ford Mustang Convertible was reportedly built in 2007, with additional major mechanical work performed between 2012-17, including the engine and transmission. They include a 428 V8 engine backed by a Tremec five-speed manual transmission.', 450000.00, 599999.99, 0, 2, 1, 1, 2, 5, false, 'car_photos\866420230.webp', NOW(), NOW()),
+('H9YH1611001925430', 113267, 'Extra-cost equipment that was chosen includes the 390-horsepower 427 engine, transistorized ignition, a four-speed manual transmission, a Positraction rear differential (with 4.11:1 gears per the seller), the aforementioned side-mounted exhaust, and tinted glass.', 550000.00, 799999.99, 0, 3, 1, 1, 2, 5, false,'car_photos\9905480702.webp', NOW(), NOW());
+
+
+
+-- Tabla :
