@@ -25,11 +25,13 @@ const getItems = async (req, res) => {
 			include: [
 				{
 					model: PostalCode,
+					as: "dealership_postal_code",
 					attributes: ["id", "code"],
 					foreignKey: "postal_code",
 					include: [
 						{
 							model: State,
+							as: "postal_code_state",
 							attributes: ["id", "name"],
 							foreignKey: "state",
 						},
@@ -82,11 +84,13 @@ const getItem = async (req, res) => {
 			include: [
 				{
 					model: PostalCode,
+					as: "dealership_postal_code",
 					attributes: ["id", "code"],
 					foreignKey: "postal_code",
 					include: [
 						{
 							model: State,
+							as: "postal_code_state",
 							attributes: ["id", "name"],
 							foreignKey: "state",
 						},

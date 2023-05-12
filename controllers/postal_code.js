@@ -1,5 +1,5 @@
 const { matchedData } = require("express-validator");
-const { PostalCode } = require("../models"); // Referencia a lo exportado en models/index.js
+const { PostalCode, State } = require("../models"); // Referencia a lo exportado en models/index.js
 const { handleHttpError } = require("../utils/handleError");
 const { sequelize } = require("../config/mariadb");
 
@@ -20,8 +20,15 @@ const getItems = async (req, res) => {
 		// const limit = parseInt(req.query.limit) || 100;
 		// const offset = (page - 1) * limit;
 
+		console.log("No entró");
+
 		// Se ejecuta la consulta dentro de la transacción:
 		const data = await PostalCode.findAll({
+			include: {
+				model: State,
+				as: "postal_code_state",
+				attributes: ["id", "name"],
+			},
 			transaction,
 			order: [["id", "ASC"]],
 		});
@@ -64,6 +71,11 @@ const getItem = async (req, res) => {
 		// Se ejecuta la consulta dentro de la transacción:
 		const data = await PostalCode.findOne({
 			where: { code: code },
+			include: {
+				model: State,
+				as: "postal_code_state",
+				attributes: ["id", "name"],
+			},
 			transaction,
 		});
 

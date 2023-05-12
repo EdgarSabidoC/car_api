@@ -52,12 +52,12 @@ const Sell = sequelize.define(
 // Relación de claves foráneas:
 Sell.belongsTo(Appointment, {
 	foreignKey: "appointment",
-	as: "sell_appointment_as",
+	as: "sell_appointment",
 });
 
 Sell.belongsTo(Employee, {
 	foreignKey: "employee",
-	as: "sell_employee_as",
+	as: "sell_employee",
 });
 
 module.exports = Sell;

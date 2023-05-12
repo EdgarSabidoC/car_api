@@ -23,27 +23,28 @@ const getItems = async (req, res) => {
 
 		// Se ejecuta la consulta dentro de la transacción:
 		const data = await User.findAll({
-			indclude: [
+			include: [
 				{
 					model: Dealership,
+					as: "user_dealership",
 					foreignKey: "dealership",
 					attributes: [
-						"id",
 						"name",
 						"description",
 						"street",
 						"exterior_number",
 						"neighborhood",
-						"country",
 					],
 					include: [
 						{
 							model: PostalCode,
+							as: "dealership_postal_code",
 							attributes: ["id", "code"],
 							foreignKey: "postal_code",
 							include: [
 								{
 									model: State,
+									as: "postal_code_state",
 									attributes: ["id", "name"],
 									foreignKey: "state",
 								},
@@ -53,7 +54,8 @@ const getItems = async (req, res) => {
 				},
 				{
 					model: Role,
-					attributes: ["id", "name", "permissions"],
+					as: "user_user_role",
+					attributes: ["name", "permissions"],
 					foreignKey: "user_role",
 				},
 			],
@@ -101,27 +103,28 @@ const getItem = async (req, res) => {
 			where: isEmail.test(userIdOrEmail)
 				? { email: userIdOrEmail }
 				: { googleId: userIdOrEmail },
-			indclude: [
+			include: [
 				{
 					model: Dealership,
+					as: "user_dealership",
 					foreignKey: "dealership",
 					attributes: [
-						"id",
 						"name",
 						"description",
 						"street",
 						"exterior_number",
 						"neighborhood",
-						"country",
 					],
 					include: [
 						{
 							model: PostalCode,
+							as: "dealership_postal_code",
 							attributes: ["id", "code"],
 							foreignKey: "postal_code",
 							include: [
 								{
 									model: State,
+									as: "postal_code_state",
 									attributes: ["id", "name"],
 									foreignKey: "state",
 								},
@@ -131,7 +134,8 @@ const getItem = async (req, res) => {
 				},
 				{
 					model: Role,
-					attributes: ["id", "name", "permissions"],
+					as: "user_user_role",
+					attributes: ["name", "permissions"],
 					foreignKey: "user_role",
 				},
 			],

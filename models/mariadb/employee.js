@@ -59,7 +59,7 @@ const Employee = sequelize.define(
 // Relación de claves foráneas:
 Employee.belongsTo(Dealership, {
 	foreignKey: "dealership",
-	as: "employee_dealership_as",
+	as: "employee_dealership",
 });
 
 module.exports = Employee;

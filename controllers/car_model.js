@@ -31,21 +31,25 @@ const getItems = async (req, res) => {
 			include: [
 				{
 					model: Transmission,
+					as: "model_transmission",
 					attributes: ["id", "type"],
 					foreignKey: "transmission",
 				},
 				{
 					model: Color,
+					as: "model_color",
 					attributes: ["id", "name"],
 					foreignKey: "color",
 				},
 				{
 					model: CarMaker,
+					as: "model_maker",
 					attributes: ["id", "name"],
 					foreignKey: "maker",
 				},
 				{
 					model: CarCategory,
+					as: "model_category",
 					attributes: ["id", "name"],
 					foreignKey: "car_category",
 				},
@@ -97,21 +101,25 @@ const getItem = async (req, res) => {
 			include: [
 				{
 					model: Transmission,
+					as: "model_transmission",
 					attributes: ["id", "type"],
 					foreignKey: "transmission",
 				},
 				{
 					model: Color,
+					as: "model_color",
 					attributes: ["id", "name"],
 					foreignKey: "color",
 				},
 				{
 					model: CarMaker,
+					as: "model_maker",
 					attributes: ["id", "name"],
 					foreignKey: "maker",
 				},
 				{
 					model: CarCategory,
+					as: "model_category",
 					attributes: ["id", "name"],
 					foreignKey: "car_category",
 				},
