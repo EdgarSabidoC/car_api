@@ -1,6 +1,8 @@
 const { sequelize } = require("../../config/mariadb");
 const { DataTypes } = require("sequelize");
 
+const State = require("./state");
+
 // Estructura del schema:
 const PostalCode = sequelize.define(
 	"postal_code",
@@ -13,6 +15,14 @@ const PostalCode = sequelize.define(
 		},
 		code: {
 			type: DataTypes.STRING,
+			allowNull: false,
+		},
+		state: {
+			type: DataTypes.INTEGER,
+			references: {
+				model: State,
+				key: "id",
+			},
 			allowNull: false,
 		},
 		createdAt: {
@@ -32,5 +42,11 @@ const PostalCode = sequelize.define(
 		paranoid: true,
 	}
 );
+
+// Relación de claves foráneas:
+PostalCode.belongsTo(State, {
+	foreignKey: "state",
+	as: "postal_code_state",
+});
 
 module.exports = PostalCode;
