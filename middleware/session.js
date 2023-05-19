@@ -17,8 +17,35 @@ const authMiddleware = async (req, res, next) => {
 			return;
 		}
 
-		const query = { googleId: tokenData.id };
-		const user = await User.findOne({ where: query });
+		// Se busca el usuario por correo electrónico:
+		const query = { email: tokenData.email };
+
+		// Se obtiene una instancia de la transacción:
+		const transaction = await sequelize.transaction();
+
+		// Se ejecuta la consulta dentro de la transacción:
+		const user = await User.findOne({
+			where: query,
+			transaction,
+		});
+
+		// Si no se encuentra el usuario, se lanza un error:
+		if (!user) {
+			handleHttpError(res, "USER_NOT_FOUND", 404);
+			return;
+		}
+
+		// Establece el campo "googleId" si está vacío:
+		await user.update(
+			{ googleId: tokenData.id },
+			{
+				where: { query, googleId: null },
+				transaction,
+			}
+		);
+
+		// Si la eliminación del elemento es exitosa, se confirma la transacción:
+		await transaction.commit();
 		req.user = user;
 		next();
 	} catch (err) {
