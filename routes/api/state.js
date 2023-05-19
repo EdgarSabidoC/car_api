@@ -17,7 +17,6 @@ const customHeader = require("../../middleware/customHeader"); // Middleware par
 const { recordLog } = require("../../middleware/logRecord"); // Middleware para grabar en la bitácora.
 const { authMiddleware } = require("../../middleware/session"); // Middleware de autenticación.
 const { checkRole } = require("../../middleware/role"); // Middleware de verificación de rol.
-const devMode = process.env.NODE_ENV;
 
 /* Obtiene una lista de elementos del registro */
 router.get("/", recordLog, getItems);
@@ -49,7 +48,7 @@ router.put(
 router.delete(
 	"/:stateIdOrName",
 	authMiddleware,
-	checkRole(["admin", "capturist"]),
+	checkRole(["admin"]),
 	recordLog,
 	getItemValidator,
 	deleteItem

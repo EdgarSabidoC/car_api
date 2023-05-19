@@ -226,7 +226,8 @@ INSERT INTO `car_api`.`role` (`name`, `permissions`, `createdAt`, `updatedAt`) V
 -- Tabla user:
 INSERT INTO `car_api`.`user` (`googleId`, `first_name`, `last_name_1`, `last_name_2`, `email`, `dealership`, `user_role`, `createdAt`, `updatedAt`) VALUES
 ('100262865461402723367', 'Edgar', 'Sabido', 'Cortés', 'edgar.sabido17@gmail.com', 6, 1, NOW(), NOW()),
-('', 'Carlos', 'Ruiz', 'Domínguez', 'cardtpp@gmail.com', 6, 2, NOW(), NOW());
+('1', 'Admin', 'Donut', 'Motors', 'donutmotors.4dm1n@gmail.com', 6, 1, NOW(), NOW()),
+('2', 'Capturist', 'Donut', 'Motors', 'donutmotors.c4ptur15t@gmail.com', 6, 2, NOW(), NOW());
 
 
 -- Tabla car_model:

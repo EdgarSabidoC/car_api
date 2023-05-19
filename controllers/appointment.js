@@ -264,7 +264,7 @@ const getItems = async (req, res) => {
  * @returns {Promise} - Promesa que resuelve con un objeto que contiene la lista de elementos si la creación fue exitosa.
  * @throws {Error} - Si ocurre un error durante la transacción o si no se encuentra ningún elemento.
  */
-const createItem = async (req, res) => {
+const createItem = async (req, res, next) => {
 	let transaction;
 	try {
 		const { body } = req;
@@ -273,13 +273,14 @@ const createItem = async (req, res) => {
 		transaction = await sequelize.transaction();
 
 		// Se ejecuta la consulta dentro de la transacción:
-		const data = await Appointment.create(body, { transaction });
+		await Appointment.create(body, { transaction });
 
 		// Si la creación del elemento es exitosa, se confirma la transacción:
 		await transaction.commit();
 
 		// Devuelve los datos creados y un mensaje:
-		res.send({ message: "ITEM_CREATED_SUCCESSFULLY", data });
+		// res.send({ message: "ITEM_CREATED_SUCCESSFULLY", data });
+		next();
 	} catch (err) {
 		// Si hay un error, se deshace la transacción:
 		if (transaction) await transaction.rollback();
