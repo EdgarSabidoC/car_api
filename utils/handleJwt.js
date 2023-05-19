@@ -1,7 +1,5 @@
 const jwt = require("jsonwebtoken");
 const JWT_SECRET = process.env.JWT_SECRET;
-const getProperties = require("../utils/handleEngineProperties");
-const propertiesKey = getProperties();
 /**
  * Genera un token JWT a partir de los datos de usuario proporcionados.
  * @param {Object} user - Objeto con los datos del usuario.
@@ -10,7 +8,6 @@ const propertiesKey = getProperties();
  * @returns {Promise<string>} Token JWT generado.
  */
 const signToken = async (user) => {
-	console.log("SIGN: ", user.googleId);
 	const sign = jwt.sign(
 		{
 			// Payload:

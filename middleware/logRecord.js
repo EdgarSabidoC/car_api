@@ -1,5 +1,6 @@
 const { Log } = require("../models");
 const { sequelize } = require("../config/mariadb");
+
 const recordLog = async (req, res, next) => {
 	let transaction;
 	try {

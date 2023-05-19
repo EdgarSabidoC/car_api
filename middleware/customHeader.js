@@ -1,4 +1,6 @@
+// Se obtiene la API_KEY de las variables de entorno:
 const API_KEY = process.env.API_KEY;
+
 const customHeader = (req, res, next) => {
 	try {
 		const apiKey = req.headers.api_key;

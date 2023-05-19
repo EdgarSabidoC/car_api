@@ -1,14 +1,7 @@
 const passport = require("passport");
-const cookieParser = require("cookie-parser");
 const { Strategy: GoogleStrategy } = require("passport-google-oauth20");
-const { matchedData } = require("express-validator");
-const { encrypt, compare } = require("../utils/handlePassword");
-const { signToken } = require("../utils/handleJwt");
-const { handleHttpError } = require("../utils/handleError");
 const { User } = require("../models");
 const { Op } = require("sequelize");
-const ENGINE_DB = process.env.ENGINE_DB;
-const handleAuthCallback = require("../utils/handleAuthCallback");
 
 passport.serializeUser(function (user, done) {
 	done(null, user);
@@ -58,7 +51,6 @@ const authenticate = passport.authenticate("google", {
 
 const callback = passport.authenticate("google", {
 	failureRedirect: "http://localhost:4200/login",
-	failureFlash: true,
 });
 
 module.exports = { authenticate, callback };

@@ -1,5 +1,5 @@
 const isLoggedIn = (req, res, next) => {
-	req.user ? next() : res.sendStatus(401);
+	req.cookies.token ? res.send(true) : res.send(false);
 };
 
 module.exports = { isLoggedIn };
