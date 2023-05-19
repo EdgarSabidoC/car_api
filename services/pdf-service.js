@@ -8,6 +8,23 @@ const HOME_URL = process.env.HOME_URL;
  * @param {Function} next - Función para pasar al siguiente middleware.
  */
 const buildPdf = (req, res, next) => {
+	// Se obtienen los datos de la cita:
+	// const {
+	// 	customer_firstname,
+	// 	customer_lastname_1,
+	// 	customer_lastname_2,
+	// 	email,
+	// 	telephone,
+	// 	appointment_date,
+	// 	appointment_time,
+	// 	dealership,
+	// 	car,
+	// } = req.body;
+
+	// const customer = `${customer_firstname} ${customer_lastname_1} ${customer_lastname_2}`;
+
+	// Se debe de buscar información en la BD sobre el dealership con transacciones.
+
 	const doc = new PDFDocument({
 		size: "A4",
 		margins: {
@@ -42,7 +59,8 @@ const buildPdf = (req, res, next) => {
 	});
 
 	// Se agrega la información al PDF:
-	doc.fontSize(25).text("Hello World!", 100, 200);
+	doc.fontSize(25).text(`Hello, ${customer}`, 100, 200);
+	doc.text(); // Aquí irán el resto de datos.
 
 	// Footer:
 	const footerImagePath = "./storage/assets/pdf/footer.png"; // Ruta de la imagen del pie de página
