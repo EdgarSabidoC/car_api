@@ -18,59 +18,35 @@ const {
 const { recordLog } = require("../../middleware/logRecord"); // Middleware para grabar en la bitácora.
 const { authMiddleware } = require("../../middleware/session"); // Middleware de autenticación.
 const { checkRole } = require("../../middleware/role"); // Middleware de verificación de rol.
-const devMode = process.env.NODE_ENV;
 
-if (devMode !== "development") {
-	/* Obtiene una lista de elementos del registro */
-	router.get("/", recordLog, getAllItems);
+/* Obtiene una lista de elementos del registro */
+router.get("/", getAllItems);
 
-	/* Obtiene un elemento del registro */
-	router.get("/:date/:time", recordLog, getItemsValidator, getItems);
+/* Obtiene un elemento del registro */
+router.get("/:date/:time", getItemsValidator, getItems);
 
-	/* Crea un elemento en el registro */
-	router.post(
-		"/",
-		authMiddleware,
-		checkRole(["admin", "capturist"]),
-		recordLog,
-		createItemValidator,
-		createItem
-	);
+// Agregar middleware para enviar correo electrónico.
+/* Crea un elemento en el registro */
+router.post("/", recordLog, createItemValidator, createItem);
 
-	/* Actualiza un elemento del registro */
-	router.put(
-		"/:appointmentId",
-		authMiddleware,
-		checkRole(["admin", "capturist"]),
-		recordLog,
-		getItemValidator,
-		updateItem
-	);
+/* Actualiza un elemento del registro */
+router.put(
+	"/:appointmentId",
+	authMiddleware,
+	checkRole(["admin", "capturist"]),
+	recordLog,
+	getItemValidator,
+	updateItem
+);
 
-	/* Elimina un elemento del registro */
-	router.delete(
-		"/:appointmentId",
-		authMiddleware,
-		checkRole(["admin"]),
-		recordLog,
-		getItemValidator,
-		deleteItem
-	);
-} else {
-	/* Obtiene una lista de elementos del registro */
-	router.get("/", recordLog, getAllItems);
-
-	/* Obtiene un elemento del registro */
-	router.get("/:date/:time", recordLog, getItemsValidator, getItems);
-
-	/* Crea un elemento en el registro */
-	router.post("/", recordLog, createItemValidator, createItem);
-
-	/* Actualiza un elemento del registro */
-	router.put("/:appointmentId", recordLog, getItemValidator, updateItem);
-
-	/* Elimina un elemento del registro */
-	router.delete("/:appointmentId", recordLog, getItemValidator, deleteItem);
-}
+/* Elimina un elemento del registro */
+router.delete(
+	"/:appointmentId",
+	authMiddleware,
+	checkRole(["admin"]),
+	recordLog,
+	getItemValidator,
+	deleteItem
+);
 
 module.exports = router;

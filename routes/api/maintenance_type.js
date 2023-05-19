@@ -31,11 +31,20 @@ router.get(
 );
 
 /* Crea un elemento en el registro */
-router.post("/", recordLog, createItemValidator, createItem);
+router.post(
+	"/",
+	authMiddleware,
+	checkRole(["admin", "capturist"]),
+	recordLog,
+	createItemValidator,
+	createItem
+);
 
 /* Actualiza un elemento del registro */
 router.put(
 	"/:maintenanceTypeIdOrConcept",
+	authMiddleware,
+	checkRole(["admin", "capturist"]),
 	recordLog,
 	getItemValidator,
 	updateItem
@@ -44,6 +53,8 @@ router.put(
 /* Elimina un elemento del registro */
 router.delete(
 	"/:maintenanceTypeIdOrConcept",
+	authMiddleware,
+	checkRole(["admin"]),
 	recordLog,
 	getItemValidator,
 	deleteItem

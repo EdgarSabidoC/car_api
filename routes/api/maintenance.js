@@ -26,12 +26,33 @@ router.get("/", recordLog, getItems);
 router.get("/:maintenanceId/:vin", recordLog, getItemValidator, getAllItems);
 
 /* Crea un elemento en el registro */
-router.post("/", recordLog, createItemValidator, createItem);
+router.post(
+	"/",
+	authMiddleware,
+	checkRole(["admin", "capturist"]),
+	recordLog,
+	createItemValidator,
+	createItem
+);
 
 /* Actualiza un elemento del registro */
-router.put("/:maintenanceId/:vin", recordLog, getItemValidator, updateItem);
+router.put(
+	"/:maintenanceId/:vin",
+	authMiddleware,
+	checkRole(["admin", "capturist"]),
+	recordLog,
+	getItemValidator,
+	updateItem
+);
 
 /* Elimina un elemento del registro */
-router.delete("/:maintenanceId/:vin", recordLog, getItemValidator, deleteItem);
+router.delete(
+	"/:maintenanceId/:vin",
+	authMiddleware,
+	checkRole(["admin"]),
+	recordLog,
+	getItemValidator,
+	deleteItem
+);
 
 module.exports = router;

@@ -26,12 +26,33 @@ router.get("/", recordLog, getItems);
 router.get("/:userIdOrEmail", recordLog, getItemValidator, getItem);
 
 /* Crea un elemento en el registro */
-router.post("/", recordLog, createItemValidator, createItem);
+router.post(
+	"/",
+	authMiddleware,
+	checkRole(["admin", "capturist"]),
+	recordLog,
+	createItemValidator,
+	createItem
+);
 
 /* Actualiza un elemento del registro */
-router.put("/:userIdOrEmail", recordLog, getItemValidator, updateItem);
+router.put(
+	"/:userIdOrEmail",
+	authMiddleware,
+	checkRole(["admin", "capturist"]),
+	recordLog,
+	getItemValidator,
+	updateItem
+);
 
 /* Elimina un elemento del registro */
-router.delete("/:userIdOrEmail", recordLog, getItemValidator, deleteItem);
+router.delete(
+	"/:userIdOrEmail",
+	authMiddleware,
+	checkRole(["admin"]),
+	recordLog,
+	getItemValidator,
+	deleteItem
+);
 
 module.exports = router;

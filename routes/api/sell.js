@@ -26,14 +26,30 @@ router.get("/", recordLog, getItems);
 router.get("/:appointment/:employee", recordLog, getItemValidator, getItem);
 
 /* Crea un elemento en el registro */
-router.post("/", recordLog, createItemValidator, createItem);
+router.post(
+	"/",
+	authMiddleware,
+	checkRole(["admin", "capturist"]),
+	recordLog,
+	createItemValidator,
+	createItem
+);
 
 /* Actualiza un elemento del registro */
-router.put("/:appointment/:employee", recordLog, getItemValidator, updateItem);
+router.put(
+	"/:appointment/:employee",
+	authMiddleware,
+	checkRole(["admin", "capturist"]),
+	recordLog,
+	getItemValidator,
+	updateItem
+);
 
 /* Elimina un elemento del registro */
 router.delete(
 	"/:appointment/:employee",
+	authMiddleware,
+	checkRole(["admin"]),
 	recordLog,
 	getItemValidator,
 	deleteItem

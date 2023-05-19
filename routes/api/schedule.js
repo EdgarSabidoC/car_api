@@ -26,12 +26,33 @@ router.get("/", recordLog, getItems);
 router.get("/:scheduleIdOrHour", recordLog, getItemValidator, getItem);
 
 /* Crea un elemento en el registro */
-router.post("/", recordLog, createItemValidator, createItem);
+router.post(
+	"/",
+	authMiddleware,
+	checkRole(["admin", "capturist"]),
+	recordLog,
+	createItemValidator,
+	createItem
+);
 
 /* Actualiza un elemento del registro */
-router.put("/:scheduleIdOrHour", recordLog, getItemValidator, updateItem);
+router.put(
+	"/:scheduleIdOrHour",
+	authMiddleware,
+	checkRole(["admin", "capturist"]),
+	recordLog,
+	getItemValidator,
+	updateItem
+);
 
 /* Elimina un elemento del registro */
-router.delete("/:scheduleIdOrHour", recordLog, getItemValidator, deleteItem);
+router.delete(
+	"/:scheduleIdOrHour",
+	authMiddleware,
+	checkRole(["admin"]),
+	recordLog,
+	getItemValidator,
+	deleteItem
+);
 
 module.exports = router;

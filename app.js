@@ -11,7 +11,14 @@ const session = require("./config/session");
 const app = express();
 const port = process.env.PORT || 3000;
 
-app.use(cors());
+// Habilitar el uso de cookies en solicitudes CORS
+// Configurar CORS con opciones
+const corsOptions = {
+	origin: "http://localhost:4200", // URL del frontend.
+	credentials: true, // Permitir credenciales (cookies, encabezados personalizados, etc.)
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.static("storage"));
 app.use(cookieParser());

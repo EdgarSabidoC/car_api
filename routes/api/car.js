@@ -17,20 +17,28 @@ const customHeader = require("../../middleware/customHeader"); // Middleware par
 const { recordLog } = require("../../middleware/logRecord"); // Middleware para grabar en la bitácora.
 const { authMiddleware } = require("../../middleware/session"); // Middleware de autenticación.
 const { checkRole } = require("../../middleware/role"); // Middleware de verificación de rol.
-process.env.NODE_ENV;
 
 /* Obtiene una lista de elementos del registro */
-router.get("/", recordLog, getItems);
+router.get("/", getItems);
 
 /* Obtiene un elemento del registro */
-router.get("/:vin", recordLog, getItemValidator, getItem);
+router.get("/:vin", getItemValidator, getItem);
 
 /* Crea un elemento en el registro */
-router.post("/", recordLog, createItemValidator, createItem);
+router.post(
+	"/",
+	authMiddleware,
+	checkRole(["admin", "capturist"]),
+	recordLog,
+	createItemValidator,
+	createItem
+);
 
 /* Actualiza un elemento del registro */
 router.put(
 	"/:vin",
+	authMiddleware,
+	checkRole(["admin", "capturist"]),
 	recordLog,
 	getItemValidator,
 	createItemValidator,
@@ -38,6 +46,13 @@ router.put(
 );
 
 /* Elimina un elemento del registro */
-router.delete("/:vin", recordLog, getItemValidator, deleteItem);
+router.delete(
+	"/:vin",
+	authMiddleware,
+	checkRole(["admin"]),
+	recordLog,
+	getItemValidator,
+	deleteItem
+);
 
 module.exports = router;

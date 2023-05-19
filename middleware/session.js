@@ -4,12 +4,12 @@ const { User } = require("../models");
 
 const authMiddleware = async (req, res, next) => {
 	try {
-		if (!req.headers.authorization) {
+		if (!req.cookies.token) {
 			handleHttpError(res, "ERROR_TOKEN_NOT_FOUND", 401);
 			return;
 		}
 
-		const token = req.headers.authorization.split(" ").pop(); //  Gets only the token. Because it contains "Bearer" and the token.
+		const token = req.cookies.token; //  Obtiene el token de la cookie httpOnly
 		const tokenData = await verifyToken(token);
 
 		if (!tokenData) {
