@@ -1,4 +1,4 @@
-const { matchedData } = require("express-validator");
+const { Op } = require("sequelize");
 const {
 	Maintenance,
 	Dealership,
@@ -131,7 +131,7 @@ const getAllItems = async (req, res) => {
 				},
 			],
 			transaction,
-			order: [["id", "ASC"]],
+			order: [["createdAt", "ASC"]],
 		});
 
 		// Si no se encuentra ningún registro, se devuelve un error:
@@ -164,17 +164,14 @@ const getAllItems = async (req, res) => {
 const getItems = async (req, res) => {
 	let transaction;
 	try {
-		const date = req.params["date"];
-		const time = req.params["time"];
+		const { maintenanceId, vin } = req.params;
 
 		// Se obtiene una instancia de la transacción:
 		transaction = await sequelize.transaction();
 
 		// Se ejecuta la consulta dentro de la transacción:
 		const data = await Maintenance.findAndCountAll({
-			where: isNaN(appointmentIdOrDate)
-				? { first_name: appointmentIdOrDate }
-				: { id: appointmentIdOrDate },
+			where: { [Op.and]: [{ maintenance_type: maintenanceId }, { car: vin }] },
 			include: [
 				{
 					model: MaintenanceType,
@@ -271,6 +268,7 @@ const getItems = async (req, res) => {
 				},
 			],
 			transaction,
+			order: [["createdAt", "ASC"]],
 		});
 
 		// Si no se encuentra el registro, se devuelve un error:
@@ -334,7 +332,7 @@ const createItem = async (req, res) => {
 const updateItem = async (req, res) => {
 	let transaction;
 	try {
-		const { date, time } = req.params;
+		const { maintenanceId, vin } = req.params;
 		const { body } = req;
 
 		// Se obtiene una instancia de la transacción:
@@ -342,9 +340,7 @@ const updateItem = async (req, res) => {
 
 		// Se busca el registro a actualizar:
 		const data = await Maintenance.findOne({
-			where: isNaN(appointmentIdOrDate)
-				? { first_name: appointmentIdOrDate }
-				: { id: appointmentIdOrDate },
+			where: { [Op.and]: [{ maintenance_type: maintenanceId }, { car: vin }] },
 			transaction,
 		});
 
@@ -386,16 +382,14 @@ const updateItem = async (req, res) => {
 const deleteItem = async (req, res) => {
 	let transaction;
 	try {
-		const { date, time } = req.params;
+		const { maintenanceId, vin } = req.params;
 
 		// Se obtiene una instancia de la transacción:
 		transaction = await sequelize.transaction();
 
 		// Se ejecuta la consulta dentro de la transacción:
 		const data = await Maintenance.findOne({
-			where: isNaN(appointmentIdOrDate)
-				? { first_name: appointmentIdOrDate }
-				: { id: appointmentIdOrDate },
+			where: { [Op.and]: [{ maintenance_type: maintenanceId }, { car: vin }] },
 			transaction,
 		});
 
@@ -409,18 +403,16 @@ const deleteItem = async (req, res) => {
 		await data.update(
 			{ deleted: true },
 			{
-				where: isNaN(appointmentIdOrDate)
-					? { first_name: appointmentIdOrDate }
-					: { id: appointmentIdOrDate },
+				where: {
+					[Op.and]: [{ maintenance_type: maintenanceId }, { car: vin }],
+				},
 				transaction,
 			}
 		);
 
 		// Actualiza la fecha de destrucción:
 		await data.destroy({
-			where: isNaN(appointmentIdOrDate)
-				? { first_name: appointmentIdOrDate }
-				: { id: appointmentIdOrDate },
+			where: { [Op.and]: [{ maintenance_type: maintenanceId }, { car: vin }] },
 			transaction,
 		});
 
