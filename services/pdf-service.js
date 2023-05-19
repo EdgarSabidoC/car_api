@@ -1,5 +1,6 @@
 const PDFDocument = require("pdfkit");
 const HOME_URL = process.env.HOME_URL;
+
 /**
  * Genera un PDF con encabezado y pie de página y lo pasa al siguiente middleware.
  * @param {Object} req - Objeto de solicitud HTTP.

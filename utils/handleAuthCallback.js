@@ -1,4 +1,5 @@
 const { signToken } = require("../utils/handleJwt");
+const HOME_URL = process.env.HOME_URL;
 
 // Nueva función que maneja la redirección de autenticación
 const handleAuthCallback = async (req, res, next) => {
@@ -25,7 +26,7 @@ const handleAuthCallback = async (req, res, next) => {
 
 		if (role === 1) {
 			// Si es admin:
-			res.redirect("http://localhost:4200/home");
+			res.redirect(`${HOME_URL}`);
 		}
 		// } else if (role === 2) {
 		// 	// Si es capturist:
