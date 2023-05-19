@@ -29,7 +29,6 @@ router.get("/pdf", buildPdf, sendPdfToEmail);
 /* Obtiene un elemento del registro */
 router.get("/:date/:time", getItemsValidator, getItems);
 
-// Agregar middleware para enviar correo electrónico.
 /* Crea un elemento en el registro */
 router.post(
 	"/",

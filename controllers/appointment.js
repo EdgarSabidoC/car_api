@@ -1,4 +1,3 @@
-const { matchedData } = require("express-validator");
 const {
 	Appointment,
 	Dealership,
