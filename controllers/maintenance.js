@@ -172,7 +172,9 @@ const getItems = async (req, res) => {
 
 		// Se ejecuta la consulta dentro de la transacción:
 		const data = await Maintenance.findAndCountAll({
-			where: { appointment_date: date, appointment_time: time },
+			where: isNaN(appointmentIdOrDate)
+				? { first_name: appointmentIdOrDate }
+				: { id: appointmentIdOrDate },
 			include: [
 				{
 					model: MaintenanceType,

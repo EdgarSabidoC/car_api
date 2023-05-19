@@ -2,7 +2,7 @@ const { matchedData } = require("express-validator");
 const { User, Role, Dealership, PostalCode, State } = require("../models"); // Referencia a lo exportado en models/index.js
 const { handleHttpError } = require("../utils/handleError");
 const { sequelize } = require("../config/mariadb");
-const isEmail = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+const isEmail = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/;
 
 /**
  * Esta función obtiene una lista de elementos de la base de datos.

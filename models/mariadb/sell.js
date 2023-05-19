@@ -27,7 +27,7 @@ const Sell = sequelize.define(
 				key: "id",
 			},
 		},
-		sold_price: {
+		final_sale_price: {
 			type: DataTypes.DECIMAL,
 			allowNull: false,
 		},
