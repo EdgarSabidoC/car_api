@@ -1,45 +1,46 @@
 const nodemailer = require("nodemailer");
-let toEmail = process.env.TO_EMAIL;
-let host = process.env.EMAIL_HOST;
-const emailUser = process.env.EMAIL_USER;
-const emailPassword = process.env.EMAIL_PASSWORD;
-let secure = process.env.EMAIL_SECURE;
+let TO_EMAIL = process.env.TO_EMAIL;
+let EMAIL_HOST = process.env.EMAIL_HOST;
+const EMAIL_USER = process.env.EMAIL_USER;
+const EMAIL_PASSWORD = process.env.EMAIL_PASSWORD;
+let SECURE = process.env.EMAIL_SECURE;
+const HOME_URL = process.env.HOME_URL;
 
 const sendPdfToEmail = (req, res, next) => {
 	const pdf = req.pdf; // PDF generado.
 
 	// Si no se especificó un correo electrónico en las variables, se toma el del body de la petición:
-	if (toEmail === "") {
-		toEmail = req.body.email; // Correo electrónico al que se enviará.
+	if (TO_EMAIL === "") {
+		TO_EMAIL = req.body.email; // Correo electrónico al que se enviará.
 	}
 
 	let auth = {};
 	if (process.env.EMAIL_AUTH === "true") {
 		auth = {
-			user: emailUser, // Dirección de correo electrónico que enviará los correos
-			pass: emailPassword, // Contraseña de correo electrónico que enviará los correos
+			user: EMAIL_USER, // Dirección de correo electrónico que enviará los correos
+			pass: EMAIL_PASSWORD, // Contraseña de correo electrónico que enviará los correos
 		};
 	}
 
-	if (secure === "true") {
-		secure = true;
+	if (SECURE === "true") {
+		SECURE = true;
 	} else {
-		secure = false;
+		SECURE = false;
 	}
 
 	// Configura el transporte de correo utilizando Nodemailer y la información de tu proveedor de correo electrónico
 	const transporter = nodemailer.createTransport({
 		// Configura la información del servidor de correo saliente (SMTP)
-		host: host,
+		EMAIL_HOST: EMAIL_HOST,
 		port: process.env.EMAIL_PORT,
-		secure: secure, // Si el servidor de correo requiere una conexión segura (SSL/TLS), cambia esto a true
+		SECURE: SECURE, // Si el servidor de correo requiere una conexión segura (SSL/TLS), cambia esto a true
 		auth: auth,
 	});
 
 	// Define los detalles del correo electrónico
 	const mailOptions = {
-		from: emailUser, // Tu dirección de correo electrónico
-		to: toEmail, // La dirección de correo electrónico del destinatario
+		from: EMAIL_USER, // Tu dirección de correo electrónico
+		to: TO_EMAIL, // La dirección de correo electrónico del destinatario
 		subject: "Appointment confirmation", // Asunto del correo electrónico
 		text: "Attached you will find the PDF with the information of your appointment.", // Texto del correo electrónico
 		attachments: [
@@ -57,7 +58,7 @@ const sendPdfToEmail = (req, res, next) => {
 		} else {
 			console.log("E-mail send:", info.response);
 		}
-		res.redirect("http://localhost:4200/home"); // Se redirecciona a home.
+		res.redirect(`${HOME_URL}`); // Se redirecciona a home.
 	});
 };
 

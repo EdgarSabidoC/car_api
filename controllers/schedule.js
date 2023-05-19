@@ -2,7 +2,7 @@ const { matchedData } = require("express-validator");
 const { Schedule } = require("../models"); // Referencia a lo exportado en models/index.js
 const { handleHttpError } = require("../utils/handleError");
 const { sequelize } = require("../config/mariadb");
-const isTime = /^([01][0-9]|2[0-3]):[0-5][0-9]$/;
+const isTime = /^([01]\d|2[0-3]):[0-5]\d$/;
 
 /**
  * Esta función obtiene una lista de elementos de la base de datos.

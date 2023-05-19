@@ -231,11 +231,12 @@ const getItem = async (req, res) => {
 							model: Car,
 							attributes: ["vin", "mileage", "description", "sale_price"],
 							foreignKey: "car",
+							as: "appointment_car",
 							include: [
 								{
 									model: CarModel,
 									foreignKey: "model",
-									as: "appointment_car",
+									as: "car_model",
 									attributes: ["id", "name", "year"],
 									include: [
 										{

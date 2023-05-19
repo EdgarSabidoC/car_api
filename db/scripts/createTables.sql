@@ -436,7 +436,7 @@ ADD INDEX `createdAt` (`createdAt`) USING BTREE;
 CREATE TABLE IF NOT EXISTS car_api.sell(
 		appointment INT NOT NULL,
 		employee INT NOT NULL,
-		sold_price DECIMAL NOT NULL,
+		final_sale_price DECIMAL NOT NULL,
 		createdAt DATETIME NOT NULL,
 		updatedAt DATETIME NOT NULL,
 		deleted BOOLEAN DEFAULT 0,
