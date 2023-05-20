@@ -1,7 +1,16 @@
 const { signToken } = require("../utils/handleJwt");
 const HOME_URL = process.env.HOME_URL;
+const FAILURE_URL = process.env.FAILURE_URL;
 
-// Nueva función que maneja la redirección de autenticación
+/**
+ * Maneja la devolución de llamada de autenticación.
+ *
+ * @param {Object} req - Objeto de solicitud HTTP.
+ * @param {Object} res - Objeto de respuesta HTTP.
+ * @param {Function} next - Función para pasar al siguiente middleware.
+ * @returns {Promise<void>} Promesa que indica la finalización del middleware.
+ * @throws {Error} Si ocurre un error.
+ */
 const handleAuthCallback = async (req, res, next) => {
 	try {
 		// Se obtiene el usuario que inició sesión:
@@ -24,16 +33,13 @@ const handleAuthCallback = async (req, res, next) => {
 		const role = user.user_role;
 		req.session.role = role;
 
-		if (role === 1) {
+		if (role === 1 || role === 2) {
 			// Si es admin:
 			res.redirect(`${HOME_URL}`);
 		}
-		// } else if (role === 2) {
-		// 	// Si es capturist:
-		// 	res.redirect("http://localhost:4200/cars-for-sale");
-		// }
-		// // Si no es un usuario:
-		// res.redirect("http://localhost:4200/login");
+
+		// Si no es un usuario:
+		res.redirect(`${FAILURE_URL}`);
 	} catch (error) {
 		console.error(error);
 	}

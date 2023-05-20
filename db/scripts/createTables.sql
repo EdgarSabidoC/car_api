@@ -60,7 +60,6 @@ ALTER TABLE `car_api`.`car_category` ADD INDEX `name` (`name`) USING BTREE;
 CREATE TABLE IF NOT EXISTS car_api.maker(
 		id INT NOT NULL AUTO_INCREMENT,
 		name VARCHAR(40) NOT NULL,
-		logo TEXT NULL,
 		createdAt DATETIME NOT NULL,
 		updatedAt DATETIME NOT NULL,
 		deleted BOOLEAN DEFAULT 0,

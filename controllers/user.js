@@ -1,4 +1,3 @@
-const { matchedData } = require("express-validator");
 const { User, Role, Dealership, PostalCode, State } = require("../models"); // Referencia a lo exportado en models/index.js
 const { handleHttpError } = require("../utils/handleError");
 const { sequelize } = require("../config/mariadb");

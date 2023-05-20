@@ -91,7 +91,7 @@ CarModel.belongsTo(Color, {
 });
 
 CarModel.belongsTo(CarCategory, {
-	foreignKey: "car_category",
+	foreignKey: "category",
 	as: "model_category",
 });
 

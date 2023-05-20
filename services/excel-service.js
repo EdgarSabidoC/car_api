@@ -21,11 +21,11 @@ const months = {
 };
 
 /**
- * Genera un informe de ventas en formato Excel para un mes y año específicos.
+ * Genera un reporte de ventas en formato Excel para un mes y año específicos.
  * @param {Object} req - Objeto de solicitud HTTP.
  * @param {Object} res - Objeto de respuesta HTTP.
  * @param {Function} next - Función para llamar al siguiente middleware.
- * @throws {Error} - Error al crear el informe.
+ * @throws {Error} - Error al crear el reporte de Excel.
  */
 const buildReport = async (req, res, next) => {
 	let transaction;

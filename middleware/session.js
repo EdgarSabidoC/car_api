@@ -2,6 +2,15 @@ const { handleHttpError } = require("../utils/handleError");
 const { verifyToken } = require("../utils/handleJwt");
 const { User } = require("../models");
 
+/**
+ * Middleware para autenticación y verificación del token JWT.
+ *
+ * @param {Object} req - Objeto de solicitud HTTP.
+ * @param {Object} res - Objeto de respuesta HTTP.
+ * @param {Function} next - Función para pasar al siguiente middleware.
+ * @returns {Promise<void>} Promesa que indica la finalización del middleware.
+ * @throws {Error} Si ocurre un error al autenticar al usuario.
+ */
 const authMiddleware = async (req, res, next) => {
 	try {
 		if (!req.cookies.token) {
