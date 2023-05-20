@@ -1,6 +1,14 @@
 const { Log } = require("../models");
 const { sequelize } = require("../config/mariadb");
 
+/**
+ * Middleware para registrar un registro en la bitácora de la base de datos.
+ *
+ * @param {Object} req - Objeto de solicitud HTTP.
+ * @param {Object} res - Objeto de respuesta HTTP.
+ * @param {Function} next - Función de siguiente middleware.
+ * @throws {Error} Si ocurre un error al registrar el log.
+ */
 const recordLog = async (req, res, next) => {
 	let transaction;
 	try {

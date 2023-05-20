@@ -1,4 +1,3 @@
-const { matchedData } = require("express-validator");
 const {
 	CarModel,
 	Transmission,
@@ -42,16 +41,16 @@ const getItems = async (req, res) => {
 					foreignKey: "color",
 				},
 				{
-					model: CarMaker,
-					as: "model_maker",
-					attributes: ["id", "name"],
-					foreignKey: "maker",
-				},
-				{
 					model: CarCategory,
 					as: "model_category",
 					attributes: ["id", "name"],
 					foreignKey: "car_category",
+				},
+				{
+					model: CarMaker,
+					as: "model_maker",
+					attributes: ["id", "name"],
+					foreignKey: "maker",
 				},
 			],
 			transaction,
@@ -95,7 +94,7 @@ const getItem = async (req, res) => {
 
 		// Se ejecuta la consulta dentro de la transacción:
 		const data = await CarModel.findOne({
-			where: isNaN.test(carModelIdOrName)
+			where: isNaN(carModelIdOrName)
 				? { name: carModelIdOrName }
 				: { id: carModelIdOrName },
 			include: [
@@ -112,16 +111,16 @@ const getItem = async (req, res) => {
 					foreignKey: "color",
 				},
 				{
-					model: CarMaker,
-					as: "model_maker",
-					attributes: ["id", "name"],
-					foreignKey: "maker",
-				},
-				{
 					model: CarCategory,
 					as: "model_category",
 					attributes: ["id", "name"],
 					foreignKey: "car_category",
+				},
+				{
+					model: CarMaker,
+					as: "model_maker",
+					attributes: ["id", "name"],
+					foreignKey: "maker",
 				},
 			],
 			transaction,
@@ -196,7 +195,7 @@ const updateItem = async (req, res) => {
 
 		// Se busca el registro a actualizar:
 		const data = await CarModel.findOne({
-			where: isNaN.test(carModelIdOrName)
+			where: isNaN(carModelIdOrName)
 				? { name: carModelIdOrName }
 				: { id: carModelIdOrName },
 			transaction,
@@ -247,7 +246,7 @@ const deleteItem = async (req, res) => {
 
 		// Se ejecuta la consulta dentro de la transacción:
 		const data = await CarModel.findOne({
-			where: isNaN.test(carModelIdOrName)
+			where: isNaN(carModelIdOrName)
 				? { name: carModelIdOrName }
 				: { id: carModelIdOrName },
 			transaction,
@@ -263,7 +262,7 @@ const deleteItem = async (req, res) => {
 		await data.update(
 			{ deleted: true },
 			{
-				where: isNaN.test(carModelIdOrName)
+				where: isNaN(carModelIdOrName)
 					? { name: carModelIdOrName }
 					: { id: carModelIdOrName },
 				transaction,
@@ -272,7 +271,7 @@ const deleteItem = async (req, res) => {
 
 		// Actualiza la fecha de destrucción:
 		await data.destroy({
-			where: isNaN.test(carModelIdOrName)
+			where: isNaN(carModelIdOrName)
 				? { name: carModelIdOrName }
 				: { id: carModelIdOrName },
 			transaction,

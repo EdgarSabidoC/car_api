@@ -2,6 +2,7 @@ const passport = require("passport");
 const { Strategy: GoogleStrategy } = require("passport-google-oauth20");
 const { User } = require("../models");
 const { Op } = require("sequelize");
+const FAILURE_URL = process.env.FAILURE_URL;
 
 passport.serializeUser(function (user, done) {
 	done(null, user);
@@ -50,7 +51,7 @@ const authenticate = passport.authenticate("google", {
 });
 
 const callback = passport.authenticate("google", {
-	failureRedirect: "http://localhost:4200/login",
+	failureRedirect: `${FAILURE_URL}`,
 });
 
 module.exports = { authenticate, callback };

@@ -1,9 +1,8 @@
 const bcrypt = require("bcryptjs");
 
 /**
- *  Takes a password string and
- *  returns the result of calling bcrypt.hash
- *  with password and 15 as arguments.
+ * Toma la cadena de una contraseña y retorna su hash.
+ *
  * @param {*} password
  * @returns
  */
@@ -12,9 +11,9 @@ const encrypt = async (password) => {
 };
 
 /**
- *  Takes a password string and a password hash
- *  returns the result of the comparison between
- *  the password and the password hash.
+ * Toma la cadena de la contraseña y el hash de una contraseña,
+ * retorna el resultado de la comparación de ambas cadenas.
+ *
  * @param {*} password
  * @param {*} passwordHash
  * @returns

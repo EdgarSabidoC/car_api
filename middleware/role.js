@@ -1,9 +1,11 @@
 const { handleHttpError } = require("../utils/handleError");
 
 /**
- * Busca en el arreglo si el usuario tiene el rol para realizar las peticiones.
- * @param {*} roles 	Arreglo de cadenas con los roles.
- * @returns
+ * Middleware para verificar los roles de un usuario.
+ *
+ * @param {string[]} roles - Roles permitidos para acceder al recurso.
+ * @returns {Function} Función middleware para verificar los roles.
+ * @throws {Error} Si ocurre un error al verificar el rol.
  */
 const checkRole = (roles) => (req, res, next) => {
 	try {

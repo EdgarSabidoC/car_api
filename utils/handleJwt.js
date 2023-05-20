@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 const JWT_SECRET = process.env.JWT_SECRET;
 /**
- * Genera un token JWT a partir de los datos de usuario proporcionados.
+ * Genera un token JWT firmado a partir de los datos de usuario proporcionados.
  * @param {Object} user - Objeto con los datos del usuario.
  * @param {string} user.googleId - Identificador único del usuario.
  * @param {string} user.user_role - Rol del usuario.
