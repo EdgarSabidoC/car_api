@@ -1,5 +1,6 @@
 const PDFDocument = require("pdfkit");
 const HOME_URL = process.env.HOME_URL;
+const CONTACT_EMAIL = process.env.CONTACT_EMAIL;
 
 /**
  * Genera un PDF con encabezado y pie de página y lo pasa al siguiente middleware.
@@ -24,6 +25,13 @@ const buildPdf = (req, res, next) => {
 	// const customer = `${customer_firstname} ${customer_lastname_1} ${customer_lastname_2}`;
 
 	// Se debe de buscar información en la BD sobre el dealership con transacciones.
+	const customer = "Edgar Sabido Cortés";
+	const dealership = "Donut-Motors Timeless Car Boutique";
+	const email = "example@example.com";
+	const appointment_date = "19-05-2023";
+	const appointment_time = "17:00";
+	const car = "1ZVHT80N775372738";
+	const telephone = "9996271237";
 
 	const doc = new PDFDocument({
 		size: "A4",
@@ -34,6 +42,7 @@ const buildPdf = (req, res, next) => {
 			right: 0,
 		},
 	});
+
 	const buffers = [];
 
 	doc.on("data", (chunk) => {
@@ -59,8 +68,58 @@ const buildPdf = (req, res, next) => {
 	});
 
 	// Se agrega la información al PDF:
-	doc.fontSize(25).text(`Hello, ${customer}`, 100, 200);
-	doc.text(); // Aquí irán el resto de datos.
+	doc.fontSize(25).text(`Hello, ${customer}.`, 100, 200);
+	doc.fontSize(20).text("Your appointment has been successfully registered!");
+	doc.moveDown();
+	doc
+		.fontSize(17)
+		.text("Attached to this document are the data you have provided us.");
+	doc.moveDown();
+	doc.font("Helvetica-Bold").fontSize(15).text("Email: ", { continued: true });
+	doc.font("Helvetica").text(email);
+	doc
+		.font("Helvetica-Bold")
+		.fontSize(15)
+		.text("Telephone: ", { continued: true });
+	doc.font("Helvetica").fontSize(13.5).text(telephone);
+	doc.moveDown();
+	doc.moveDown();
+	doc.moveDown();
+	doc
+		.font("Helvetica-Bold")
+		.fontSize(15)
+		.text("Vehicle Identification Number (VIN): ", { continued: true });
+	doc.font("Helvetica").fontSize(13.5).text(car);
+	doc.font("Helvetica-Bold").fontSize(15).text("Date: ", { continued: true });
+	doc.font("Helvetica").fontSize(13.5).text(appointment_date);
+	doc.font("Helvetica-Bold").fontSize(15).text("Time: ", { continued: true });
+	doc.font("Helvetica").fontSize(13.5).text(appointment_time);
+	doc
+		.font("Helvetica-Bold")
+		.fontSize(15)
+		.text("Dealership: ", { continued: true });
+	doc.font("Helvetica").fontSize(13.5).text(dealership);
+	doc.moveDown();
+	doc.moveDown();
+	doc.moveDown();
+	doc.moveDown();
+	doc.moveDown();
+	doc.moveDown();
+	doc.moveDown();
+	doc.moveDown();
+	doc.moveDown();
+	doc.moveDown();
+	doc.moveDown();
+	doc.moveDown();
+	doc.moveDown();
+	doc.moveDown();
+	doc.moveDown();
+	doc.moveDown();
+	doc
+		.font("Helvetica-Bold")
+		.fontSize(12)
+		.text("Contact: ", { continued: true });
+	doc.font("Helvetica").fontSize(10).text(`${CONTACT_EMAIL}`);
 
 	// Footer:
 	const footerImagePath = "./storage/assets/pdf/footer.png"; // Ruta de la imagen del pie de página
