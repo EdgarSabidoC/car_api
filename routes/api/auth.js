@@ -16,15 +16,6 @@ router.get("/google/callback", recordLog, callback, handleAuthCallback);
 router.get("/loggedin", isLoggedIn);
 
 // Ruta de cierre de sesión:
-router.get("/logout", (req, res) => {
-	req.session.destroy(); // Se destruye la sesión.
-	res.cookie("token", "", { maxAge: 0, httpOnly: true }); // Se destruye la cookie con el token.
-	// Se configuran los encabezados:
-	res.setHeader("Access-Control-Allow-Origin", "http://localhost:4200");
-	res.setHeader("Access-Control-Allow-Credentials", "true");
-
-	// Se envía el estado de la respuesta:
-	res.status(200).json({ message: "Logout successful!" });
-});
+router.get("/logout", logOut);
 
 module.exports = router;
