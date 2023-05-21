@@ -30,10 +30,10 @@ router.get("/:vin", getItemValidator, getItem);
 /* Crea un elemento en el registro */
 router.post(
 	"/",
-	// authMiddleware,
-	// checkRole(["admin", "capturist"]),
-	// recordLog,
-	// createItemValidator,
+	authMiddleware,
+	checkRole(["admin", "capturist"]),
+	recordLog,
+	createItemValidator,
 	createStorageMiddleware.single("car_image"),
 	createItem
 );
@@ -41,9 +41,9 @@ router.post(
 /* Actualiza un elemento del registro */
 router.put(
 	"/:vin",
-	// authMiddleware,
-	// checkRole(["admin", "capturist"]),
-	// recordLog,
+	authMiddleware,
+	checkRole(["admin", "capturist"]),
+	recordLog,
 	getItemValidator,
 	updateStorageMiddleware.single("car_image"),
 	updateItem
@@ -52,9 +52,9 @@ router.put(
 /* Elimina un elemento del registro */
 router.delete(
 	"/:vin",
-	// authMiddleware,
-	// checkRole(["admin"]),
-	// recordLog,
+	authMiddleware,
+	checkRole(["admin"]),
+	recordLog,
 	getItemValidator,
 	deleteItem
 );
