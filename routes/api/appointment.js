@@ -23,9 +23,6 @@ const { sendPdfToEmail } = require("../../services/email-service"); // Servicio 
 /* Obtiene una lista de elementos del registro */
 router.get("/", getAllItems);
 
-/* Manda un PDF a un correo electrónico */
-// router.get("/pdf", buildPdf, sendPdfToEmail);
-
 /* Obtiene un elemento del registro */
 router.get("/:date/:time", getItemsValidator, getItems);
 
