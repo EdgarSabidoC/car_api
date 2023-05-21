@@ -113,14 +113,14 @@ const getItems = async (req, res) => {
 
 		if (data.length === 0) {
 			handleHttpError(res, "ITEMS_NOT_FOUND", 404);
-			return;
 		}
 
 		// Se hace el commit de la transacción:
 		await transaction.commit();
 
-		res.send({ data, searchedBy });
+		res.send({ data });
 	} catch (err) {
+		console.log("ERROR: ", err);
 		// Se deshace la transacción en caso de un error:
 		if (transaction) await transaction.rollback();
 
