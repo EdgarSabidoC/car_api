@@ -239,10 +239,6 @@ INSERT INTO `car_api`.`car_model` (`name`, `year`, `factory_price`, `transmissio
 
 -- Tabla car:
 INSERT INTO `car_api`.`car` (`vin`, `mileage`, `description`, `purchase_price`, `sale_price`, `maintenance_cost`, `model`, `ccondition`, `interior_color`, `exterior_color`, `dealership`, `sold`, `car_image`, `createdAt`, `updatedAt`) VALUES
-('1G1YY3D70G5100001', 558233, 'This Thunderbird is said to have received a body-off restoration some six years ago. The car is reportedly finished to original specifications, and all components are either numbers-matching original, correct coded replacements, or quality reproduction.', 350000.00, 499999.99, 0, 1, 1, 1, 2, 5, false, 'car_photos\2023041801.webp', NOW(), NOW()),
-('1ZVHT80N775372738', 143272, 'Restored to resemble a Shelby G.T.500, this 1967 Ford Mustang Convertible was reportedly built in 2007, with additional major mechanical work performed between 2012-17, including the engine and transmission. They include a 428 V8 engine backed by a Tremec five-speed manual transmission.', 450000.00, 599999.99, 0, 2, 1, 1, 2, 5, false, 'car_photos\866420230.webp', NOW(), NOW()),
-('H9YH1611001925430', 113267, 'Extra-cost equipment that was chosen includes the 390-horsepower 427 engine, transistorized ignition, a four-speed manual transmission, a Positraction rear differential (with 4.11:1 gears per the seller), the aforementioned side-mounted exhaust, and tinted glass.', 550000.00, 799999.99, 0, 3, 1, 1, 2, 5, false,'car_photos\9905480702.webp', NOW(), NOW());
-
-
-
--- Tabla :
+('1G1YY3D70G5100001', 558233, 'This Thunderbird is said to have received a body-off restoration some six years ago. The car is reportedly finished to original specifications, and all components are either numbers-matching original, correct coded replacements, or quality reproduction.', 350000.00, 499999.99, 0, 1, 1, 1, 2, 5, false, '1G1YY3D70G5100001.webp', NOW(), NOW()),
+('1ZVHT80N775372738', 143272, 'Restored to resemble a Shelby G.T.500, this 1967 Ford Mustang Convertible was reportedly built in 2007, with additional major mechanical work performed between 2012-17, including the engine and transmission. They include a 428 V8 engine backed by a Tremec five-speed manual transmission.', 450000.00, 599999.99, 0, 2, 1, 1, 2, 5, false, '1ZVHT80N775372738.webp', NOW(), NOW()),
+('H9YH1611001925430', 113267, 'Extra-cost equipment that was chosen includes the 390-horsepower 427 engine, transistorized ignition, a four-speed manual transmission, a Positraction rear differential (with 4.11:1 gears per the seller), the aforementioned side-mounted exhaust, and tinted glass.', 550000.00, 799999.99, 0, 3, 1, 1, 2, 5, false,'H9YH1611001925430.webp', NOW(), NOW());
