@@ -2,11 +2,32 @@ const multer = require("multer");
 const { handleHttpError } = require("./handleError");
 const fs = require("fs");
 
+/**
+ * Configuración de almacenamiento para multer.
+ * @param {Object} req - Objeto de solicitud.
+ * @param {Object} file - Objeto de archivo cargado.
+ * @param {Function} cb - Función de devolución de llamada.
+ * @returns {void}
+ */
 const createStorage = multer.diskStorage({
+	/**
+	 * Define el directorio de destino para guardar los archivos.
+	 * @param {Object} req - Objeto de solicitud.
+	 * @param {Object} file - Objeto de archivo cargado.
+	 * @param {Function} cb - Función de devolución de llamada.
+	 * @returns {void}
+	 */
 	destination: (req, file, cb) => {
 		const pathStorage = `../car_api/storage/car_photos`;
 		cb(null, pathStorage);
 	},
+	/**
+	 * Define el nombre de archivo para los archivos cargados.
+	 * @param {Object} req - Objeto de solicitud.
+	 * @param {Object} file - Objeto de archivo cargado.
+	 * @param {Function} cb - Función de devolución de llamada.
+	 * @returns {void}
+	 */
 	filename: function (req, file, cb) {
 		const ext = file.originalname.split(".").pop(); // Obtiene la extensión del archivo.
 		const filename = `${req.body.vin}.${ext}`;
@@ -23,11 +44,32 @@ const createStorage = multer.diskStorage({
 	},
 });
 
+/**
+ * Configuración de almacenamiento para multer al actualizar una imagen.
+ * @param {Object} req - Objeto de solicitud.
+ * @param {Object} file - Objeto de archivo cargado.
+ * @param {Function} cb - Función de devolución de llamada.
+ * @returns {void}
+ */
 const updateStorage = multer.diskStorage({
+	/**
+	 * Define el directorio de destino para guardar los archivos.
+	 * @param {Object} req - Objeto de solicitud.
+	 * @param {Object} file - Objeto de archivo cargado.
+	 * @param {Function} cb - Función de devolución de llamada.
+	 * @returns {void}
+	 */
 	destination: (req, file, cb) => {
 		const pathStorage = `../car_api/storage/car_photos`;
 		cb(null, pathStorage);
 	},
+	/**
+	 * Define el nombre de archivo para los archivos cargados durante la actualización.
+	 * @param {Object} req - Objeto de solicitud.
+	 * @param {Object} file - Objeto de archivo cargado.
+	 * @param {Function} cb - Función de devolución de llamada.
+	 * @returns {void}
+	 */
 	filename: function (req, file, cb) {
 		const { vin } = req.params;
 		console.log("VIN: ", vin);
