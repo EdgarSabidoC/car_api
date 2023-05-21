@@ -145,7 +145,6 @@ const updateItem = async (req, res) => {
 		// Si no se encuentra el registro, se devuelve un error:
 		if (!data) {
 			handleHttpError(res, "ERROR_ITEM_NOT_FOUND", 404);
-			return;
 		}
 
 		// Agrega el campo updatedAt en los datos que se pasan al método update

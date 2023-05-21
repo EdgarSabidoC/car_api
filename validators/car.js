@@ -1,4 +1,4 @@
-const { check } = require("express-validator");
+const { check, body } = require("express-validator");
 const validateResults = require("../utils/handleValidator");
 const ENGINE_DB = process.env.ENGINE_DB;
 
@@ -22,12 +22,12 @@ const createItemValidator = [
 		.notEmpty()
 		.isDecimal({ decimal_digits: "1,4" }),
 	check("model").exists().notEmpty().isInt(),
-	check("car_condition").exists().notEmpty().isInt(),
+	check("ccondition").exists().notEmpty().isInt(),
 	check("interior_color").exists().notEmpty().isInt(),
 	check("exterior_color").exists().notEmpty().isInt(),
 	check("dealership").exists().notEmpty().isInt(),
 	check("sold").optional().notEmpty().isBoolean(),
-	check("photo_url").optional().notEmpty().isString(),
+	body("car_image").optional(),
 	(req, res, next) => {
 		return validateResults(req, res, next);
 	},

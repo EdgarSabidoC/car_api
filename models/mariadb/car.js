@@ -80,7 +80,7 @@ const Car = sequelize.define(
 			type: DataTypes.BOOLEAN,
 			defaultValue: false,
 		},
-		photo_url: {
+		car_image: {
 			type: DataTypes.TEXT,
 			allowNull: true,
 		},
