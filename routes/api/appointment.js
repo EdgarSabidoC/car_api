@@ -17,7 +17,7 @@ const {
 const { recordLog } = require("../../middleware/logRecord"); // Middleware para grabar en la bitácora.
 const { authMiddleware } = require("../../middleware/session"); // Middleware de autenticación.
 const { checkRole } = require("../../middleware/role"); // Middleware de verificación de rol.
-const { buildPdf } = require("../../services/pdf-service"); // Servicio que genera un PDF.
+const { buildPdf, createPdf } = require("../../services/pdf-service"); // Servicio que genera un PDF.
 const { sendPdfToEmail } = require("../../services/email-service"); // Servicio que manda un correo electrónico.
 
 /* Obtiene una lista de elementos del registro */
@@ -55,5 +55,8 @@ router.delete(
 	getItemValidator,
 	deleteItem
 );
+
+/* Obtiene una lista de elementos del registro */
+router.get("/pdf", createPdf, sendPdfToEmail);
 
 module.exports = router;
