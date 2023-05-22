@@ -16,6 +16,9 @@ const LOGIN_URL = process.env.LOGIN_URL;
 const authMiddleware = async (req, res, next) => {
 	try {
 		if (!req.session || !req.session.cookie || !req.session.cookie.expires) {
+			if (res.cookie) {
+				res.cookie("token", "", { maxAge: 0, httpOnly: true }); // Se destruye la cookie con el token si existe.
+			}
 			// La sesión ha caducado.
 			res.setHeader("Access-Control-Allow-Origin", `${WEBSITE_URL}`);
 			res.setHeader("Access-Control-Allow-Credentials", "true");
