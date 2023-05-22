@@ -18,6 +18,18 @@ const authMiddleware = async (req, res, next) => {
 			return;
 		}
 
+		// Renovación de sesión
+		if (req.session && req.session.cookie && req.session.cookie.expires) {
+			const now = new Date().getTime();
+			const expiryTime = new Date(req.session.cookie.expires).getTime();
+
+			// Si ha pasado la mitad del tiempo de expiración de la sesión, renovar la sesión
+			if (expiryTime - now < req.session.cookie.maxAge / 2) {
+				req.session._garbage = Date();
+				req.session.touch();
+			}
+		}
+
 		const token = req.cookies.token; //  Obtiene el token de la cookie httpOnly
 		const tokenData = await verifyToken(token);
 
