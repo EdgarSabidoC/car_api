@@ -13,12 +13,12 @@ const sessionConf = {
 		model: createSessionModel,
 		table: "session",
 		modelKey: "sid",
-		expiration: 60 * 60 * 1000, // 1h
+		expiration: 60 * 60 * 1000 * 6, // 6h
 	}),
 	cookie: {
 		secure: process.env.NODE_ENV === "production",
 		sameSite: "strict",
-		maxAge: 60 * 60 * 1000, // 1h
+		maxAge: 60 * 60 * 1000 * 6, // 6h
 	},
 };
 
