@@ -11,9 +11,9 @@ const { buildReport } = require("../../services/excel-service"); // Servicio que
 /* Genera un reporte de ventas */
 router.get(
 	"/:year/:month",
-	// authMiddleware,
-	// recordLog,
-	// checkRole(["admin"]),
+	authMiddleware,
+	recordLog,
+	checkRole(["admin"]),
 	createReportValidator,
 	buildReport
 );
