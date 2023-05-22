@@ -2,7 +2,7 @@ const ExcelJS = require("exceljs");
 const { handleHttpError } = require("../utils/handleError");
 const { Op } = require("sequelize");
 const { sequelize } = require("../config/mariadb");
-const { Sell } = require("../models");
+const { Sell, Appointment, Dealership, Car, Employee } = require("../models");
 
 // Meses del año en inglés:
 const months = {
@@ -102,17 +102,16 @@ const buildReport = async (req, res, next) => {
 			"Sale date",
 		]);
 
-		// Se obtienen los datos del cliente, empleado y la fecha de venta para darles formato:
-		const customer = `${sell.sell_appointment.customer_firstname} ${sell.sell_appointment.customer_lastname_1} ${sell.sell_appointment.customer_lastname_2}`;
-		const employee = `${sell.sell_employee.first_name} ${sell.sell_employee.last_name_1} ${sell.sell_employee.last_name_2}`;
-		let sale_date = new Date(sell.createdAt);
-		const sale_day = sale_date.getDate();
-		const sale_month = sale_date.getMonth() + 1;
-		const sale_year = sale_date.getFullYear();
-		sale_date = `${sale_day}-${sale_month}-${sale_year}`;
-
 		// Agrega los datos a la hoja de trabajo
 		sellData.forEach((sell) => {
+			// Se obtienen los datos del cliente, empleado y la fecha de venta para darles formato:
+			const customer = `${sell.sell_appointment.customer_firstname} ${sell.sell_appointment.customer_lastname_1} ${sell.sell_appointment.customer_lastname_2}`;
+			const employee = `${sell.sell_employee.first_name} ${sell.sell_employee.last_name_1} ${sell.sell_employee.last_name_2}`;
+			let sale_date = new Date(sell.createdAt);
+			const sale_day = sale_date.getDate();
+			const sale_month = sale_date.getMonth() + 1;
+			const sale_year = sale_date.getFullYear();
+			sale_date = `${sale_day}-${sale_month}-${sale_year}`;
 			worksheet.addRow([
 				sell.sell_appointment.appointment_car.vin,
 				sell.sell_appointment.appointment_car.sale_price,
@@ -143,6 +142,7 @@ const buildReport = async (req, res, next) => {
 		// Envía el buffer como respuesta al cliente
 		res.send(excelBuffer);
 	} catch (error) {
+		console.log("ERROR: ", error);
 		// Rollback de la transacción en caso de un error
 		if (transaction) await transaction.rollback();
 		handleHttpError(res, "ERROR_WHILE_CREATING_REPORT", 500);
