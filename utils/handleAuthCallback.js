@@ -26,8 +26,8 @@ const handleAuthCallback = async (req, res, next) => {
 		res.cookie("token", data, {
 			httpOnly: dev,
 			secure: dev,
-			maxAge: 3600000,
-		}); // La cookie dura 1h.
+			maxAge: 3600000 * 6,
+		}); // La cookie dura 6h.
 
 		// Se almacena el rol del usuario en la sesión:
 		const role = user.user_role;
