@@ -3,7 +3,6 @@ const { verifyToken } = require("../utils/handleJwt");
 const { sequelize } = require("../config/mariadb");
 const { User } = require("../models");
 const WEBSITE_URL = process.env.WEBSITE_URL;
-const LOGIN_URL = process.env.LOGIN_URL;
 
 /**
  * Middleware para autenticación y verificación del token JWT.
@@ -23,7 +22,7 @@ const authMiddleware = async (req, res, next) => {
 			// La sesión ha caducado.
 			res.setHeader("Access-Control-Allow-Origin", `${WEBSITE_URL}`);
 			res.setHeader("Access-Control-Allow-Credentials", "true");
-			res.redirect(`${LOGIN_URL}`);
+			res.status(200).json({ message: "Logout successful!" });
 		}
 
 		if (!req.cookies.token) {

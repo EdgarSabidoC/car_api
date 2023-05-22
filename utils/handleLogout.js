@@ -1,5 +1,5 @@
-const LOGIN_URL = process.env.LOGIN_URL;
 const WEBSITE_URL = process.env.WEBSITE_URL;
+
 /**
  * Cierra la sesión del usuario y realiza la redirección a la página de inicio de sesión.
  *
@@ -12,7 +12,7 @@ const logOut = (req, res) => {
 	// Se configuran los encabezados:
 	res.setHeader("Access-Control-Allow-Origin", `${WEBSITE_URL}`);
 	res.setHeader("Access-Control-Allow-Credentials", "true");
-	res.redirect(`${LOGIN_URL}`);
+	res.status(200).json({ message: "Logout successful!" });
 };
 
 // (req, res) => {

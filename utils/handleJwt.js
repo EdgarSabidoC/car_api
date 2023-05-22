@@ -18,7 +18,7 @@ const signToken = async (user) => {
 		JWT_SECRET,
 		{
 			// Tiempo de expiración del token:
-			expiresIn: "1h",
+			expiresIn: "6h",
 		}
 	);
 	return sign;
