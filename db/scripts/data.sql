@@ -740,8 +740,7 @@ CREATE TABLE `user` (
 
 INSERT INTO `user` (`googleId`, `first_name`, `last_name_1`, `last_name_2`, `email`, `dealership`, `user_role`, `createdAt`, `updatedAt`, `deleted`, `deletedAt`) VALUES
 ('1', 'Admin', 'Donut', 'Motors', 'donutmotors.4dm1n@gmail.com', 6, 1, '2023-05-21 16:39:13', '2023-05-21 16:39:13', 0, NULL),
-('2', 'Capturist', 'Donut', 'Motors', 'donutmotors.c4ptur15t@gmail.com', 6, 2, '2023-05-21 16:39:13', '2023-05-21 16:39:13', 0, NULL),
-('100262865461402723367', 'Edgar', 'Sabido', 'Cortés', 'edgar.sabido17@gmail.com', 6, 1, '2023-05-21 16:39:13', '2023-05-21 16:39:13', 0, NULL);
+('2', 'Capturist', 'Donut', 'Motors', 'donutmotors.c4ptur15t@gmail.com', 6, 2, '2023-05-21 16:39:13', '2023-05-21 16:39:13', 0, NULL);
 
 --
 -- Índices para tablas volcadas

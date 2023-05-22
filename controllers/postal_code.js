@@ -44,6 +44,7 @@ const getItems = async (req, res) => {
 		// Devuelve los elementos:
 		res.send({ data });
 	} catch (err) {
+		console.log("ERROR: ", err);
 		// Se deshace la transacción en caso de un error:
 		if (transaction) await transaction.rollback();
 
@@ -90,6 +91,7 @@ const getItem = async (req, res) => {
 		// Devuelve el elemento:
 		res.send({ data });
 	} catch (err) {
+		console.log("ERROR: ", err);
 		// Se deshace la transacción en caso de un error:
 		if (transaction) await transaction.rollback();
 
@@ -122,6 +124,7 @@ const createItem = async (req, res) => {
 		// Devuelve los datos creados y un mensaje:
 		res.send({ message: "ITEM_CREATED_SUCCESSFULLY", data });
 	} catch (err) {
+		console.log("ERROR: ", err);
 		// Si hay un error, se deshace la transacción:
 		if (transaction) await transaction.rollback();
 
@@ -172,6 +175,7 @@ const updateItem = async (req, res) => {
 		// Devuelve los datos actualizados y un mensaje:
 		res.send({ message: "ITEM_UPDATED_SUCCESSFULLY", data });
 	} catch (err) {
+		console.log("ERROR: ", err);
 		// Si hay un error, se deshace la transacción:
 		if (transaction) await transaction.rollback();
 
@@ -227,6 +231,7 @@ const deleteItem = async (req, res) => {
 		// Enviar una respuesta indicando que la eliminación fue exitosa
 		res.send({ message: "ELEMENT_DELETED_SUCCESSFULLY", data });
 	} catch (err) {
+		console.log("ERROR: ", err);
 		// Si hay un error, se deshace la transacción:
 		if (transaction) await transaction.rollback();
 

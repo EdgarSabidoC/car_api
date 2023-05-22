@@ -141,7 +141,7 @@ const getItems = async (req, res) => {
 const getItem = async (req, res) => {
 	let transaction;
 	try {
-		const { vin } = req.query;
+		const { vin } = req.params;
 
 		// Se obtiene una instancia de la transacción:
 		transaction = await sequelize.transaction();
@@ -243,6 +243,7 @@ const getItem = async (req, res) => {
 
 		res.send({ data });
 	} catch (err) {
+		console.log("ERROR: ", err);
 		// Se deshace la transacción en caso de un error:
 		if (transaction) await transaction.rollback();
 
