@@ -1,5 +1,6 @@
 const { handleHttpError } = require("../utils/handleError");
 const { verifyToken } = require("../utils/handleJwt");
+const { sequelize } = require("../config/mariadb");
 const { User } = require("../models");
 const WEBSITE_URL = process.env.WEBSITE_URL;
 const LOGIN_URL = process.env.LOGIN_URL;
@@ -70,6 +71,7 @@ const authMiddleware = async (req, res, next) => {
 		req.user = user;
 		next();
 	} catch (err) {
+		console.log("ERROR: ", err);
 		handleHttpError(res, "ERROR_SESSION_NOT_FOUND", 401);
 	}
 };
