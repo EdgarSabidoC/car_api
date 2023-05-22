@@ -41,6 +41,7 @@ const handleAuthCallback = async (req, res, next) => {
 		// Si no es un usuario:
 		// res.redirect(`${FAILURE_URL}`);
 	} catch (error) {
+		console.log("ERROR: ", err);
 		console.error(error);
 	}
 };
