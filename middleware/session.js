@@ -1,6 +1,7 @@
 const { handleHttpError } = require("../utils/handleError");
 const { verifyToken } = require("../utils/handleJwt");
 const { User } = require("../models");
+const LOGIN_URL = process.env.LOGIN_URL;
 
 /**
  * Middleware para autenticación y verificación del token JWT.
@@ -13,21 +14,14 @@ const { User } = require("../models");
  */
 const authMiddleware = async (req, res, next) => {
 	try {
+		if (!req.session || !req.session.cookie || !req.session.cookie.expires) {
+			// La sesión ha caducado.
+			res.redirect(`${LOGIN_URL}`);
+		}
+
 		if (!req.cookies.token) {
 			handleHttpError(res, "ERROR_TOKEN_NOT_FOUND", 401);
 			return;
-		}
-
-		// Renovación de sesión
-		if (req.session && req.session.cookie && req.session.cookie.expires) {
-			const now = new Date().getTime();
-			const expiryTime = new Date(req.session.cookie.expires).getTime();
-
-			// Si ha pasado la mitad del tiempo de expiración de la sesión, renovar la sesión
-			if (expiryTime - now < req.session.cookie.maxAge / 2) {
-				req.session._garbage = Date();
-				req.session.touch();
-			}
 		}
 
 		const token = req.cookies.token; //  Obtiene el token de la cookie httpOnly
