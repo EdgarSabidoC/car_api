@@ -1,6 +1,7 @@
 const { handleHttpError } = require("../utils/handleError");
 const { verifyToken } = require("../utils/handleJwt");
 const { User } = require("../models");
+const WEBSITE_URL = process.env.WEBSITE_URL;
 const LOGIN_URL = process.env.LOGIN_URL;
 
 /**
@@ -16,6 +17,8 @@ const authMiddleware = async (req, res, next) => {
 	try {
 		if (!req.session || !req.session.cookie || !req.session.cookie.expires) {
 			// La sesión ha caducado.
+			res.setHeader("Access-Control-Allow-Origin", `${WEBSITE_URL}`);
+			res.setHeader("Access-Control-Allow-Credentials", "true");
 			res.redirect(`${LOGIN_URL}`);
 		}
 
