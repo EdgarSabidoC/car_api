@@ -13,6 +13,7 @@ const signToken = async (user) => {
 			// Payload:
 			id: user.googleId,
 			role: user.user_role,
+			email: user.email,
 		},
 		JWT_SECRET,
 		{
