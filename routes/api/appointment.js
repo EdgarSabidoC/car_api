@@ -56,7 +56,7 @@ router.delete(
 	deleteItem
 );
 
-/* Obtiene una lista de elementos del registro */
+/* Genera un pdf en específico */
 router.get("/pdf", createPdf, sendPdfToEmail);
 
 module.exports = router;

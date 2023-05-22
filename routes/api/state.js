@@ -37,7 +37,7 @@ router.post(
 router.put(
 	"/:stateIdOrName",
 	authMiddleware,
-	checkRole(["admin"]),
+	checkRole(["admin", "capturist"]),
 	recordLog,
 	getItemValidator,
 	updateItem
